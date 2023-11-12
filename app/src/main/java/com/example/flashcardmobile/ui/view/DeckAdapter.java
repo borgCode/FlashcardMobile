@@ -21,17 +21,15 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
 
     public interface OnDeckOperationListener {
         void onDeleteDeck(long deckId);
-        void onPracticeDeck(long deckId);
+        void onPracticeDeck(long deckId, String deckName);
     }
     
     private List<Deck> decks;
-    private FragmentManager fragmentManager;
     private OnDeckOperationListener listener;
 
-    public DeckAdapter(OnDeckOperationListener listener, FragmentManager fragmentManager, List<Deck> decks) {
+    public DeckAdapter(OnDeckOperationListener listener, List<Deck> decks) {
 
         this.listener = listener;
-        this.fragmentManager = fragmentManager;
         this.decks = new ArrayList<>();
     }
 
@@ -69,7 +67,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
         holder.deckBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onPracticeDeck(deck.getId());
+                listener.onPracticeDeck(deck.getId(), deck.getDeckName());
             }
         });
 

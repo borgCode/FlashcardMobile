@@ -41,8 +41,11 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
     }
 
     @Override
-    public void onPracticeDeck(long deckId) {
+    public void onPracticeDeck(long deckId, String deckName) {
         sharedPracticeViewModel.setDeckId(deckId);
+        sharedPracticeViewModel.setDeckName(deckName);
+        
+        //TODO navigate to practice fragment
     }
 
     private void showDeleteDialog() {
@@ -89,7 +92,7 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
 
         recyclerView = view.findViewById(R.id.deckSelectionView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        deckAdapter = new DeckAdapter(this, getParentFragmentManager(), decks);
+        deckAdapter = new DeckAdapter(this, decks);
         recyclerView.setAdapter(deckAdapter);
 
         ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
