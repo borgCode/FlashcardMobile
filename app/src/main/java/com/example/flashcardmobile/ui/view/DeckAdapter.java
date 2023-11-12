@@ -1,6 +1,5 @@
 package com.example.flashcardmobile.ui.view;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,21 +8,38 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.flashcardmobile.R;
-import com.example.flashcardmobile.ui.activity.DeckActivity;
 import com.example.flashcardmobile.entity.Deck;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder> {
-    private List<Deck> decks;
 
-    public DeckAdapter(List<Deck> decks) {
-        this.decks = decks;
+    public interface OnDeckOperationListener {
+        void onDeleteDeck(long deckId);
+        void onPracticeDeck(long deckId);
+    }
+    
+    private List<Deck> decks;
+    private FragmentManager fragmentManager;
+    private OnDeckOperationListener listener;
+
+    public DeckAdapter(OnDeckOperationListener listener, FragmentManager fragmentManager, List<Deck> decks) {
+
+        this.listener = listener;
+        this.fragmentManager = fragmentManager;
+        this.decks = new ArrayList<>();
     }
 
+    public void setDecks(List<Deck> decks) {
+        this.decks.clear();
+        this.decks.addAll(decks);
+        notifyDataSetChanged();
+    }
 
     public static class DeckViewHolder extends RecyclerView.ViewHolder {
         public Button deckBtn;
@@ -50,6 +66,12 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
 
         Deck deck = decks.get(position);
         holder.deckBtn.setText(deck.getDeckName());
+        holder.deckBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onPracticeDeck(deck.getId());
+            }
+        });
 
         holder.deckOptions.setOnClickListener(new View.OnClickListener() {
 
@@ -68,18 +90,20 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
                         if (id == R.id.addCardItem) {
 
                         } else if (id == R.id.viewDeckItem) {
-                            Intent intent = new Intent(view.getContext(), DeckActivity.class);
-                            intent.putExtra("deckName", deck.getDeckName());
-                            view.getContext().startActivity(intent);
+//                            Intent intent = new Intent(view.getContext(), DeckActivity.class);
+//                            intent.putExtra("deckName", deck.getDeckName());
+//                            view.getContext().startActivity(intent);
 
                         } else if (id == R.id.deleteDeckItem) {
+                            listener.onDeleteDeck(deck.getId());
 
-                        } else {
+                        } else {    
                             return false;
                         }
                         return true;
                     }
                 });
+                popupMenu.show();
 
             }
         });
@@ -88,6 +112,9 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
 
     @Override
     public int getItemCount() {
+        if (decks == null) {
+            return 0;
+        }
         return decks.size();
     }
 }

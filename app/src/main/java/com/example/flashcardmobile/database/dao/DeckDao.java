@@ -15,6 +15,8 @@ public interface DeckDao {
     void update(Deck deck);
     @Delete
     void delete(Deck deck);
+    @Query("DELETE FROM decks WHERE id = :deckId")
+    void deleteDeckById(long deckId);
     @Query("SELECT * FROM decks")
     LiveData<List<Deck>> getAllDecks();
 }

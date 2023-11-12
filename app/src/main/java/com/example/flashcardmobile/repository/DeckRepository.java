@@ -1,6 +1,7 @@
 package com.example.flashcardmobile.repository;
 
 import android.app.Application;
+import android.util.Log;
 import androidx.lifecycle.LiveData;
 import com.example.flashcardmobile.database.AppDatabase;
 import com.example.flashcardmobile.database.dao.DeckDao;
@@ -24,6 +25,7 @@ public class DeckRepository {
     }
 
     public void insert(Deck deck) {
+        Log.d("DeckRepo", "Inserting new Deck");
         CompletableFuture.runAsync(() -> deckDao.insert(deck), executorService);
     }
 
@@ -33,6 +35,10 @@ public class DeckRepository {
 
     public void delete(Deck deck) {
         CompletableFuture.runAsync(() -> deckDao.delete(deck), executorService);
+    }
+    
+    public void deleteDeckById(long deckId) {
+        CompletableFuture.runAsync(() -> deckDao.deleteDeckById(deckId), executorService);
     }
 
     public LiveData<List<Deck>> getAllDecks() {

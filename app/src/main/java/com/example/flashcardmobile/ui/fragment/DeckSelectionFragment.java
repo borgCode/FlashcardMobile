@@ -3,35 +3,59 @@ package com.example.flashcardmobile.ui.fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.*;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.flashcardmobile.R;
 import com.example.flashcardmobile.entity.Deck;
+import com.example.flashcardmobile.ui.dialog.DeleteConfirmationDialog;
 import com.example.flashcardmobile.ui.view.DeckAdapter;
-import com.example.flashcardmobile.viewmodel.AddDeckViewModel;
 import com.example.flashcardmobile.viewmodel.DeckViewModel;
+import com.example.flashcardmobile.viewmodel.SharedPracticeViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class DeckSelectionFragment extends Fragment {
+public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDeckOperationListener,
+        DeleteConfirmationDialog.DeleteDialogListener {
+    
+    
 
     private DeckViewModel deckViewModel;
+    private SharedPracticeViewModel sharedPracticeViewModel;
     private RecyclerView recyclerView;
     private DeckAdapter deckAdapter;
     private List<Deck> decks;
-    
+    private long deckToDelete;
 
+    @Override
+    public void onDeleteDeck(long deckId) {
+        deckToDelete = deckId;
+        showDeleteDialog();
+    }
+
+    @Override
+    public void onPracticeDeck(long deckId) {
+        sharedPracticeViewModel.setDeckId(deckId);
+    }
+
+    private void showDeleteDialog() {
+        DeleteConfirmationDialog dialog = new DeleteConfirmationDialog();
+        dialog.setDeleteDialogListener(this);
+        dialog.show(getParentFragmentManager(), "deleteDialog");
+    }
+    
+    @Override
+    public void onConfirmDelete() {
+        deckViewModel.deleteByDeckId(deckToDelete);
+    }
+    
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_deck_selection, viewGroup, false);
         
@@ -49,20 +73,23 @@ public class DeckSelectionFragment extends Fragment {
                         .addToBackStack(null)
                         .commit();
             }
-            
         });
+        
+        decks = new ArrayList<>();
+        
+        sharedPracticeViewModel = new ViewModelProvider(requireActivity()).get(SharedPracticeViewModel.class);
 
         deckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
         deckViewModel.getAllDecks().observe(getViewLifecycleOwner(), new Observer<List<Deck>>() {
             @Override
-            public void onChanged(List<Deck> decks) {
-                Log.d("Deck Selection", "deck select fragment opened");
-
+            public void onChanged(List<Deck> newDecks) {
+                deckAdapter.setDecks(newDecks);
             }
         });
 
         recyclerView = view.findViewById(R.id.deckSelectionView);
-        deckAdapter = new DeckAdapter(decks);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        deckAdapter = new DeckAdapter(this, getParentFragmentManager(), decks);
         recyclerView.setAdapter(deckAdapter);
 
         ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
@@ -70,9 +97,6 @@ public class DeckSelectionFragment extends Fragment {
             actionBar.setTitle("Decks");
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        
-        
         return view;
     }
-    
 }

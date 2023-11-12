@@ -1,6 +1,7 @@
 package com.example.flashcardmobile.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import com.example.flashcardmobile.entity.Deck;
@@ -19,6 +20,7 @@ public class DeckViewModel extends AndroidViewModel {
     }
     
     public void insert(Deck deck) {
+        Log.d("View Model", "Inserting new Deck");
         deckRepository.insert(deck);
     }
     public void update(Deck deck) {
@@ -26,6 +28,9 @@ public class DeckViewModel extends AndroidViewModel {
     }
     public void delete(Deck deck) {
         deckRepository.delete(deck);
+    }
+    public void deleteByDeckId(long id) {
+        deckRepository.deleteDeckById(id);
     }
     public LiveData<List<Deck>> getAllDecks() {
         return allDecks;

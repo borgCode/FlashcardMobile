@@ -15,7 +15,7 @@ import com.example.flashcardmobile.viewmodel.SharedPracticeViewModel;
 public class PracticeActivity extends AppCompatActivity {
     private SharedPracticeViewModel sharedPracticeViewModel;
 
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
