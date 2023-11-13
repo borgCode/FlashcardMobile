@@ -100,6 +100,7 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
         deckViewModel.getAllDecks().observe(getViewLifecycleOwner(), new Observer<List<Deck>>() {
             @Override
             public void onChanged(List<Deck> newDecks) {
+                
                 deckAdapter.setDecks(newDecks);
             }
         });

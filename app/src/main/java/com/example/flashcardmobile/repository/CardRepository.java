@@ -1,6 +1,7 @@
 package com.example.flashcardmobile.repository;
 
 import android.app.Application;
+import android.util.Log;
 import androidx.lifecycle.LiveData;
 import com.example.flashcardmobile.database.AppDatabase;
 import com.example.flashcardmobile.database.dao.CardDao;
@@ -23,6 +24,7 @@ public class CardRepository {
     }
 
     public void insert(Card card) {
+        Log.d("Card R", "Inserting into db");
         CompletableFuture.runAsync(() -> cardDao.insert(card), executorService);
     }
 

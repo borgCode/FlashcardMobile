@@ -16,12 +16,18 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder> {
+    public interface AdapterCallback {
+        void onDifficultySelected(Card card, int difficulty);
+    }
+
     private List<Card> cards;
-    
-    public CardAdapter(List<Card> cards) {
+    private AdapterCallback callback;
+
+    public CardAdapter(List<Card> cards, AdapterCallback callback) {
+        this.callback = callback;
         this.cards = cards;
     }
-    
+
     public static class CardViewHolder extends RecyclerView.ViewHolder {
         public TextView frontSide;
         public TextView backSide;
@@ -36,9 +42,11 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             easy = itemView.findViewById(R.id.buttonEasy);
             medium = itemView.findViewById(R.id.buttonMedium);
             hard = itemView.findViewById(R.id.buttonHard);
+
         }
-        
+
     }
+
     @NonNull
     @NotNull
     @Override
@@ -53,7 +61,11 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         Card card = cards.get(position);
         holder.frontSide.setText(card.getFrontSide());
         holder.backSide.setText(card.getBackSide());
-        
+
+        DifficultyButtonClickListener listener = new DifficultyButtonClickListener(card);
+        holder.easy.setOnClickListener(listener);
+        holder.medium.setOnClickListener(listener);
+        holder.hard.setOnClickListener(listener);
 
     }
 
@@ -61,4 +73,31 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     public int getItemCount() {
         return cards.size();
     }
+
+    private class DifficultyButtonClickListener implements View.OnClickListener {
+        private Card card;
+
+        public DifficultyButtonClickListener(Card card) {
+            this.card = card;
+        }
+
+        @Override
+        public void onClick(View v) {
+            int buttonId = v.getId();
+            int difficulty;
+            if (buttonId == R.id.buttonEasy) {
+                difficulty = 1;
+            } else if (buttonId == R.id.buttonMedium) {
+                difficulty = 3;
+
+            } else if (buttonId == R.id.buttonHard) {
+                difficulty = 5;
+            } else {
+                return;
+            }
+            callback.onDifficultySelected(card, difficulty);
+        }
+    }
 }
+
+

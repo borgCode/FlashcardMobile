@@ -1,6 +1,7 @@
 package com.example.flashcardmobile.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import com.example.flashcardmobile.entity.Card;
@@ -21,6 +22,7 @@ public class CardViewModel extends AndroidViewModel {
     }
 
     public void insert(Card card) {
+        Log.d("AddCard ViewModel", "insert into DB");
         cardRepository.insert(card);
     }
     public void update(Card card) {

@@ -51,27 +51,55 @@ public class Card {
         return deckId;
     }
 
+    public void setDeckId(long deckId) {
+        this.deckId = deckId;
+    }
+
     public String getFrontSide() {
         return frontSide;
+    }
+
+    public void setFrontSide(String frontSide) {
+        this.frontSide = frontSide;
     }
 
     public String getBackSide() {
         return backSide;
     }
 
+    public void setBackSide(String backSide) {
+        this.backSide = backSide;
+    }
+
     public LocalDateTime getDueDate() {
         return dueDate;
+    }
+
+    public void setDueDate(LocalDateTime dueDate) {
+        this.dueDate = dueDate;
     }
 
     public int getInterval() {
         return interval;
     }
 
+    public void setInterval(int interval) {
+        this.interval = interval;
+    }
+
     public int getRepetitions() {
         return repetitions;
     }
 
+    public void setRepetitions(int repetitions) {
+        this.repetitions = repetitions;
+    }
+
     public double getEasiness() {
         return easiness;
+    }
+
+    public void setEasiness(double easiness) {
+        this.easiness = easiness;
     }
 }
