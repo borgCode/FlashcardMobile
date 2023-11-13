@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.flashcardmobile.R;
 import com.example.flashcardmobile.entity.Deck;
@@ -22,6 +21,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
     public interface OnDeckOperationListener {
         void onDeleteDeck(long deckId);
         void onPracticeDeck(long deckId, String deckName);
+        void onAddCard(long deckId);   
     }
     
     private List<Deck> decks;
@@ -86,6 +86,8 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
                         int id = menuItem.getItemId();
 
                         if (id == R.id.addCardItem) {
+                            listener.onAddCard(deck.getId());
+                            
 
                         } else if (id == R.id.viewDeckItem) {
 //                            Intent intent = new Intent(view.getContext(), DeckActivity.class);

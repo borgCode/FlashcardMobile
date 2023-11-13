@@ -2,7 +2,9 @@ package com.example.flashcardmobile.ui.fragment;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -45,7 +47,19 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
         sharedPracticeViewModel.setDeckId(deckId);
         sharedPracticeViewModel.setDeckName(deckName);
         
-        //TODO navigate to practice fragment
+    }
+
+    @Override
+    public void onAddCard(long deckId) {
+        sharedPracticeViewModel.setDeckId(deckId);
+
+        AddCardFragment addCardFragment = new AddCardFragment();
+        FragmentManager fragmentManager = getParentFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, addCardFragment)
+                .addToBackStack(null)
+                .commit();
+        
     }
 
     private void showDeleteDialog() {

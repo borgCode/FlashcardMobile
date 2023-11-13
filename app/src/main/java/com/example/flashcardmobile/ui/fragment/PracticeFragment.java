@@ -43,7 +43,7 @@ public class PracticeFragment extends Fragment {
 
         SharedPracticeViewModel sharedPracticeViewModel = new ViewModelProvider(requireActivity())
                 .get(SharedPracticeViewModel.class);
-        sharedPracticeViewModel.getId().observe(this, deckId -> {
+        sharedPracticeViewModel.getId().observe(getViewLifecycleOwner(), deckId -> {
             cardViewModel.getDueCards(deckId).observe(getViewLifecycleOwner(), newCards ->  {
                 cards.clear();
                 cards.addAll(newCards);
@@ -80,4 +80,4 @@ public class PracticeFragment extends Fragment {
 //            }
 //        });
     }
-}
+
