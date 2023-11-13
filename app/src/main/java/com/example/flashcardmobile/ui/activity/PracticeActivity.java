@@ -1,6 +1,8 @@
 package com.example.flashcardmobile.ui.activity;
 
 import android.os.Bundle;
+import android.view.MenuItem;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -15,7 +17,15 @@ import com.example.flashcardmobile.viewmodel.SharedPracticeViewModel;
 public class PracticeActivity extends AppCompatActivity {
     private SharedPracticeViewModel sharedPracticeViewModel;
 
-    
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            getOnBackPressedDispatcher().onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +53,8 @@ public class PracticeActivity extends AppCompatActivity {
                     .replace(R.id.fragment_container, new DeckSelectionFragment())
                     .commit();
         }
+        
+        
     }
     
 

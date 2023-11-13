@@ -3,10 +3,12 @@ package com.example.flashcardmobile.viewmodel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import com.example.flashcardmobile.entity.Card;
 
 public class SharedPracticeViewModel extends ViewModel {
     private MutableLiveData<Long> deckId = new MutableLiveData<>();
     private MutableLiveData<String> deckName = new MutableLiveData<>();
+    private MutableLiveData<Card> selectedCard = new MutableLiveData<>();
 
     public void setDeckId(Long id) {
         deckId.setValue(id);
@@ -22,6 +24,14 @@ public class SharedPracticeViewModel extends ViewModel {
     
     public LiveData<String> getName() {
         return deckName;
+    }
+    
+    public void setSelectedCard(Card card) {
+        selectedCard.setValue(card);
+    }
+    
+    public LiveData<Card> getSelectedCard() {
+        return selectedCard;
     }
 
     
