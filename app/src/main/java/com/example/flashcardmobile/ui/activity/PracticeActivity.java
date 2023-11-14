@@ -21,7 +21,11 @@ public class PracticeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            getOnBackPressedDispatcher().onBackPressed();
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
+            } else {
+                getOnBackPressedDispatcher().onBackPressed();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -35,27 +39,28 @@ public class PracticeActivity extends AppCompatActivity {
         sharedPracticeViewModel.getId().observe(this, id -> {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new PracticeFragment())
+                    .addToBackStack(null)
                     .commit();
-        
+
         });
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.back);
         }
-        
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new DeckSelectionFragment())
                     .commit();
         }
-        
-        
+
+
     }
-    
+
 
 }

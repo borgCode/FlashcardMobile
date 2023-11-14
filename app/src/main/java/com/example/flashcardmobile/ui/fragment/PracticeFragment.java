@@ -9,6 +9,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
@@ -84,8 +85,14 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
                 int id = menuItem.getItemId();
                 if (id == R.id.editCardItem) {
                     if (currentCardPosition != -1 && currentCardPosition < cards.size()) {
-                        Card cardtoEdit = cards.get(currentCardPosition);
-                        sharedPracticeViewModel.setSelectedCard(cardtoEdit);
+                        Card cardToEdit = cards.get(currentCardPosition);
+                        sharedPracticeViewModel.setSelectedCard(cardToEdit);
+                        EditCardFragment editCardFragment = new EditCardFragment();
+                        FragmentManager fragmentManager = getParentFragmentManager();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.fragment_container, editCardFragment)
+                                .addToBackStack(null)
+                                .commit();
                     }
                     return true;
                 }
@@ -100,6 +107,7 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
         Log.d("Due date calculation", "Calling calculateduedate method");
         Card newCard = calculateDueDate(card, difficulty);
         cardViewModel.update(newCard);
+        Log.d("Update new Due Date", "due date updated");
     }
 
     private Card calculateDueDate(Card card, int difficulty) {
@@ -116,16 +124,15 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
         Log.d("Due date calculation", "new easiness: " + easiness);
 
 
-        if (difficulty < 3) {
-            repetitions = 0;
-        } else {
+        if (difficulty >= 3) {
             repetitions += 1;
+        } else {
+            repetitions = 0;
         }
-        Log.d("Due date calculation", "new repetitions value" + repetitions);
 
-        if (repetitions <= 1) {
+        if (repetitions == 0) {
             interval = 1;
-        } else if (repetitions == 2) {
+        } else if (repetitions == 1) {
             interval = 6;
         } else {
             interval = (int) Math.round(interval * easiness);

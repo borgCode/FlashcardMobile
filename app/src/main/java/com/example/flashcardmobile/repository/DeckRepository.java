@@ -40,6 +40,9 @@ public class DeckRepository {
     public void deleteDeckById(long deckId) {
         CompletableFuture.runAsync(() -> deckDao.deleteDeckById(deckId), executorService);
     }
+    public void deleteAllDecks() {
+        CompletableFuture.runAsync(() -> deckDao.deleteAllDecks(), executorService);
+    }
 
     public LiveData<List<Deck>> getAllDecks() {
         return allDecks;

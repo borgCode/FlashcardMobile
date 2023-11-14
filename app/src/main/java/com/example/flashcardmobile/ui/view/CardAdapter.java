@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,6 +30,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     public static class CardViewHolder extends RecyclerView.ViewHolder {
         public TextView frontSide;
         public TextView backSide;
+        public Button answerButton;
+        public LinearLayout buttonBox;
         public Button easy;
         public Button medium;
         public Button hard;
@@ -37,6 +40,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             super(itemView);
             frontSide = itemView.findViewById(R.id.frontSide);
             backSide = itemView.findViewById(R.id.backSide);
+            answerButton = itemView.findViewById(R.id.buttonShowAnswer);
+            buttonBox = itemView.findViewById(R.id.buttonLayout);
             easy = itemView.findViewById(R.id.buttonEasy);
             medium = itemView.findViewById(R.id.buttonMedium);
             hard = itemView.findViewById(R.id.buttonHard);
@@ -56,6 +61,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull CardAdapter.CardViewHolder holder, int position) {
+        holder.backSide.setVisibility(View.INVISIBLE);
+        holder.buttonBox.setVisibility(View.INVISIBLE);
         Card card = cards.get(position);
         holder.frontSide.setText(card.getFrontSide());
         holder.backSide.setText(card.getBackSide());
@@ -64,6 +71,11 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         holder.easy.setOnClickListener(listener);
         holder.medium.setOnClickListener(listener);
         holder.hard.setOnClickListener(listener);
+        
+        holder.answerButton.setOnClickListener(l -> {
+            holder.backSide.setVisibility(View.VISIBLE);
+            holder.buttonBox.setVisibility(View.VISIBLE);
+        });
 
     }
 
@@ -85,6 +97,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             int difficulty;
             if (buttonId == R.id.buttonEasy) {
                 difficulty = 1;
+                
             } else if (buttonId == R.id.buttonMedium) {
                 difficulty = 3;
 

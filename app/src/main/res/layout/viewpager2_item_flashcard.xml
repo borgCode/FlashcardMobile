@@ -6,6 +6,7 @@
     <TextView
             android:id="@+id/frontSide"
             android:text="Front Side"
+            android:textSize="24sp"
             android:textAlignment="center"
             android:gravity="center"
             android:layout_width="0dp"
@@ -13,26 +14,42 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/backSide"
+            app:layout_constraintBottom_toTopOf="@id/buttonShowAnswer"
             app:layout_constraintHeight_default="percent"
             app:layout_constraintHeight_percent="0.4"/>
+
+    <Button
+            android:id="@+id/buttonShowAnswer"
+            android:text="Show Answer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/frontSide"
+            app:layout_constraintBottom_toTopOf="@id/backSide"
+            android:backgroundTint="#29818C"/>
 
     <TextView
             android:id="@+id/backSide"
             android:text="Back Side"
+            android:textSize="24sp"
+            android:visibility="invisible"
             android:textAlignment="center"
             android:gravity="center"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/frontSide"
+            app:layout_constraintTop_toBottomOf="@id/buttonShowAnswer"
             app:layout_constraintBottom_toTopOf="@id/buttonLayout"
             app:layout_constraintHeight_default="percent"
-            app:layout_constraintHeight_percent="0.4"/>
+            app:layout_constraintHeight_percent="0.42"/>
 
     <LinearLayout
             android:id="@+id/buttonLayout"
+            android:visibility="invisible"
             android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -41,25 +58,26 @@
             app:layout_constraintTop_toBottomOf="@id/backSide"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHeight_default="percent"
-            app:layout_constraintHeight_percent="0.2">
+            app:layout_constraintHeight_percent="0.1">
         <Button
-                
+
                 android:text="@string/easy"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:id="@+id/buttonEasy"
-                android:layout_weight="1"/>
+                android:backgroundTint="#3D9E23"
+                android:layout_weight="1" android:textColorHighlight="#9F3C3C"/>
         <Button
                 android:text="@string/medium"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:id="@+id/buttonMedium"
-                android:layout_weight="1"/>
+                android:layout_weight="1" android:backgroundTint="#959816"/>
         <Button
                 android:text="@string/hard"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:id="@+id/buttonHard"
-                android:layout_weight="1"/>
+                android:layout_weight="1" android:backgroundTint="#B60F0F"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

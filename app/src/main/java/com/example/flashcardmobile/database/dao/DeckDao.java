@@ -19,4 +19,7 @@ public interface DeckDao {
     void deleteDeckById(long deckId);
     @Query("SELECT * FROM decks")
     LiveData<List<Deck>> getAllDecks();
+    
+    @Query("DELETE FROM decks")
+    void deleteAllDecks();
 }
