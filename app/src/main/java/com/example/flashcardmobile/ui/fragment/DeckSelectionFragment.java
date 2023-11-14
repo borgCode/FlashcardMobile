@@ -48,6 +48,18 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
         sharedPracticeViewModel.setDeckName(deckName);
 
     }
+    
+    public void onViewDeck(long deckId, String deckName) {
+        sharedPracticeViewModel.setDeckId(deckId);
+        sharedPracticeViewModel.setDeckName(deckName);
+        ViewDeckFragment viewDeckFragment = new ViewDeckFragment();
+        FragmentManager fragmentManager = getParentFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, viewDeckFragment)
+                .addToBackStack(null)
+                .commit();
+
+    }
 
     @Override
     public void onAddCard(long deckId) {
@@ -80,7 +92,6 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_deck_selection, viewGroup, false);
 
-
         decks = new ArrayList<>();
 
         sharedPracticeViewModel = new ViewModelProvider(requireActivity()).get(SharedPracticeViewModel.class);
@@ -105,7 +116,6 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
         }
 
         requireActivity().addMenuProvider(new MenuProvider() {
-
             @Override
             public void onCreateMenu(@NonNull @NotNull Menu menu, @NonNull @NotNull MenuInflater menuInflater) {
                 Log.d("Practice Toolbar", "creating toolbar");

@@ -36,4 +36,9 @@ public class CardViewModel extends AndroidViewModel {
         cards = cardRepository.getAllDueCards(deckId);
         return cards;
     } 
+    
+    public LiveData<List<Card>> getAllCards(long deckId) {
+        cards = cardRepository.getAllDeckCards(deckId);
+        return cards;
+    }
 }

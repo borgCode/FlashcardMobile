@@ -1,5 +1,6 @@
 package com.example.flashcardmobile.ui.view;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.flashcardmobile.R;
 import com.example.flashcardmobile.entity.Deck;
+import com.example.flashcardmobile.ui.activity.DeckActivity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
         void onDeleteDeck(long deckId);
         void onPracticeDeck(long deckId, String deckName);
         void onAddCard(long deckId);   
+        void onViewDeck(long deckId, String deckName);
     }
     
     private List<Deck> decks;
@@ -55,7 +58,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
     @NotNull
     @Override
     public DeckViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_row, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_deck_selection_row, parent, false);
         return new DeckViewHolder(view);
     }
 
@@ -87,16 +90,13 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
 
                         if (id == R.id.addCardItem) {
                             listener.onAddCard(deck.getId());
-                            
 
                         } else if (id == R.id.viewDeckItem) {
-//                            Intent intent = new Intent(view.getContext(), DeckActivity.class);
-//                            intent.putExtra("deckName", deck.getDeckName());
-//                            view.getContext().startActivity(intent);
-
+                            listener.onViewDeck(deck.getId(), deck.getDeckName());
+                            
                         } else if (id == R.id.deleteDeckItem) {
                             listener.onDeleteDeck(deck.getId());
-
+                            
                         } else {    
                             return false;
                         }

@@ -55,8 +55,6 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
             }
         });
         
-        SharedPracticeViewModel sharedPracticeViewModel = new ViewModelProvider(requireActivity())
-                .get(SharedPracticeViewModel.class);
         sharedPracticeViewModel.getId().observe(getViewLifecycleOwner(), deckId -> {
             cardViewModel.getDueCards(deckId).observe(getViewLifecycleOwner(), newCards -> {
                 cards.clear();
