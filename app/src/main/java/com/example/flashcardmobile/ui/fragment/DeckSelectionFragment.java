@@ -2,13 +2,14 @@ package com.example.flashcardmobile.ui.fragment;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,15 +20,14 @@ import com.example.flashcardmobile.ui.dialog.DeleteConfirmationDialog;
 import com.example.flashcardmobile.ui.view.DeckAdapter;
 import com.example.flashcardmobile.viewmodel.DeckViewModel;
 import com.example.flashcardmobile.viewmodel.SharedPracticeViewModel;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDeckOperationListener,
         DeleteConfirmationDialog.DeleteDialogListener {
-    
-    
+
 
     private DeckViewModel deckViewModel;
     private SharedPracticeViewModel sharedPracticeViewModel;
@@ -39,14 +39,14 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
     @Override
     public void onDeleteDeck(long deckId) {
         deckToDelete = deckId;
-        showDeleteDialog();
+        showDeleteDialog("Do you really want to delete this deck?", "single_deck");
     }
 
     @Override
     public void onPracticeDeck(long deckId, String deckName) {
         sharedPracticeViewModel.setDeckId(deckId);
         sharedPracticeViewModel.setDeckName(deckName);
-        
+
     }
 
     @Override
@@ -59,48 +59,36 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
                 .replace(R.id.fragment_container, addCardFragment)
                 .addToBackStack(null)
                 .commit();
-        
+
     }
 
-    private void showDeleteDialog() {
-        DeleteConfirmationDialog dialog = new DeleteConfirmationDialog();
+    private void showDeleteDialog(String dialogMessage, String confirmationType) {
+        DeleteConfirmationDialog dialog = new DeleteConfirmationDialog(dialogMessage, confirmationType);
         dialog.setDeleteDialogListener(this);
         dialog.show(getParentFragmentManager(), "deleteDialog");
     }
-    
+
     @Override
-    public void onConfirmDelete() {
-        deckViewModel.deleteByDeckId(deckToDelete);
+    public void onConfirmDelete(String confirmationType) {
+        if (confirmationType.equals("single_deck")) {
+            deckViewModel.deleteByDeckId(deckToDelete);
+        } else if (confirmationType.equals("all_decks")) {
+            deckViewModel.deleteAllDecks();
+        }
     }
-    
+
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_deck_selection, viewGroup, false);
-        
-        FloatingActionButton buttonAddDeck = view.findViewById(R.id.add_deck_button);
-        buttonAddDeck.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Add Deck Fragment", "opening add deck fragment");
-                
-                AddDeckFragment addDeckFragment = new AddDeckFragment();
-                FragmentManager fragmentManager = getParentFragmentManager();
-                
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, addDeckFragment)
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });
-        
+
+
         decks = new ArrayList<>();
-        
+
         sharedPracticeViewModel = new ViewModelProvider(requireActivity()).get(SharedPracticeViewModel.class);
 
         deckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
         deckViewModel.getAllDecks().observe(getViewLifecycleOwner(), new Observer<List<Deck>>() {
             @Override
             public void onChanged(List<Deck> newDecks) {
-                
                 deckAdapter.setDecks(newDecks);
             }
         });
@@ -115,6 +103,38 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
             actionBar.setTitle("Decks");
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        requireActivity().addMenuProvider(new MenuProvider() {
+
+            @Override
+            public void onCreateMenu(@NonNull @NotNull Menu menu, @NonNull @NotNull MenuInflater menuInflater) {
+                Log.d("Practice Toolbar", "creating toolbar");
+                menuInflater.inflate(R.menu.menu_deck_selection_dropdown, menu);
+                Log.d("Practice Toolbar", "toolbar created");
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull @NotNull MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                if (id == R.id.AddDeckItem) {
+                    Log.d("Add Deck Fragment", "opening add deck fragment");
+
+                    AddDeckFragment addDeckFragment = new AddDeckFragment();
+                    FragmentManager fragmentManager = getParentFragmentManager();
+
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, addDeckFragment)
+                            .addToBackStack(null)
+                            .commit();
+                    return true;
+                } else if (id == R.id.deleteAllDecksItem) {
+                    showDeleteDialog("Do you really want to delete all decks?", "all_decks");
+                    return true;
+                }
+                return false;
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+        
         return view;
     }
 }

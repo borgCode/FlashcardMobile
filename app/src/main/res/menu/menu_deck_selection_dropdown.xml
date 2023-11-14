@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+            android:id="@+id/AddDeckItem"
+            android:title="Add Deck"
+            app:showAsAction="never"
+    />
+    <item
+            android:id="@+id/deleteAllDecksItem"
+            android:title="Delete All Decks"
+            app:showAsAction="never"
+    />
+</menu>
