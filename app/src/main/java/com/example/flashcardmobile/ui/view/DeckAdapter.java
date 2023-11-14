@@ -1,6 +1,5 @@
 package com.example.flashcardmobile.ui.view;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.flashcardmobile.R;
 import com.example.flashcardmobile.entity.Deck;
-import com.example.flashcardmobile.ui.activity.DeckActivity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

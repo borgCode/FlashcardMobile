@@ -46,6 +46,12 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
     public void onPracticeDeck(long deckId, String deckName) {
         sharedPracticeViewModel.setDeckId(deckId);
         sharedPracticeViewModel.setDeckName(deckName);
+        
+        FragmentManager fragmentManager = getParentFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, new PracticeFragment())
+                .addToBackStack(null)
+                .commit();
 
     }
     

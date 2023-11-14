@@ -15,9 +15,8 @@ import com.example.flashcardmobile.viewmodel.DeckViewModel;
 import com.example.flashcardmobile.viewmodel.SharedPracticeViewModel;
 
 public class PracticeActivity extends AppCompatActivity {
-    private SharedPracticeViewModel sharedPracticeViewModel;
-
-
+    
+    
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -34,15 +33,7 @@ public class PracticeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_practice);
-
-        sharedPracticeViewModel = new ViewModelProvider(this).get(SharedPracticeViewModel.class);
-        sharedPracticeViewModel.getId().observe(this, id -> {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new PracticeFragment())
-                    .addToBackStack(null)
-                    .commit();
-
-        });
+        
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
