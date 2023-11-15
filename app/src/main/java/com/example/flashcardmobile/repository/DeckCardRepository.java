@@ -7,7 +7,6 @@ import com.example.flashcardmobile.database.dao.DeckCardDao;
 import com.example.flashcardmobile.entity.DeckCard;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 public class DeckCardRepository {
     private DeckCardDao deckCardDao;
