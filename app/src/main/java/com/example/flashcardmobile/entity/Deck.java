@@ -1,5 +1,6 @@
 package com.example.flashcardmobile.entity;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -7,9 +8,9 @@ import androidx.room.PrimaryKey;
 public class Deck {
     @PrimaryKey(autoGenerate = true)
     private long id;
+    @ColumnInfo(name = "deck_name")
     private String deckName;
-
-
+    
     public Deck(String deckName) {
         this.deckName = deckName;
     }

@@ -27,8 +27,8 @@
                 android:layout_weight="1" android:text="@string/practice" android:textSize="34sp"
         android:id="@+id/practiceBtn"/>
         <Button android:layout_width="match_parent" android:layout_height="0dp"
-                android:layout_weight="1" android:text="@string/browse" android:textSize="34sp"
-                android:id="@+id/browseBtn"/>
+                android:layout_weight="1" android:text="@string/list" android:textSize="34sp"
+                android:id="@+id/listBtn"/>
         <Button android:layout_width="match_parent" android:layout_height="0dp"
                 android:layout_weight="1" android:text="@string/settings" android:textSize="34sp"
                 android:id="@+id/settingsBtn"/>

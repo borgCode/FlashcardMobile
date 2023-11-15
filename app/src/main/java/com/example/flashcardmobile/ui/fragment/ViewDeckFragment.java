@@ -51,7 +51,7 @@ public class ViewDeckFragment extends Fragment {
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),RecyclerView.VERTICAL));
 
         sharedPracticeViewModel.getId().observe(getViewLifecycleOwner(), deckId -> {
-            cardViewModel.getAllCards(deckId).observe(getViewLifecycleOwner(), newCards -> {
+            cardViewModel.getAllDeckCards(deckId).observe(getViewLifecycleOwner(), newCards -> {
                 cards.clear();
                 cards.addAll(newCards);
                 deckViewAdapter.notifyDataSetChanged();

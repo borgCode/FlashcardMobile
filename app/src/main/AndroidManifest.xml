@@ -24,6 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.PracticeActivity"/>
+        <activity android:name=".ui.activity.ListActivity"/>
     </application>
 
 </manifest>

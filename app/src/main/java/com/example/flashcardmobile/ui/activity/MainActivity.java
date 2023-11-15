@@ -27,11 +27,19 @@ public class MainActivity extends AppCompatActivity {
 
 
         Button practiceButton = findViewById(R.id.practiceBtn);
+        Button listButton = findViewById(R.id.listBtn);
 
         practiceButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, PracticeActivity.class);
             startActivity(intent);
         });
+        
+        listButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ListActivity.class);
+            startActivity(intent);
+        });
+        
+        
 
     }
 }
