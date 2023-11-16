@@ -68,8 +68,6 @@ public class ViewDeckFragment extends Fragment {
             }
         });
         
-        
-        
         return view; 
     }
 }
