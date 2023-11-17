@@ -19,7 +19,7 @@ import com.example.flashcardmobile.entity.Deck;
 import com.example.flashcardmobile.ui.dialog.DeleteConfirmationDialog;
 import com.example.flashcardmobile.ui.view.DeckAdapter;
 import com.example.flashcardmobile.viewmodel.DeckViewModel;
-import com.example.flashcardmobile.viewmodel.SharedPracticeViewModel;
+import com.example.flashcardmobile.viewmodel.SharedViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -30,77 +30,19 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
 
 
     private DeckViewModel deckViewModel;
-    private SharedPracticeViewModel sharedPracticeViewModel;
+    private SharedViewModel sharedViewModel;
     private RecyclerView recyclerView;
     private DeckAdapter deckAdapter;
     private List<Deck> decks;
     private long deckToDelete;
-
-    @Override
-    public void onDeleteDeck(long deckId) {
-        deckToDelete = deckId;
-        showDeleteDialog("Do you really want to delete this deck?", "single_deck");
-    }
-
-    @Override
-    public void onPracticeDeck(long deckId, String deckName) {
-        sharedPracticeViewModel.setDeckId(deckId);
-        sharedPracticeViewModel.setDeckName(deckName);
-        
-        FragmentManager fragmentManager = getParentFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, new PracticeFragment())
-                .addToBackStack(null)
-                .commit();
-
-    }
     
-    public void onViewDeck(long deckId, String deckName) {
-        sharedPracticeViewModel.setDeckId(deckId);
-        sharedPracticeViewModel.setDeckName(deckName);
-        ViewDeckFragment viewDeckFragment = new ViewDeckFragment();
-        FragmentManager fragmentManager = getParentFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, viewDeckFragment)
-                .addToBackStack(null)
-                .commit();
-
-    }
-
-    @Override
-    public void onAddCard(long deckId) {
-        sharedPracticeViewModel.setDeckId(deckId);
-
-        AddCardFragment addCardFragment = new AddCardFragment();
-        FragmentManager fragmentManager = getParentFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, addCardFragment)
-                .addToBackStack(null)
-                .commit();
-
-    }
-
-    private void showDeleteDialog(String dialogMessage, String confirmationType) {
-        DeleteConfirmationDialog dialog = new DeleteConfirmationDialog(dialogMessage, confirmationType);
-        dialog.setDeleteDialogListener(this);
-        dialog.show(getParentFragmentManager(), "deleteDialog");
-    }
-
-    @Override
-    public void onConfirmDelete(String confirmationType) {
-        if (confirmationType.equals("single_deck")) {
-            deckViewModel.deleteByDeckId(deckToDelete);
-        } else if (confirmationType.equals("all_decks")) {
-            deckViewModel.deleteAllDecks();
-        }
-    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_deck_selection, viewGroup, false);
 
         decks = new ArrayList<>();
 
-        sharedPracticeViewModel = new ViewModelProvider(requireActivity()).get(SharedPracticeViewModel.class);
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
         deckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
         deckViewModel.getAllDecks().observe(getViewLifecycleOwner(), new Observer<List<Deck>>() {
@@ -152,5 +94,63 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
         
         return view;
+    }
+
+    @Override
+    public void onDeleteDeck(long deckId) {
+        deckToDelete = deckId;
+        showDeleteDialog("Do you really want to delete this deck?", "single_deck");
+    }
+
+    @Override
+    public void onPracticeDeck(long deckId) {
+        sharedViewModel.setDeckId(deckId);
+        
+        FragmentManager fragmentManager = getParentFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, new PracticeFragment())
+                .addToBackStack(null)
+                .commit();
+
+    }
+
+    public void onViewDeck(long deckId) {
+        sharedViewModel.setDeckId(deckId);
+        
+        ViewDeckFragment viewDeckFragment = new ViewDeckFragment();
+        FragmentManager fragmentManager = getParentFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, viewDeckFragment)
+                .addToBackStack(null)
+                .commit();
+
+    }
+
+    @Override
+    public void onAddCard(long deckId) {
+        sharedViewModel.setDeckId(deckId);
+
+        AddCardFragment addCardFragment = new AddCardFragment();
+        FragmentManager fragmentManager = getParentFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, addCardFragment)
+                .addToBackStack(null)
+                .commit();
+
+    }
+
+    private void showDeleteDialog(String dialogMessage, String confirmationType) {
+        DeleteConfirmationDialog dialog = new DeleteConfirmationDialog(dialogMessage, confirmationType);
+        dialog.setDeleteDialogListener(this);
+        dialog.show(getParentFragmentManager(), "deleteDialog");
+    }
+
+    @Override
+    public void onConfirmDelete(String confirmationType) {
+        if (confirmationType.equals("single_deck")) {
+            deckViewModel.deleteByDeckId(deckToDelete);
+        } else if (confirmationType.equals("all_decks")) {
+            deckViewModel.deleteAllDecks();
+        }
     }
 }

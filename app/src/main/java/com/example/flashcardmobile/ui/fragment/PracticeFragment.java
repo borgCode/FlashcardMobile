@@ -17,7 +17,8 @@ import com.example.flashcardmobile.R;
 import com.example.flashcardmobile.entity.Card;
 import com.example.flashcardmobile.ui.view.CardAdapter;
 import com.example.flashcardmobile.viewmodel.CardViewModel;
-import com.example.flashcardmobile.viewmodel.SharedPracticeViewModel;
+import com.example.flashcardmobile.viewmodel.DeckViewModel;
+import com.example.flashcardmobile.viewmodel.SharedViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
@@ -26,7 +27,8 @@ import java.util.List;
 
 public class PracticeFragment extends Fragment implements CardAdapter.AdapterCallback {
     private CardViewModel cardViewModel;
-    private SharedPracticeViewModel sharedPracticeViewModel;
+    private SharedViewModel sharedViewModel;
+    private DeckViewModel deckViewModel;
     private List<Card> cards;
     private CardAdapter cardAdapter;
     private ViewPager2 viewPager2;
@@ -39,7 +41,8 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
         ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
         
         cardViewModel = new ViewModelProvider(requireActivity()).get(CardViewModel.class);
-        sharedPracticeViewModel = new ViewModelProvider(requireActivity()).get(SharedPracticeViewModel.class);
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        deckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
         
         viewPager2 = view.findViewById(R.id.practiceView);
         viewPager2.setUserInputEnabled(false);
@@ -55,20 +58,19 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
             }
         });
         
-        sharedPracticeViewModel.getId().observe(getViewLifecycleOwner(), deckId -> {
+        sharedViewModel.getDeckId().observe(getViewLifecycleOwner(), deckId -> {
             cardViewModel.getDueCards(deckId).observe(getViewLifecycleOwner(), newCards -> {
                 cards.clear();
                 cards.addAll(newCards);
                 cardAdapter.notifyDataSetChanged();
             });
+            deckViewModel.getDeckById(deckId).observe(getViewLifecycleOwner(), deck -> {
+                if (actionBar != null) {
+                    actionBar.setTitle(deck.getDeckName());
+                    actionBar.setDisplayHomeAsUpEnabled(true);
+                }
+            });
 
-        });
-
-        sharedPracticeViewModel.getName().observe(getViewLifecycleOwner(), deckName -> {
-            if (actionBar != null) {
-                actionBar.setTitle(deckName);
-                actionBar.setDisplayHomeAsUpEnabled(true);
-            }
         });
         requireActivity().addMenuProvider(new MenuProvider() {
             
@@ -84,7 +86,7 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
                 if (id == R.id.editCardItem) {
                     if (currentCardPosition != -1 && currentCardPosition < cards.size()) {
                         Card cardToEdit = cards.get(currentCardPosition);
-                        sharedPracticeViewModel.setSelectedCard(cardToEdit);
+                        sharedViewModel.setSelectedCard(cardToEdit);
                         EditCardFragment editCardFragment = new EditCardFragment();
                         FragmentManager fragmentManager = getParentFragmentManager();
                         fragmentManager.beginTransaction()

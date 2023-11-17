@@ -22,4 +22,7 @@ public interface DeckDao {
     
     @Query("DELETE FROM decks")
     void deleteAllDecks();
+
+    @Query("SELECT * FROM decks WHERE id = :id")
+    LiveData<Deck> getDeckById(long id);
 }

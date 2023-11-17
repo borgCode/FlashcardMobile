@@ -35,6 +35,9 @@ public class DeckViewModel extends AndroidViewModel {
     public void deleteAllDecks() {
         deckRepository.deleteAllDecks();
     }
+    public LiveData<Deck> getDeckById(long id) {
+        return deckRepository.getDeckById(id);
+    }
     public LiveData<List<Deck>> getAllDecks() {
         return allDecks;
     }

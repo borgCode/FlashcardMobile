@@ -18,4 +18,7 @@ public interface CardDao {
     LiveData<List<Card>> getCardsByDeckId(long deckId);
     @Query("SELECT * FROM cards WHERE deck_id = :deckId AND due_date <= :localTime")
     LiveData<List<Card>> getDueCardsByDeckId(long deckId, String localTime);
+
+    @Query("SELECT * FROM cards WHERE id = :id")
+    LiveData<Card> getCardById(long id);
 }

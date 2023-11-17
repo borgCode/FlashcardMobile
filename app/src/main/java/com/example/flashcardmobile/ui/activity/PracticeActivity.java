@@ -6,13 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProvider;
 import com.example.flashcardmobile.R;
 import com.example.flashcardmobile.ui.fragment.DeckSelectionFragment;
-import com.example.flashcardmobile.ui.fragment.PracticeFragment;
-import com.example.flashcardmobile.viewmodel.CardViewModel;
-import com.example.flashcardmobile.viewmodel.DeckViewModel;
-import com.example.flashcardmobile.viewmodel.SharedPracticeViewModel;
 
 public class PracticeActivity extends AppCompatActivity {
     

@@ -6,15 +6,18 @@
               android:showDividers="middle|end"
               android:divider="@drawable/table_divider"
               android:orientation="horizontal"
-              android:padding="8dp">
+              android:paddingTop="8dp"
+              android:paddingBottom="8dp"
+              android:paddingStart="4dp"
+android:weightSum="5">
 
     <TextView
             android:id="@+id/deckNameCol"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="1.15"
             android:layout_gravity="center"
-            android:padding="4dp"
+            android:padding="2dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:text="Column 1"
     />
@@ -22,9 +25,9 @@
             android:id="@+id/frontCol"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="1.15"
             android:layout_gravity="center"
-            android:padding="4dp"
+            android:padding="2dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:text="Column 1"
     />
@@ -33,9 +36,9 @@
             android:id="@+id/backCol"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="1.15"
             android:layout_gravity="center"
-            android:padding="4dp"
+            android:padding="2dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:text="Column 2"
     />
@@ -44,12 +47,16 @@
             android:id="@+id/dueDateCol"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="1.15"
             android:layout_gravity="center"
-            android:padding="4dp"
+            android:padding="2dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:text="Column 3"
     />
+    <ImageButton android:layout_width="0dp" android:layout_height="match_parent"
+                 android:id="@+id/list_card_popup_menu" android:src="@drawable/ic_more_vert"
+                 android:background="?attr/selectableItemBackgroundBorderless"
+    android:layout_weight="0.4"/>
 
 </LinearLayout>
 

@@ -17,7 +17,8 @@ import com.example.flashcardmobile.R;
 import com.example.flashcardmobile.entity.Card;
 import com.example.flashcardmobile.ui.view.DeckViewAdapter;
 import com.example.flashcardmobile.viewmodel.CardViewModel;
-import com.example.flashcardmobile.viewmodel.SharedPracticeViewModel;
+import com.example.flashcardmobile.viewmodel.DeckViewModel;
+import com.example.flashcardmobile.viewmodel.SharedViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -25,14 +26,12 @@ import java.util.List;
 
 public class ViewDeckFragment extends Fragment {
     
-    private SharedPracticeViewModel sharedPracticeViewModel;
+    private SharedViewModel sharedViewModel;
     private CardViewModel cardViewModel;
+    private DeckViewModel deckViewModel;
     private RecyclerView recyclerView;
     private DeckViewAdapter deckViewAdapter;
     private List<Card> cards;
-
-    public ViewDeckFragment() {
-    }
     
     @Nullable
     @Override
@@ -42,7 +41,8 @@ public class ViewDeckFragment extends Fragment {
         cards = new ArrayList<>();
 
         cardViewModel = new ViewModelProvider(requireActivity()).get(CardViewModel.class);
-        sharedPracticeViewModel = new ViewModelProvider(requireActivity()).get(SharedPracticeViewModel.class);
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        deckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
         
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -50,24 +50,22 @@ public class ViewDeckFragment extends Fragment {
         recyclerView.setAdapter(deckViewAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),RecyclerView.VERTICAL));
 
-        sharedPracticeViewModel.getId().observe(getViewLifecycleOwner(), deckId -> {
+        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
+
+        sharedViewModel.getDeckId().observe(getViewLifecycleOwner(), deckId -> {
             cardViewModel.getAllDeckCards(deckId).observe(getViewLifecycleOwner(), newCards -> {
                 cards.clear();
                 cards.addAll(newCards);
                 deckViewAdapter.notifyDataSetChanged();
             });
+            deckViewModel.getDeckById(deckId).observe(getViewLifecycleOwner(), deck -> {
+                if (actionBar != null) {
+                    actionBar.setTitle(deck.getDeckName());
+                    actionBar.setDisplayHomeAsUpEnabled(true);
+                }
+            });
 
         });
-
-        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
-
-        sharedPracticeViewModel.getName().observe(getViewLifecycleOwner(), deckName -> {
-            if (actionBar != null) {
-                actionBar.setTitle(deckName);
-                actionBar.setDisplayHomeAsUpEnabled(true);
-            }
-        });
-        
         return view; 
     }
 }

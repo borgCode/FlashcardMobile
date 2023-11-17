@@ -17,7 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.flashcardmobile.R;
 import com.example.flashcardmobile.entity.Card;
 import com.example.flashcardmobile.viewmodel.CardViewModel;
-import com.example.flashcardmobile.viewmodel.SharedPracticeViewModel;
+import com.example.flashcardmobile.viewmodel.SharedViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 public class AddCardFragment extends Fragment {
     
     private CardViewModel cardViewModel;
-    private SharedPracticeViewModel sharedPracticeViewModel;
+    private SharedViewModel sharedViewModel;
     private EditText frontSide;
     private EditText backSide;
     private EditText tags;
@@ -38,7 +38,7 @@ public class AddCardFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_save_card, container, false);
         
         cardViewModel = new ViewModelProvider(requireActivity()).get(CardViewModel.class);
-        sharedPracticeViewModel = new ViewModelProvider(requireActivity()).get(SharedPracticeViewModel.class);
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
         ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
         actionBar.setTitle("Add Card");
@@ -59,7 +59,7 @@ public class AddCardFragment extends Fragment {
     private void addCard() {
         String frontText = frontSide.getText().toString().trim();
         String backText = backSide.getText().toString().trim();
-        long deckId = sharedPracticeViewModel.getId().getValue();
+        long deckId = sharedViewModel.getDeckId().getValue();
 
         Log.d("AddCardF", "Checking if fields are filled");
         

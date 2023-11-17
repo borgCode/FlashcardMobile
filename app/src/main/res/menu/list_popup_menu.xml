@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+            android:id="@+id/editCardItem"
+            android:title="Edit Card"
+            app:showAsAction="never"
+    />
+    <item android:id="@+id/resetDueDateItem"
+          android:title="Reset Due Date"
+          app:showAsAction="never"/>
+    <item
+            android:id="@+id/deleteCardItem"
+            android:title="Delete Card"
+            app:showAsAction="never"
+    />
+</menu>

@@ -43,4 +43,8 @@ public class CardRepository {
     public LiveData<List<Card>> getAllDueCards(long id) {
         return cardDao.getDueCardsByDeckId(id, LocalDateTime.now().toString());
     }
+
+    public LiveData<Card> getCardById(long id) {
+        return cardDao.getCardById(id);
+    }
 }

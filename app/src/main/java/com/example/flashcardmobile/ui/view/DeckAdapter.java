@@ -1,7 +1,6 @@
 package com.example.flashcardmobile.ui.view;
 
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -20,9 +19,9 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
 
     public interface OnDeckOperationListener {
         void onDeleteDeck(long deckId);
-        void onPracticeDeck(long deckId, String deckName);
+        void onPracticeDeck(long deckId);
         void onAddCard(long deckId);   
-        void onViewDeck(long deckId, String deckName);
+        void onViewDeck(long deckId);
     }
     
     private List<Deck> decks;
@@ -65,45 +64,32 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
 
         Deck deck = decks.get(position);
         holder.deckBtn.setText(deck.getDeckName());
-        holder.deckBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onPracticeDeck(deck.getId(), deck.getDeckName());
-            }
-        });
+        holder.deckBtn.setOnClickListener(v -> listener.onPracticeDeck(deck.getId()));
 
-        holder.deckOptions.setOnClickListener(new View.OnClickListener() {
+        holder.deckOptions.setOnClickListener(view -> {
 
-            @Override
-            public void onClick(View view) {
+            PopupMenu popupMenu = new PopupMenu(holder.itemView.getContext(), holder.deckOptions);
+            popupMenu.getMenuInflater().inflate(R.menu.deck_popup_menu, popupMenu.getMenu());
+            
+            popupMenu.setOnMenuItemClickListener(menuItem -> {
+                int id = menuItem.getItemId();
 
-                PopupMenu popupMenu = new PopupMenu(holder.itemView.getContext(), holder.deckOptions);
-                popupMenu.getMenuInflater().inflate(R.menu.deck_popup_menu, popupMenu.getMenu());
+                if (id == R.id.addCardItem) {
+                    listener.onAddCard(deck.getId());
 
+                } else if (id == R.id.viewDeckItem) {
+                    listener.onViewDeck(deck.getId());
+                    
+                } else if (id == R.id.deleteDeckItem) {
+                    listener.onDeleteDeck(deck.getId());
+                    
+                } else {    
+                    return false;
+                }
+                return true;
+            });
+            popupMenu.show();
 
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        int id = menuItem.getItemId();
-
-                        if (id == R.id.addCardItem) {
-                            listener.onAddCard(deck.getId());
-
-                        } else if (id == R.id.viewDeckItem) {
-                            listener.onViewDeck(deck.getId(), deck.getDeckName());
-                            
-                        } else if (id == R.id.deleteDeckItem) {
-                            listener.onDeleteDeck(deck.getId());
-                            
-                        } else {    
-                            return false;
-                        }
-                        return true;
-                    }
-                });
-                popupMenu.show();
-
-            }
         });
 
     }

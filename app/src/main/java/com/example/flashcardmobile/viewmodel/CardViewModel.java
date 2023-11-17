@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import com.example.flashcardmobile.entity.Card;
+import com.example.flashcardmobile.entity.Deck;
 import com.example.flashcardmobile.repository.CardRepository;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,7 +36,10 @@ public class CardViewModel extends AndroidViewModel {
     public LiveData<List<Card>> getDueCards(long deckId) {
         cards = cardRepository.getAllDueCards(deckId);
         return cards;
-    } 
+    }
+    public LiveData<Card> getCardById(long id) {
+        return cardRepository.getCardById(id);
+    }
     
     public LiveData<List<Card>> getAllDeckCards(long deckId) {
         cards = cardRepository.getAllDeckCards(deckId);

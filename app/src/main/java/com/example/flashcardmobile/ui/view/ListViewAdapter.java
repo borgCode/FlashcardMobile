@@ -4,9 +4,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.flashcardmobile.R;
@@ -18,11 +16,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHolder> implements Filterable {
+    
+    public interface onCardOperationListener {
+        void onCardEdit(long deckId, long cardId);
+        void onResetDueDate(int position);
+        void onCardDelete(long cardId);
+        
+    }
 
     private List<DeckCard> cards;
     private List<DeckCard> cardsFull;
+    private onCardOperationListener listener;
 
-    public ListViewAdapter() {
+    public ListViewAdapter(onCardOperationListener listener) {
+        this.listener = listener;
         cards = new ArrayList<>();
         cardsFull = new ArrayList<>();
     }
@@ -41,6 +48,7 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
         public TextView frontSideCol;
         public TextView backSideCol;
         public TextView dueDateCol;
+        public ImageButton cardOptions;
 
 
         public ViewHolder(@NonNull @NotNull View itemView) {
@@ -50,6 +58,7 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
             frontSideCol = itemView.findViewById(R.id.frontCol);
             backSideCol = itemView.findViewById(R.id.backCol);
             dueDateCol = itemView.findViewById(R.id.dueDateCol);
+            cardOptions = itemView.findViewById(R.id.list_card_popup_menu);
         }
     }
 
@@ -73,6 +82,29 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
         holder.backSideCol.setText(card.getBackSide());
         LocalDate date = card.getDueDate().toLocalDate();
         holder.dueDateCol.setText(date.toString());
+        
+        holder.cardOptions.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(holder.itemView.getContext(), holder.cardOptions);
+            popupMenu.getMenuInflater().inflate(R.menu.list_popup_menu, popupMenu.getMenu());
+            
+            popupMenu.setOnMenuItemClickListener(item -> {
+                Log.d("PopupMenu", "item Clicked");
+                int id = item.getItemId();
+                if (id == R.id.editCardItem) {
+                    listener.onCardEdit(card.getDeckId(), card.getCardId());
+                } else if (id == R.id.resetDueDateItem) {
+                    listener.onResetDueDate(position);
+                } else if (id == R.id.deleteCardItem) {
+                    listener.onCardDelete(card.getCardId());
+                } else {
+                    return false;
+                }
+                return true;
+            });
+            Log.d("PopupMenu", "Showing menu");
+            popupMenu.show();
+            
+        });
     }
 
     @Override
