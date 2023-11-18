@@ -3,9 +3,11 @@ package com.example.flashcardmobile.ui.fragment;
 import android.os.Bundle;
 import android.view.*;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -70,9 +72,13 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.onCard
 
                 int id = menuItem.getItemId();
 
-                if (id == R.id.search_list) {
-
-                    SearchView searchView = (SearchView) menuItem.getActionView();
+                if (id == R.id.search_view_with_spinner) {
+                    
+                    
+                    View actionView = menuItem.getActionView();
+                    SearchView searchView = actionView.findViewById(R.id.search_view);
+                    Spinner spinner = actionView.findViewById(R.id.spinner_search_options);
+                    
                     searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
                     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

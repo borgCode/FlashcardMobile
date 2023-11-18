@@ -1,8 +1,11 @@
 package com.example.flashcardmobile.ui.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
+import androidx.appcompat.app.AppCompatDelegate;
 import com.example.flashcardmobile.R;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,17 +17,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        DatabaseHelper db = DatabaseHelper.getInstance(this);
-//        SharedPreferences prefs = getApplicationContext().getSharedPreferences("prefs", MODE_PRIVATE);
-//        if (!prefs.getBoolean("db_init", false)) {
-//            db.createDatabase();
-//            SharedPreferences.Editor editor = prefs.edit();
-//            editor.putBoolean("db_init", true);
-//            editor.apply();
-//        }
+        SharedPreferences sharedPreferences = getSharedPreferences("AppSettings", MODE_PRIVATE);
+        String theme = sharedPreferences.getString("Theme", "Light");
+        if (theme != null) {
+            Log.d("Theme check", "Fetched theme: " + theme);
+        }
+        if (theme.equals("Dark")) {
+            Log.d("Theme check", "Theme is Dark");
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            Log.d("Theme check", "Theme is Light");
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
 
         setContentView(R.layout.activity_main);
-        setTheme(R.style.Base_Theme_FlashcardMobile_Dark);
 
 
         Button practiceButton = findViewById(R.id.practiceBtn);

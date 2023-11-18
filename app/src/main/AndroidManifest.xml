@@ -25,6 +25,7 @@
         </activity>
         <activity android:name=".ui.activity.PracticeActivity"/>
         <activity android:name=".ui.activity.ListActivity"/>
+        <activity android:name=".ui.activity.SettingsActivity"/>
     </application>
 
 </manifest>

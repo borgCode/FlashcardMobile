@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import com.example.flashcardmobile.R;
 
@@ -35,10 +36,10 @@ public class SettingsActivity extends AppCompatActivity {
         }
         if (theme.equals("Dark")) {
             Log.d("Theme check", "Theme is Dark");
-            setTheme(R.style.Base_Theme_FlashcardMobile_Dark);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
             Log.d("Theme check", "Theme is Light");
-            setTheme(R.style.Base_Theme_FlashcardMobile_Light);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
         setContentView(R.layout.activity_settings);
 

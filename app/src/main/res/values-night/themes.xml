@@ -2,6 +2,9 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.FlashcardMobile" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/primaryColorDark</item>
+        <item name="colorSecondary">@color/secondaryColorDark</item>
+        <item name="android:windowBackground">@color/backgroundColorDark</item>
+        <item name="android:textColor">@color/textColorDark</item>
     </style>
 </resources>
