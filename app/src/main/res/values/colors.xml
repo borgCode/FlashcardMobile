@@ -3,4 +3,18 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="teal_color">#29818C</color>
+
+    
+
+    
+    <color name="primaryColorLight">#176B87</color>
+    <color name="secondaryColorLight">#64CCC5</color>
+    <color name="backgroundColorLight">#EEEEEE</color>
+    <color name="textColorLight">#053B50</color>
+
+    <!-- Dark Theme Colors -->
+    <color name="primaryColorDark">#355D63</color>
+    <color name="secondaryColorDark">#A98274</color>
+    <color name="backgroundColorDark">#053B50</color>
+    <color name="textColorDark">#EEEEEE</color>
 </resources>

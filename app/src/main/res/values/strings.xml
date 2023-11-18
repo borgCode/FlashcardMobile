@@ -59,4 +59,7 @@
     <string name="front">Front</string>
     <string name="due_date">Due date</string>
     <string name="select_deck">Select Deck:</string>
+    <string name="light_mode">Light Mode</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="select_theme">Select Theme:</string>
 </resources>

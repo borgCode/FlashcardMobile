@@ -24,10 +24,12 @@ public class MainActivity extends AppCompatActivity {
 //        }
 
         setContentView(R.layout.activity_main);
+        setTheme(R.style.Base_Theme_FlashcardMobile_Dark);
 
 
         Button practiceButton = findViewById(R.id.practiceBtn);
         Button listButton = findViewById(R.id.listBtn);
+        Button settingsButton = findViewById(R.id.settingsBtn);
 
         practiceButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, PracticeActivity.class);
@@ -39,7 +41,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
         
-        
+        settingsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
+        });
 
     }
 }
