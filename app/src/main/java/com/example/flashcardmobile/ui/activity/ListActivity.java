@@ -38,7 +38,9 @@ public class ListActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.back);
+            actionBar.setTitle("All Cards");
         }
+        
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()

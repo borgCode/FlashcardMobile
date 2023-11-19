@@ -157,6 +157,7 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
                                 filteredList.add(card);
                                 break;
                             }
+                            //TODO TAG FILTER
                     }
                 }
             }

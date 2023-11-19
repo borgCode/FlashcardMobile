@@ -50,6 +50,8 @@ public class AddCardFragment extends Fragment {
         tags = view.findViewById(R.id.tagsEditText);
         addButton = view.findViewById(R.id.addCardButton);
         
+        view.findViewById(R.id.deckSelectionBox).setVisibility(View.GONE);
+        
         addButton.setOnClickListener(v -> addCard());
         
         return view;
