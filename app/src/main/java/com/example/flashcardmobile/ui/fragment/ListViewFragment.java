@@ -3,11 +3,12 @@ package com.example.flashcardmobile.ui.fragment;
 import android.os.Bundle;
 import android.view.*;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.view.MenuItemCompat;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -16,7 +17,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.flashcardmobile.R;
-import com.example.flashcardmobile.entity.Card;
 import com.example.flashcardmobile.entity.DeckCard;
 import com.example.flashcardmobile.ui.view.ListViewAdapter;
 import com.example.flashcardmobile.viewmodel.CardViewModel;
@@ -24,7 +24,6 @@ import com.example.flashcardmobile.viewmodel.DeckCardViewModel;
 import com.example.flashcardmobile.viewmodel.SharedViewModel;
 import org.jetbrains.annotations.NotNull;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,9 +75,30 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.onCard
                     
                     
                     View actionView = menuItem.getActionView();
-                    SearchView searchView = actionView.findViewById(R.id.search_view);
-                    Spinner spinner = actionView.findViewById(R.id.spinner_search_options);
                     
+                    
+                    Spinner spinner = actionView.findViewById(R.id.spinner_search_options);
+                    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                            getActivity(), R.array.search_options, android.R.layout.simple_spinner_item);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner.setAdapter(adapter);
+                    
+                    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            String selectedOption = parent.getItemAtPosition(position).toString();
+                            listViewAdapter.setCurrentSearchColumn(selectedOption);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+
+
+
+                    SearchView searchView = actionView.findViewById(R.id.search_view);
                     searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
                     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

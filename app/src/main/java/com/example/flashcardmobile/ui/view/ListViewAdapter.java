@@ -16,7 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHolder> implements Filterable {
+
     
+
     public interface onCardOperationListener {
         void onCardEdit(long deckId, long cardId);
         void onResetDueDate(int position);
@@ -27,6 +29,7 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
     private List<DeckCard> cards;
     private List<DeckCard> cardsFull;
     private onCardOperationListener listener;
+    private String currentSearchColumn;
 
     public ListViewAdapter(onCardOperationListener listener) {
         this.listener = listener;
@@ -132,16 +135,36 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
                 Log.d("Filter pattern", filterPattern);
                 
                 for (DeckCard card : cardsFull) {
-                    if (card.getFrontSide().toLowerCase().contains(filterPattern)
-                    || card.getBackSide().toLowerCase().contains(filterPattern)) {
-                        Log.d("Add card to Filter", "Card contains filter pattern, adding to filtered list");
-                        filteredList.add(card);
+                    switch (currentSearchColumn) {
+                        case "Decks":
+                            Log.d("Filter Column", "Column is decks");
+                            if (card.getDeckName().equalsIgnoreCase(filterPattern)) {
+                                Log.d("Add card to Filter", "Card contains DECK filter pattern, adding to filtered list");
+                                filteredList.add(card);
+                                break;
+                            }
+                        case "Front side":
+                            Log.d("Filter Column", "Column is front");
+                            if (card.getFrontSide().toLowerCase().contains(filterPattern)) {
+                                Log.d("Add card to Filter", "Card contains FRONT filter pattern, adding to filtered list");
+                                filteredList.add(card);
+                                break;
+                            }
+                        case "Back side":
+                            Log.d("Filter Column", "Column is back");
+                            if (card.getBackSide().toLowerCase().contains(filterPattern)) {
+                                Log.d("Add card to Filter", "Card contains BACK filter pattern, adding to filtered list");
+                                filteredList.add(card);
+                                break;
+                            }
                     }
                 }
             }
             Log.d("Filtered List", "Size: " + filteredList.size());
             FilterResults results = new FilterResults();
             results.values = filteredList;
+
+            
             
             return results;
         }
@@ -153,4 +176,9 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
             notifyDataSetChanged();
         }
     };
+
+    public void setCurrentSearchColumn(String selectedOption) {
+        this.currentSearchColumn = selectedOption;
+    }
+    
 }

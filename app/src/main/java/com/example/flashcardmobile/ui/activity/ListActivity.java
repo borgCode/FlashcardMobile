@@ -1,35 +1,14 @@
 package com.example.flashcardmobile.ui.activity;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.inputmethod.EditorInfo;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.MenuProvider;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import com.example.flashcardmobile.R;
-import com.example.flashcardmobile.entity.DeckCard;
-import com.example.flashcardmobile.ui.fragment.DeckSelectionFragment;
 import com.example.flashcardmobile.ui.fragment.ListViewFragment;
-import com.example.flashcardmobile.ui.view.ListViewAdapter;
-import com.example.flashcardmobile.viewmodel.CardViewModel;
-import com.example.flashcardmobile.viewmodel.DeckCardViewModel;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ListActivity extends AppCompatActivity {
 
