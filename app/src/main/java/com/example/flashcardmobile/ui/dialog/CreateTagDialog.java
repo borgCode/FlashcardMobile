@@ -90,6 +90,7 @@ public class CreateTagDialog extends DialogFragment {
     }
 
     private void createTag() {
+        
 
         tagViewModel.insert(new Tag(textInput.getText().toString(), defaultColor));
 

@@ -67,10 +67,12 @@
         android:src="@drawable/add"
                      android:id="@+id/create_tag_button"
         android:tooltipText="@string/create_new_tag"/>
-                     
-        
-        
     </LinearLayout>
+    
+    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:id="@+id/tag_container" android:orientation="horizontal"
+                  android:padding="8dp"/>
+    
     
     <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:layout_gravity="end"

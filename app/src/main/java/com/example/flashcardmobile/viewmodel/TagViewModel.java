@@ -3,6 +3,7 @@ package com.example.flashcardmobile.viewmodel;
 import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import com.example.flashcardmobile.entity.CardTagCrossRef;
 import com.example.flashcardmobile.entity.Tag;
 import com.example.flashcardmobile.repository.TagRepository;
 import org.jetbrains.annotations.NotNull;
@@ -37,5 +38,8 @@ public class TagViewModel extends AndroidViewModel {
     public LiveData<List<Tag>> getAllTags() {
         return tagRepository.getAllTags();
     }
-    
+
+    public void insertCrossRefs(List<CardTagCrossRef> crossRefs) {
+        tagRepository.insertCrossRefs(crossRefs);
+    }
 }

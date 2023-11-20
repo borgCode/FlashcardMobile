@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import com.example.flashcardmobile.database.AppDatabase;
 import com.example.flashcardmobile.database.dao.TagDao;
+import com.example.flashcardmobile.entity.CardTagCrossRef;
 import com.example.flashcardmobile.entity.CardWithTags;
 import com.example.flashcardmobile.entity.Tag;
 import com.example.flashcardmobile.entity.TagWithCards;
@@ -51,5 +52,8 @@ public class TagRepository {
     public LiveData<List<CardWithTags>> getTagsForCard(long cardId) {
         return tagDao.getTagsForCard(cardId);
     }
-    
+
+    public void insertCrossRefs(List<CardTagCrossRef> crossRefs) {
+        CompletableFuture.runAsync(() -> tagDao.insertCrossRefs(crossRefs), executorService);
+    }
 }

@@ -1,6 +1,6 @@
 package com.example.flashcardmobile.ui.fragment;
 
-import android.media.Image;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.flashcardmobile.R;
 import com.example.flashcardmobile.entity.Card;
+import com.example.flashcardmobile.entity.CardTagCrossRef;
 import com.example.flashcardmobile.entity.Tag;
 import com.example.flashcardmobile.ui.dialog.CreateTagDialog;
 import com.example.flashcardmobile.viewmodel.CardViewModel;
@@ -25,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -38,6 +40,8 @@ public class AddCardFragment extends Fragment {
     private Button addButton;
     private AutoCompleteTextView tagInput;
     private ImageButton addTagButton;
+    private LinearLayout tagContainer;
+    private List<Long> selectedTagIds = new ArrayList<>();
     private Map<String, Tag> tagMap = new HashMap<>();
 
     @Nullable
@@ -53,6 +57,8 @@ public class AddCardFragment extends Fragment {
         ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
         actionBar.setTitle("Add Card");
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        view.findViewById(R.id.deckSelectionBox).setVisibility(View.GONE);
         
         frontSide = view.findViewById(R.id.frontSideEditText);
         backSide = view.findViewById(R.id.backSideEditText);
@@ -64,18 +70,37 @@ public class AddCardFragment extends Fragment {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, new ArrayList<>(tagMap.keySet()));
             tagInput.setAdapter(adapter);
         });
+        tagInput.setOnItemClickListener(((parent, view1, position, id) -> {
+            String selectedTagName = (String) parent.getItemAtPosition(position);
+            Tag selectedTag = tagMap.get(selectedTagName);
+            
+            selectedTagIds.add(selectedTag.getId());
+            
+            addTagToContainer(selectedTag);
+            
+        }));
         
         addTagButton = view.findViewById(R.id.create_tag_button);
         addTagButton.setOnClickListener(v -> createTag());
         
+        tagContainer = view.findViewById(R.id.tag_container);
+        
+        
         addButton = view.findViewById(R.id.addCardButton);
-        
-        view.findViewById(R.id.deckSelectionBox).setVisibility(View.GONE);
-        
         addButton.setOnClickListener(v -> addCard());
         
         return view;
         
+    }
+
+    private void addTagToContainer(Tag selectedTag) {
+        TextView tagView = new TextView(getActivity());
+        tagView.setBackgroundResource(R.drawable.tag_bubble_background);
+        tagView.setText(selectedTag.getTagName());
+        tagView.setBackgroundColor(selectedTag.getColor());
+        tagView.setTextColor(Color.WHITE);
+        
+        tagContainer.addView(tagView);
     }
 
     private void createTag() {
@@ -103,7 +128,14 @@ public class AddCardFragment extends Fragment {
             frontSide.setText("");
             backSide.setText("");
             Log.d("AddCardF", "Fields set to blank");
+            
+            List<CardTagCrossRef> crossRefs = new ArrayList<>();
+
+            for (long tagId: selectedTagIds) {
+                CardTagCrossRef crossRef = new CardTagCrossRef(card.getId(),tagId);
+                crossRefs.add(crossRef);
+            }
+            tagViewModel.insertCrossRefs(crossRefs);
         }
-        
     }
 }

@@ -30,5 +30,9 @@ public interface TagDao {
     @Query("SELECT * FROM cards WHERE id = :cardId")
     LiveData<List<CardWithTags>> getTagsForCard(long cardId);
     
+    @Transaction
+    @Insert
+    void insertCrossRefs (List<CardTagCrossRef> cardTagCrossRefs);
+    
     
 }
