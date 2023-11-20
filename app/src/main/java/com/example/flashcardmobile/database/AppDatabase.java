@@ -8,6 +8,7 @@ import androidx.room.TypeConverters;
 import com.example.flashcardmobile.database.dao.CardDao;
 import com.example.flashcardmobile.database.dao.DeckCardDao;
 import com.example.flashcardmobile.database.dao.DeckDao;
+import com.example.flashcardmobile.database.dao.TagDao;
 import com.example.flashcardmobile.entity.Card;
 import com.example.flashcardmobile.entity.Deck;
 
@@ -20,6 +21,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract DeckDao deckDao();
     public abstract CardDao cardDao();
     public abstract DeckCardDao deckCardDao();
+    public abstract TagDao tagDao();
 
     public static synchronized AppDatabase getInstance(Context context) {
         if (instance == null) {
