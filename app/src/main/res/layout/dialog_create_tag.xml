@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+android:orientation="vertical">
+
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="@string/input_tag_name"
+            android:ems="10"
+            android:id="@+id/tagInputText"/>
+    <Button
+            android:text="@string/color_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/dialog_open_color_picker"
+    />
+
+    <TextView
+            
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/tagPreview"
+            android:background="@drawable/tag_bubble_background"
+            android:textColor="@color/white"
+    />
+    <Button
+            
+            android:text="Create tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/dialog_create_tag_button"
+    />
+    
+</LinearLayout>

@@ -9,6 +9,7 @@ import com.example.flashcardmobile.entity.TagWithCards;
 
 import java.util.List;
 
+@Dao
 public interface TagDao {
     @Insert
     void insert(Tag tag);

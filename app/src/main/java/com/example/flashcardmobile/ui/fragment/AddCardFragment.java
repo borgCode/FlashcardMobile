@@ -1,13 +1,12 @@
 package com.example.flashcardmobile.ui.fragment;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -16,20 +15,30 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.flashcardmobile.R;
 import com.example.flashcardmobile.entity.Card;
+import com.example.flashcardmobile.entity.Tag;
+import com.example.flashcardmobile.ui.dialog.CreateTagDialog;
 import com.example.flashcardmobile.viewmodel.CardViewModel;
 import com.example.flashcardmobile.viewmodel.SharedViewModel;
+import com.example.flashcardmobile.viewmodel.TagViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class AddCardFragment extends Fragment {
     
     private CardViewModel cardViewModel;
     private SharedViewModel sharedViewModel;
+    private TagViewModel tagViewModel;
     private EditText frontSide;
     private EditText backSide;
-    private EditText tags;
     private Button addButton;
+    private AutoCompleteTextView tagInput;
+    private ImageButton addTagButton;
+    private Map<String, Tag> tagMap = new HashMap<>();
 
     @Nullable
     
@@ -39,6 +48,7 @@ public class AddCardFragment extends Fragment {
         
         cardViewModel = new ViewModelProvider(requireActivity()).get(CardViewModel.class);
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        tagViewModel = new ViewModelProvider(requireActivity()).get(TagViewModel.class);
 
         ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
         actionBar.setTitle("Add Card");
@@ -46,8 +56,18 @@ public class AddCardFragment extends Fragment {
         
         frontSide = view.findViewById(R.id.frontSideEditText);
         backSide = view.findViewById(R.id.backSideEditText);
-        //TODO implement tags in db 
-        tags = view.findViewById(R.id.tagsEditText);
+        
+        tagInput = view.findViewById(R.id.tagInputBox);
+        tagViewModel.getAllTags().observe(getViewLifecycleOwner(), newTags -> {
+            tagMap.clear();
+            tagMap = newTags.stream().collect(Collectors.toMap(Tag::getTagName, tag -> tag, (existing, replacement) -> existing, HashMap::new));
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, new ArrayList<>(tagMap.keySet()));
+            tagInput.setAdapter(adapter);
+        });
+        
+        addTagButton = view.findViewById(R.id.create_tag_button);
+        addTagButton.setOnClickListener(v -> createTag());
+        
         addButton = view.findViewById(R.id.addCardButton);
         
         view.findViewById(R.id.deckSelectionBox).setVisibility(View.GONE);
@@ -56,6 +76,11 @@ public class AddCardFragment extends Fragment {
         
         return view;
         
+    }
+
+    private void createTag() {
+        CreateTagDialog createTagDialog = new CreateTagDialog();
+        createTagDialog.show(getActivity().getSupportFragmentManager(), "createTag");
     }
 
     private void addCard() {

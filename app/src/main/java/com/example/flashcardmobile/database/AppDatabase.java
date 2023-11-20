@@ -10,9 +10,11 @@ import com.example.flashcardmobile.database.dao.DeckCardDao;
 import com.example.flashcardmobile.database.dao.DeckDao;
 import com.example.flashcardmobile.database.dao.TagDao;
 import com.example.flashcardmobile.entity.Card;
+import com.example.flashcardmobile.entity.CardTagCrossRef;
 import com.example.flashcardmobile.entity.Deck;
+import com.example.flashcardmobile.entity.Tag;
 
-@Database(entities = {Deck.class, Card.class}, version = 2)
+@Database(entities = {Deck.class, Card.class, Tag.class, CardTagCrossRef.class}, version = 2)
 @TypeConverters(Converters.class)
 public abstract class AppDatabase extends RoomDatabase {
 

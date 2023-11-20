@@ -34,19 +34,13 @@ public class DeleteConfirmationDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
         dialog.setMessage(dialogMessage)
-                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        System.out.println("Delete operation");
-                        deleteDialogListener.onConfirmDelete(confirmationType);
-                    }
+                .setPositiveButton("Delete", (dialog1, which) -> {
+                    System.out.println("Delete operation");
+                    deleteDialogListener.onConfirmDelete(confirmationType);
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        System.out.println("Canceling");
-                        dialog.cancel();
-                    }
+                .setNegativeButton("Cancel", (dialog12, which) -> {
+                    System.out.println("Canceling");
+                    dialog12.cancel();
                 });
         return dialog.create();
     }

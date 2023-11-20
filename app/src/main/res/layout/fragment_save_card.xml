@@ -49,22 +49,29 @@
             />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="3">
 
-    <TextView android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="Separate tags with comma"
-              android:layout_marginBottom="5dp"
-    />
-
-
-    <EditText
-            android:id="@+id/tagsEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Tags"
-            android:inputType="textMultiLine"
-            android:minLines="2"
-            android:gravity="top"/>
+        <AutoCompleteTextView
+                android:id="@+id/tagInputBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Input tag"
+                android:gravity="top"
+        android:layout_weight="2"
+                android:layout_marginEnd="10dp"
+        />
+        
+        <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:src="@drawable/add"
+                     android:id="@+id/create_tag_button"
+        android:tooltipText="@string/create_new_tag"/>
+                     
+        
+        
+    </LinearLayout>
+    
     <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginTop="20dp"

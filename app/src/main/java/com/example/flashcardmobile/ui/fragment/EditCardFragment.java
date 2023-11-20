@@ -18,7 +18,6 @@ import com.example.flashcardmobile.entity.Deck;
 import com.example.flashcardmobile.viewmodel.CardViewModel;
 import com.example.flashcardmobile.viewmodel.DeckViewModel;
 import com.example.flashcardmobile.viewmodel.SharedViewModel;
-import com.google.android.material.textfield.TextInputLayout;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -92,7 +91,7 @@ public class EditCardFragment extends Fragment {
         
 
         //TODO implement tags in db 
-        tags = view.findViewById(R.id.tagsEditText);
+        tags = view.findViewById(R.id.tagInputBox);
         saveButton = view.findViewById(R.id.addCardButton);
         saveButton.setText(R.string.save);
 

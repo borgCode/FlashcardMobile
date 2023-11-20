@@ -12,10 +12,11 @@ import com.example.flashcardmobile.entity.TagWithCards;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class TagRepository {
     private TagDao tagDao;
-    private ExecutorService executorService;
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
     
     public TagRepository(Application application) {
         AppDatabase database = AppDatabase.getInstance(application);
