@@ -53,8 +53,8 @@ public class TagRepository {
         return tagDao.getTagsForCard(cardId);
     }
 
-    public void insertCrossRefs(List<CardTagCrossRef> crossRefs) {
-        CompletableFuture.runAsync(() -> tagDao.insertCrossRefs(crossRefs), executorService);
+    public CompletableFuture<Void> insertCrossRefs(List<CardTagCrossRef> crossRefs) {
+        return CompletableFuture.runAsync(() -> tagDao.insertCrossRefs(crossRefs), executorService);
     }
 
     public void updateCrossRefs(long cardId, List<CardTagCrossRef> crossRefs) {

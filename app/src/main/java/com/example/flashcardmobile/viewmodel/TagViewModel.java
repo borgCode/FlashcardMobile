@@ -11,6 +11,7 @@ import com.example.flashcardmobile.repository.TagRepository;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class TagViewModel extends AndroidViewModel {
     private TagRepository tagRepository;
@@ -41,8 +42,8 @@ public class TagViewModel extends AndroidViewModel {
         return tagRepository.getAllTags();
     }
 
-    public void insertCrossRefs(List<CardTagCrossRef> crossRefs) {
-        tagRepository.insertCrossRefs(crossRefs);
+    public CompletableFuture<Void> insertCrossRefs(List<CardTagCrossRef> crossRefs) {
+        return tagRepository.insertCrossRefs(crossRefs);
     }
     public void updateCrossRefs(long cardId, List<CardTagCrossRef> crossRefs) {
         tagRepository.updateCrossRefs(cardId, crossRefs);

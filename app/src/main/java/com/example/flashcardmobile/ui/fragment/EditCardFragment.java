@@ -64,10 +64,16 @@ public class EditCardFragment extends Fragment {
         deckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
         tagViewModel = new ViewModelProvider(requireActivity()).get(TagViewModel.class);
 
+        card = sharedViewModel.getSelectedCard().getValue();
+
         frontSide = view.findViewById(R.id.frontSideEditText);
         backSide = view.findViewById(R.id.backSideEditText);
-        
-        card = sharedViewModel.getSelectedCard().getValue();
+        if (card != null ) {
+            frontSide.setText(card.getFrontSide());
+            backSide.setText(card.getBackSide());
+        } else {
+            Log.d("Editor", "card is null");
+        }
         
         deckNameSelection = view.findViewById(R.id.deckSelectionAutoComplete);
         Map<String, Long> deckNameAndId = new HashMap<>();
@@ -133,13 +139,7 @@ public class EditCardFragment extends Fragment {
 
         clearButton = view.findViewById(R.id.clear_tags_button);
         clearButton.setOnClickListener(v -> {
-            for (Tag tag: selectedTagsMap.values()) {
-                adapter.add(tag.getTagName());
-                tagMap.put(tag.getTagName(), tag);
-            }
-            adapter.notifyDataSetChanged();
-            selectedTagsMap.clear();
-            tagContainer.removeAllViews();
+            clearTags();
         });
         
         saveButton = view.findViewById(R.id.addCardButton);
@@ -200,7 +200,18 @@ public class EditCardFragment extends Fragment {
                 crossRefs.add(crossRef);
             }
             tagViewModel.updateCrossRefs(card.getId(), crossRefs);
+            clearTags();
             Toast.makeText(getActivity(), "Card updated", Toast.LENGTH_SHORT).show();
         }
+        
+    }
+    public void clearTags() {
+        for (Tag tag: selectedTagsMap.values()) {
+            adapter.add(tag.getTagName());
+            tagMap.put(tag.getTagName(), tag);
+        }
+        adapter.notifyDataSetChanged();
+        selectedTagsMap.clear();
+        tagContainer.removeAllViews();
     }
 }

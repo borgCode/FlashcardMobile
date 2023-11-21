@@ -101,13 +101,7 @@ public class AddCardFragment extends Fragment {
         
         clearButton = view.findViewById(R.id.clear_tags_button);
         clearButton.setOnClickListener(v -> {
-            for (Tag tag: selectedTagsMap.values()) {
-                adapter.add(tag.getTagName());
-                tagMap.put(tag.getTagName(), tag);
-            }
-            adapter.notifyDataSetChanged();
-            selectedTagsMap.clear();
-            tagContainer.removeAllViews();
+            clearTags();
         });
         
         addButton = view.findViewById(R.id.addCardButton);
@@ -136,8 +130,6 @@ public class AddCardFragment extends Fragment {
             adapter.notifyDataSetChanged();
             selectedTagsMap.remove(selectedTag.getId());
         });
-        
-        
         tagContainer.addView(tagView);
     }
 
@@ -169,10 +161,20 @@ public class AddCardFragment extends Fragment {
                     CardTagCrossRef crossRef = new CardTagCrossRef(cardId,tagId);
                     crossRefs.add(crossRef);
                 }
-                tagViewModel.insertCrossRefs(crossRefs);
-                Toast.makeText(getActivity(), "Card added!", Toast.LENGTH_SHORT).show();
+                tagViewModel.insertCrossRefs(crossRefs).thenRun(() -> {
+                    clearTags();
+                    Toast.makeText(getActivity(), "Card added!", Toast.LENGTH_SHORT).show();
+                });
             }, Executors.newSingleThreadExecutor());
-            
         }
+    }
+    public void clearTags() {
+        for (Tag tag: selectedTagsMap.values()) {
+            adapter.add(tag.getTagName());
+            tagMap.put(tag.getTagName(), tag);
+        }
+        adapter.notifyDataSetChanged();
+        selectedTagsMap.clear();
+        tagContainer.removeAllViews();
     }
 }
