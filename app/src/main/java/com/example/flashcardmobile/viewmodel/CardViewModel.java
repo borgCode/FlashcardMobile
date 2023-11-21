@@ -10,6 +10,7 @@ import com.example.flashcardmobile.repository.CardRepository;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class CardViewModel extends AndroidViewModel {
     private CardRepository cardRepository;
@@ -22,9 +23,9 @@ public class CardViewModel extends AndroidViewModel {
         
     }
 
-    public void insert(Card card) {
+    public CompletableFuture<Long> insert(Card card) {
         Log.d("AddCard ViewModel", "insert into DB");
-        cardRepository.insert(card);
+        return cardRepository.insert(card);
     }
     public void update(Card card) {
         cardRepository.update(card);

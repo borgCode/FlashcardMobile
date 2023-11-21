@@ -45,15 +45,19 @@ public class TagRepository {
         return tagDao.getTagById(id);
     }
     
-    public LiveData<List<TagWithCards>> getCardsForTag(long tagId) {
+    public LiveData<TagWithCards> getCardsForTag(long tagId) {
         return tagDao.getCardsForTag(tagId);
     }
     
-    public LiveData<List<CardWithTags>> getTagsForCard(long cardId) {
+    public LiveData<CardWithTags> getTagsForCard(long cardId) {
         return tagDao.getTagsForCard(cardId);
     }
 
     public void insertCrossRefs(List<CardTagCrossRef> crossRefs) {
         CompletableFuture.runAsync(() -> tagDao.insertCrossRefs(crossRefs), executorService);
+    }
+
+    public void updateCrossRefs(long cardId, List<CardTagCrossRef> crossRefs) {
+        CompletableFuture.runAsync(() -> tagDao.updateCrossRefs(cardId, crossRefs), executorService);
     }
 }

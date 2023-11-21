@@ -9,7 +9,7 @@ import java.util.List;
 @Dao
 public interface CardDao {
     @Insert
-    void insert(Card card);
+    long insert(Card card);
     @Update
     void update(Card card);
     @Delete

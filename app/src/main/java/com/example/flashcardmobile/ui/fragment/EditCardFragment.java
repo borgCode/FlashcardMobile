@@ -1,5 +1,7 @@
 package com.example.flashcardmobile.ui.fragment;
 
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,32 +12,42 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.flashcardmobile.R;
-import com.example.flashcardmobile.entity.Card;
-import com.example.flashcardmobile.entity.Deck;
+import com.example.flashcardmobile.entity.*;
+import com.example.flashcardmobile.ui.dialog.CreateTagDialog;
 import com.example.flashcardmobile.viewmodel.CardViewModel;
 import com.example.flashcardmobile.viewmodel.DeckViewModel;
 import com.example.flashcardmobile.viewmodel.SharedViewModel;
+import com.example.flashcardmobile.viewmodel.TagViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class EditCardFragment extends Fragment {
 
     private CardViewModel cardViewModel;
     private SharedViewModel sharedViewModel;
     private DeckViewModel deckViewModel;
+    private TagViewModel tagViewModel;
     private EditText frontSide;
     private EditText backSide;
-    private EditText tags;
     private AutoCompleteTextView deckNameSelection;
     private Button saveButton;
+    private Button clearButton;
     private Card card;
+    private AutoCompleteTextView tagInput;
+    private ImageButton addTagButton;
+    private LinearLayout tagContainer;
+    private Map<Long, Tag> selectedTagsMap = new HashMap<>();
+    private Map<String, Tag> tagMap = new HashMap<>();
+    private ArrayAdapter<String> adapter;
 
     @Nullable
 
@@ -50,23 +62,14 @@ public class EditCardFragment extends Fragment {
         cardViewModel = new ViewModelProvider(requireActivity()).get(CardViewModel.class);
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         deckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
-        
-        card = sharedViewModel.getSelectedCard().getValue();
+        tagViewModel = new ViewModelProvider(requireActivity()).get(TagViewModel.class);
 
         frontSide = view.findViewById(R.id.frontSideEditText);
         backSide = view.findViewById(R.id.backSideEditText);
         
-        if (card != null ) {
-            frontSide.setText(card.getFrontSide());
-            backSide.setText(card.getBackSide());
-        } else {
-            Log.d("Editor", "card is null");
-        }
-        
-        
+        card = sharedViewModel.getSelectedCard().getValue();
         
         deckNameSelection = view.findViewById(R.id.deckSelectionAutoComplete);
-        
         Map<String, Long> deckNameAndId = new HashMap<>();
         
         deckViewModel.getAllDecks().observe(getViewLifecycleOwner(), decks -> {
@@ -87,11 +90,58 @@ public class EditCardFragment extends Fragment {
             });
         });
         
+        tagInput = view.findViewById(R.id.tagInputBox);
+        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, new ArrayList<>());
+        tagInput.setAdapter(adapter);
         
-        
+        tagViewModel.getAllTags().observe(getViewLifecycleOwner(), newTags -> {
+            tagMap.clear();
+            tagMap = newTags.stream().collect(Collectors.toMap(Tag::getTagName, tag -> tag, (existing, replacement) -> existing, HashMap::new));
+            adapter.clear();
+            adapter.addAll(new ArrayList<>(tagMap.keySet()));
+            adapter.notifyDataSetChanged();
+        });
+        tagInput.setOnItemClickListener(((parent, view1, position, id) -> {
+            String selectedTagName = (String) parent.getItemAtPosition(position);
+            Tag selectedTag = tagMap.get(selectedTagName);
+            
+            tagMap.remove(selectedTagName);
+            adapter.remove(selectedTagName);
+            adapter.notifyDataSetChanged();
+            
+            selectedTagsMap.put(selectedTag.getId(), selectedTag);
+            addTagToContainer(selectedTag);
+            
+            tagInput.setText("");
+        }));
 
-        //TODO implement tags in db 
-        tags = view.findViewById(R.id.tagInputBox);
+        tagContainer = view.findViewById(R.id.tag_container);
+        tagViewModel.getCardWithTags(card.getId()).observe(getViewLifecycleOwner(), cardWithTags -> {
+            cardWithTags.tags.forEach(tag -> {
+                selectedTagsMap.put(tag.getId(), tag);
+                addTagToContainer(tag);
+                tagMap.remove(tag.getTagName());
+            });
+        });
+        
+        adapter.clear();
+        adapter.addAll(new ArrayList<>(tagMap.keySet()));
+        adapter.notifyDataSetChanged();
+
+        addTagButton = view.findViewById(R.id.create_tag_button);
+        addTagButton.setOnClickListener(v -> createTag());
+
+        clearButton = view.findViewById(R.id.clear_tags_button);
+        clearButton.setOnClickListener(v -> {
+            for (Tag tag: selectedTagsMap.values()) {
+                adapter.add(tag.getTagName());
+                tagMap.put(tag.getTagName(), tag);
+            }
+            adapter.notifyDataSetChanged();
+            selectedTagsMap.clear();
+            tagContainer.removeAllViews();
+        });
+        
         saveButton = view.findViewById(R.id.addCardButton);
         saveButton.setText(R.string.save);
 
@@ -100,23 +150,57 @@ public class EditCardFragment extends Fragment {
         return view;
         
     }
+    
+
+    private void addTagToContainer(Tag selectedTag) {
+        View tagView = getLayoutInflater().inflate(R.layout.tag_layout, null);
+        TextView tagText = tagView.findViewById(R.id.tag_text);
+        ImageView closeButton = tagView.findViewById(R.id.tag_close_button);
+
+        GradientDrawable background = (GradientDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.tag_bubble_background).mutate();
+        background.setColor(selectedTag.getColor());
+
+        tagText.setBackground(background);
+        tagText.setText(selectedTag.getTagName());
+        tagText.setTextColor(Color.WHITE);
+
+        closeButton.setOnClickListener(l -> {
+            tagContainer.removeView(tagView);
+            tagMap.put(selectedTag.getTagName(), selectedTag);
+            adapter.add(selectedTag.getTagName());
+            adapter.notifyDataSetChanged();
+            selectedTagsMap.remove(selectedTag.getId());
+        });
+
+
+        tagContainer.addView(tagView);
+    }
+
+    private void createTag() {
+        CreateTagDialog createTagDialog = new CreateTagDialog();
+        createTagDialog.show(getActivity().getSupportFragmentManager(), "createTag");
+    }
 
     private void saveCard() {
         String newFrontSide = frontSide.getText().toString().trim();
         String newBackSide = backSide.getText().toString().trim();
 
         if (newFrontSide.isEmpty() || newBackSide.isEmpty()) {
-            Log.d("EditCardF", "Fields not filled");
             Toast.makeText(getActivity(),
                     "Make sure you input both a front side and back side for the card",
                     Toast.LENGTH_SHORT).show();
         } else {
-            Log.d("EditCardF", "Adding card to DB");
             card.setFrontSide(newFrontSide);
             card.setBackSide(newBackSide);
             cardViewModel.update(card);
+
+            List<CardTagCrossRef> crossRefs = new ArrayList<>();
+            for (long tagId: selectedTagsMap.keySet()) {
+                CardTagCrossRef crossRef = new CardTagCrossRef(card.getId(),tagId);
+                crossRefs.add(crossRef);
+            }
+            tagViewModel.updateCrossRefs(card.getId(), crossRefs);
             Toast.makeText(getActivity(), "Card updated", Toast.LENGTH_SHORT).show();
-            Log.d("EditCardF", "Fields set to blank");
         }
     }
 }

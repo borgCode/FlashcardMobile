@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="wrap_content"
+             android:layout_height="wrap_content" android:padding="4dp">
+
+    <TextView
+            
+            android:layout_width="wrap_content" android:text="Smirrekatten"
+            android:layout_height="wrap_content" android:id="@+id/tag_text"
+    android:paddingEnd="20dp"
+    android:padding="6dp"/>
+
+    <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp" app:srcCompat="@drawable/ic_close" android:id="@+id/tag_close_button"
+    android:src="@drawable/ic_close"
+            android:layout_gravity="end|top"
+            android:padding="4dp"
+    />
+    
+</FrameLayout>

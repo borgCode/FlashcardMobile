@@ -65,6 +65,7 @@
     <string name="create_new_tag">Create new tag</string>
     <string name="input_tag_name">Input tag name</string>
     <string name="color_picker">Color picker</string>
+    <string name="clear_tags">Clear Tags</string>
     <string-array name="search_options">
         <item>Decks</item>
         <item>Front side</item>

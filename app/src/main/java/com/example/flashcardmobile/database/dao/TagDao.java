@@ -24,15 +24,21 @@ public interface TagDao {
     
     @Transaction
     @Query("SELECT * FROM tags WHERE id = :tagId")
-    LiveData<List<TagWithCards>> getCardsForTag(long tagId);
+    LiveData<TagWithCards> getCardsForTag(long tagId);
 
     @Transaction
     @Query("SELECT * FROM cards WHERE id = :cardId")
-    LiveData<List<CardWithTags>> getTagsForCard(long cardId);
+    LiveData<CardWithTags> getTagsForCard(long cardId);
     
     @Transaction
     @Insert
     void insertCrossRefs (List<CardTagCrossRef> cardTagCrossRefs);
     
-    
+    @Transaction
+    default void updateCrossRefs(long cardId, List<CardTagCrossRef> crossRefs) {
+        deleteCrossRefsByCardId(cardId);
+        insertCrossRefs(crossRefs);
+    }
+    @Query("DELETE FROM card_tag_cross_ref WHERE cardId =:cardId")
+    void deleteCrossRefsByCardId(long cardId);
 }
