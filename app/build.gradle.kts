@@ -45,6 +45,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version")
     implementation("androidx.lifecycle:lifecycle-livedata:$lifecycle_version")
     implementation("androidx.room:room-runtime:$room_version")
+    // https://mvnrepository.com/artifact/com.github.PhilJay/MPAndroidChart
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.0.2")
     implementation("com.github.yukuku:ambilwarna:2.0.1")
     annotationProcessor("androidx.room:room-compiler:$room_version")
     annotationProcessor("androidx.lifecycle:lifecycle-compiler:$lifecycle_version")

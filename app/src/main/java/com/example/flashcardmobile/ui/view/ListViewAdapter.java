@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.flashcardmobile.R;
 import com.example.flashcardmobile.entity.DeckCard;
@@ -30,11 +31,13 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
     private List<DeckCard> cardsFull;
     private onCardOperationListener listener;
     private String currentSearchColumn;
+    private ArrayList<DeckCard> cardsFilteredByTag;
 
     public ListViewAdapter(onCardOperationListener listener) {
         this.listener = listener;
         cards = new ArrayList<>();
         cardsFull = new ArrayList<>();
+        cardsFilteredByTag = new ArrayList<>();
     }
 
     public void setCards(ArrayList<DeckCard> cards) {
@@ -52,8 +55,7 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
         public TextView backSideCol;
         public TextView dueDateCol;
         public ImageButton cardOptions;
-
-
+        
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
 
@@ -136,28 +138,35 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
                 
                 for (DeckCard card : cardsFull) {
                     switch (currentSearchColumn) {
-                        case "Decks":
+                        case "deck":
                             Log.d("Filter Column", "Column is decks");
                             if (card.getDeckName().equalsIgnoreCase(filterPattern)) {
                                 Log.d("Add card to Filter", "Card contains DECK filter pattern, adding to filtered list");
                                 filteredList.add(card);
                                 break;
                             }
-                        case "Front side":
+                        case "front side":
                             Log.d("Filter Column", "Column is front");
                             if (card.getFrontSide().toLowerCase().contains(filterPattern)) {
                                 Log.d("Add card to Filter", "Card contains FRONT filter pattern, adding to filtered list");
                                 filteredList.add(card);
                                 break;
                             }
-                        case "Back side":
+                        case "back side":
                             Log.d("Filter Column", "Column is back");
                             if (card.getBackSide().toLowerCase().contains(filterPattern)) {
                                 Log.d("Add card to Filter", "Card contains BACK filter pattern, adding to filtered list");
                                 filteredList.add(card);
                                 break;
                             }
-                            //TODO TAG FILTER
+                        case "tag":
+                            Log.d("Filter Column", "Column is Tag");
+                            filteredList.addAll(cardsFull);
+                            for (DeckCard test: filteredList) {
+                                Log.d("Filter Column", "Card front: " + test.getFrontSide() +
+                                        "\nDeck name: " + test.getDeckName());
+                            }
+                            break;
                     }
                 }
             }
@@ -181,5 +190,6 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
     public void setCurrentSearchColumn(String selectedOption) {
         this.currentSearchColumn = selectedOption;
     }
+    
     
 }

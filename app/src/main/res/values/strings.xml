@@ -67,9 +67,9 @@
     <string name="color_picker">Color picker</string>
     <string name="clear_tags">Clear Tags</string>
     <string-array name="search_options">
-        <item>Decks</item>
+        <item>Deck</item>
         <item>Front side</item>
         <item>Back side</item>
-        <item>Tags</item>
+        <item>Tag</item>
     </string-array>
 </resources>

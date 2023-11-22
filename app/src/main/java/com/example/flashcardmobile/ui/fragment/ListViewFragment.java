@@ -1,6 +1,7 @@
 package com.example.flashcardmobile.ui.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.*;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
@@ -25,7 +26,6 @@ import com.example.flashcardmobile.viewmodel.SharedViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ListViewFragment extends Fragment implements ListViewAdapter.onCardOperationListener {
 
@@ -34,15 +34,13 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.onCard
     private SharedViewModel sharedViewModel;
     private RecyclerView recyclerView;
     private ListViewAdapter listViewAdapter;
-    private List<DeckCard> cards;
+    private String selectedOption;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list_view, container, false);
-
-        cards = new ArrayList<>();
-
+        
         deckCardViewModel = new ViewModelProvider(requireActivity()).get(DeckCardViewModel.class);
         cardViewModel = new ViewModelProvider(requireActivity()).get(CardViewModel.class);
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
@@ -58,8 +56,7 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.onCard
             listViewAdapter.setCardsFull(new ArrayList<>(newCards));
             listViewAdapter.notifyDataSetChanged();
         });
-
-
+        
         requireActivity().addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull @NotNull Menu menu, @NonNull @NotNull MenuInflater menuInflater) {
@@ -72,22 +69,21 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.onCard
                 int id = menuItem.getItemId();
 
                 if (id == R.id.search_view_with_spinner) {
-                    
-                    
+
                     View actionView = menuItem.getActionView();
-                    
-                    
                     Spinner spinner = actionView.findViewById(R.id.spinner_search_options);
                     ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                             getActivity(), R.array.search_options, android.R.layout.simple_spinner_item);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner.setAdapter(adapter);
-                    
+
                     spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            String selectedOption = parent.getItemAtPosition(position).toString();
-                            listViewAdapter.setCurrentSearchColumn(selectedOption);
+                            selectedOption = parent.getItemAtPosition(position).toString().toLowerCase().trim();
+                            Log.d("Item Selection", "Item selected: " + selectedOption);
+                                listViewAdapter.setCurrentSearchColumn(selectedOption);
+
                         }
 
                         @Override
@@ -96,11 +92,8 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.onCard
                         }
                     });
 
-
-
                     SearchView searchView = actionView.findViewById(R.id.search_view);
                     searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
-
                     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                         @Override
                         public boolean onQueryTextSubmit(String query) {
@@ -109,7 +102,12 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.onCard
 
                         @Override
                         public boolean onQueryTextChange(String newText) {
-                            listViewAdapter.getFilter().filter(newText);
+                            if (selectedOption.equals("tag")) {
+                                Log.d("Search view", "options is equal to tag, calling method with param: " + newText);
+                                observeCardsFilteredByTag(newText);
+                            } else {
+                                listViewAdapter.getFilter().filter(newText);
+                            }
                             return false;
                         }
                     });
@@ -141,12 +139,25 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.onCard
 
     @Override
     public void onResetDueDate(int position) {
-        
+
 
     }
 
     @Override
     public void onCardDelete(long cardId) {
 
+    }
+
+    public void observeCardsFilteredByTag(String tag) {
+        Log.d("Observe filterd card method", "Observing");
+        deckCardViewModel.getCardsByTag(tag).observe(getViewLifecycleOwner(), newCards -> {
+            for (DeckCard card: newCards) {
+                Log.d("Fetch Cards Filtered By Tag", "Card front: " + card.getFrontSide() +
+                "\nDeck name: " + card.getDeckName());
+            }
+            listViewAdapter.setCards(new ArrayList<>(newCards));
+            Log.d("Observe filterd card method", "Cards set, notifying data set changed");
+            listViewAdapter.notifyDataSetChanged();
+        });
     }
 }

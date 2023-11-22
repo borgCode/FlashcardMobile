@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         Button practiceButton = findViewById(R.id.practiceBtn);
         Button listButton = findViewById(R.id.listBtn);
         Button settingsButton = findViewById(R.id.settingsBtn);
+        Button statsButton = findViewById(R.id.statsBtn);
 
         practiceButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, PracticeActivity.class);
@@ -49,6 +50,11 @@ public class MainActivity extends AppCompatActivity {
         
         settingsButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
+        });
+        
+        statsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, StatsActivity.class);
             startActivity(intent);
         });
 

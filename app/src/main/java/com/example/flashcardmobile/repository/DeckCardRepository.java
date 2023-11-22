@@ -19,4 +19,7 @@ public class DeckCardRepository {
     public LiveData<List<DeckCard>> getAllCards() {
         return deckCardDao.getAllCards();
     }
+    public LiveData<List<DeckCard>> getCardsByTag(String tag) {
+        return deckCardDao.getCardsByTag(tag);
+    }
 }

@@ -23,4 +23,8 @@ public class DeckCardViewModel extends AndroidViewModel {
     public LiveData<List<DeckCard>> getAllCards() {
         return cards;
     }
+
+    public LiveData<List<DeckCard>> getCardsByTag(String tag) {
+        return repository.getCardsByTag(tag);
+    }
 }
