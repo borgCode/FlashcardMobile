@@ -1,5 +1,7 @@
 package com.example.flashcardmobile.ui.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.*;
@@ -15,12 +17,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 import com.example.flashcardmobile.R;
 import com.example.flashcardmobile.entity.Card;
+import com.example.flashcardmobile.entity.StudySession;
 import com.example.flashcardmobile.ui.view.CardAdapter;
 import com.example.flashcardmobile.viewmodel.CardViewModel;
 import com.example.flashcardmobile.viewmodel.DeckViewModel;
 import com.example.flashcardmobile.viewmodel.SharedViewModel;
+import com.example.flashcardmobile.viewmodel.StudySessionViewModel;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,20 +34,28 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
     private CardViewModel cardViewModel;
     private SharedViewModel sharedViewModel;
     private DeckViewModel deckViewModel;
+    private StudySessionViewModel studySessionViewModel;
     private List<Card> cards;
+    private LocalDate date;
     private CardAdapter cardAdapter;
     private ViewPager2 viewPager2;
     private int currentCardPosition = -1;
+    private SharedPreferences sharedPreferences;
+    private  SharedPreferences.Editor editor;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_practice, container, false);
         ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
+
+        sharedPreferences = getActivity().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         
         cardViewModel = new ViewModelProvider(requireActivity()).get(CardViewModel.class);
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         deckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
+        studySessionViewModel = new ViewModelProvider(requireActivity()).get(StudySessionViewModel.class);
         
         viewPager2 = view.findViewById(R.id.practiceView);
         viewPager2.setUserInputEnabled(false);
@@ -151,7 +164,40 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
         return card;
 
     }
-    
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        long startTime = System.currentTimeMillis();
+        saveAndResetSessionTime(startTime);
+        saveTime("start", startTime);
+    }
+
+    
+    @Override
+    public void onPause() {
+        super.onPause();
+        long endTime = System.currentTimeMillis();
+        saveAndResetSessionTime(endTime);
+    }
+
+    private void saveAndResetSessionTime(long time) {
+        long startTime = sharedPreferences.getLong("start", 0);
+        if (startTime != 0) {
+            long duration = time - startTime;
+            long durationInSec = duration / 1000;
+            date = LocalDate.now();
+            studySessionViewModel.insert(new StudySession(date, durationInSec));
+            editor.remove("start");
+            editor.apply();
+        }
+    }
+
+    private void saveTime(String key, long time) {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(key, time);
+        editor.apply();
+    }
 }
 

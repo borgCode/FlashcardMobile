@@ -1,10 +1,11 @@
 package com.example.flashcardmobile.database.dao;
 
-import androidx.room.Dao;
-import androidx.room.Delete;
-import androidx.room.Insert;
-import androidx.room.Update;
+import androidx.lifecycle.LiveData;
+import androidx.room.*;
 import com.example.flashcardmobile.entity.StudySession;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Dao
 public interface StudySessionDao {
@@ -15,5 +16,9 @@ public interface StudySessionDao {
     void update(StudySession studySession);
     @Delete
     void delete(StudySession studySession);
-    
+    @Query("SELECT * FROM study_sessions")
+    LiveData<List<StudySession>> getAllSessions();
+    @Query("SELECT sessionDate FROM study_sessions LIMIT 1")
+    LiveData<LocalDate> getFirstValue();
+
 }
