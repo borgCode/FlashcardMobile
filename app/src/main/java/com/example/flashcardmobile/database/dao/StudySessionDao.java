@@ -21,4 +21,9 @@ public interface StudySessionDao {
     @Query("SELECT sessionDate FROM study_sessions LIMIT 1")
     LiveData<LocalDate> getFirstValue();
 
+    @Query("SELECT * FROM study_sessions WHERE sessionDate >= :startOfMonth AND sessionDate <= :endOfMonth")
+    LiveData<List<StudySession>> getSessionsForMonth(LocalDate startOfMonth, LocalDate endOfMonth);
+
+    @Query("SELECT * FROM study_sessions WHERE sessionDate = :today")
+    StudySession getSessionByDate(LocalDate today);
 }

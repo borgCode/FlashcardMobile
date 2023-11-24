@@ -9,10 +9,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 public class StudySessionViewModel extends AndroidViewModel {
     private StudySessionRepository studySessionRepository;
-    private LiveData<List<StudySession>> sessions;
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
 
     public StudySessionViewModel(@NotNull Application application) {
@@ -35,5 +39,15 @@ public class StudySessionViewModel extends AndroidViewModel {
     }
     public LiveData<LocalDate> getFirstDateValue() {
         return studySessionRepository.getFirstDateValue();
+    }
+    public void getSessionByDate(LocalDate date, Consumer<StudySession> onResult) {
+        CompletableFuture<StudySession> futureSession =
+                studySessionRepository.getSessionByDate(date);
+
+        futureSession.thenAcceptAsync(onResult, executorService);
+    }
+
+    public LiveData<List<StudySession>> getSessionsForMonth(LocalDate startOfMonth, LocalDate endOfMonth) {
+        return studySessionRepository.getSessionsForMonth(startOfMonth, endOfMonth);
     }
 }

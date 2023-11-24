@@ -186,10 +186,18 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
         if (startTime != 0) {
             long duration = time - startTime;
             long durationInSec = duration / 1000;
-            date = LocalDate.now();
-            studySessionViewModel.insert(new StudySession(date, durationInSec));
-            editor.remove("start");
-            editor.apply();
+            LocalDate today = LocalDate.now();
+            studySessionViewModel.getSessionByDate(today, existingSession -> {
+                    if (existingSession != null) {
+                        long newDuration = durationInSec + existingSession.getDuration();
+                        existingSession.setDuration(newDuration);
+                        studySessionViewModel.update(existingSession);
+                    } else {
+                        studySessionViewModel.insert(new StudySession(today, durationInSec));
+                    }
+                    editor.remove("start");
+                    editor.apply();
+                });
         }
     }
 
