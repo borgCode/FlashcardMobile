@@ -2,7 +2,6 @@ package com.example.flashcardmobile.ui.activity;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -11,7 +10,6 @@ import com.example.flashcardmobile.entity.StudySession;
 import com.example.flashcardmobile.viewmodel.StudySessionViewModel;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -46,34 +44,22 @@ public class StatsActivity extends AppCompatActivity {
         yearTabLayout.addTab(yearTabLayout.newTab().setText("2023"));
 
         LocalDate currentDate = LocalDate.now();
-        Log.d("Current Month/Year check", "Getting current date: " + currentDate);
         int currentYear = currentDate.getYear();
-        Log.d("Current Month/Year check", "Current year: " + currentYear);
         int currentMonth = currentDate.getMonthValue();
-        Log.d("Current Month/Year check", "Current month: " + currentMonth);
         selectedYear = currentYear;
         if (!yearTabExists(String.valueOf(currentYear))) {
-            Log.d("Current Month/Year check", "Year does not exist, adding to tab");
             addYearTab(String.valueOf(currentYear));
-
-        } else {
-            Log.d("Current Month/Year check", "Year exists");
         }
 
         yearTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 selectedYear = Integer.parseInt(tab.getText().toString());
-                Log.d("Year tab ", "Selected year: " + selectedYear);
-
-
             }
-
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
 
             }
-
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
 
@@ -89,8 +75,6 @@ public class StatsActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 selectedMonth = tab.getPosition() + 1;
-                Log.d("Month tab selection", "Selected month: " + selectedMonth);
-                Log.d("Month tab selection", "Selected year: " + selectedYear);
                 getDataForChart(selectedYear, selectedMonth);
             }
 
@@ -108,9 +92,12 @@ public class StatsActivity extends AppCompatActivity {
         barChart.getAxisLeft().setEnabled(false);
         barChart.getAxisRight().setEnabled(false);
         barChart.getXAxis().setGranularityEnabled(true);
-        Description description = new Description();
-        description.setText("");
-        barChart.setDescription(description);
+        barChart.getDescription().setEnabled(false);
+        barChart.getXAxis().setDrawGridLines(false);
+        barChart.setHorizontalScrollBarEnabled(true);
+        barChart.setDragEnabled(true);
+        barChart.setVisibleXRangeMaximum(10);
+        barChart.setHighlightPerTapEnabled(false);
         
 
         new Handler().postDelayed(new Runnable() {
@@ -130,7 +117,6 @@ public class StatsActivity extends AppCompatActivity {
     private void getDataForChart(int selectedYear, int selectedMonth) {
         List<BarEntry> entries = new ArrayList<>();
         LocalDate[] monthLength = getMonthDateRange(selectedYear, selectedMonth);
-        Log.d("Get Data from DB", "Month length: " + monthLength[0] + " + " + monthLength[1]);
         studySessionViewModel.getSessionsForMonth(monthLength[0], monthLength[1]).observe(this, studySessions -> {
             entries.clear();
             for (StudySession session : studySessions) {
@@ -144,23 +130,17 @@ public class StatsActivity extends AppCompatActivity {
             populateChart(entries);
 
         });
-
     }
     
     private LocalDate[] getMonthDateRange(int selectedYear, int selectedMonth) {
         LocalDate startOfMonth = LocalDate.of(selectedYear, selectedMonth, 1);
-        Log.d("Get Month Range", "Start of month: " + startOfMonth);
         LocalDate endOfMonth = startOfMonth.withDayOfMonth(
                 startOfMonth.getMonth().length(startOfMonth.isLeapYear()));
-        Log.d("Get Month Range", "End of month: " + endOfMonth);
         return new LocalDate[]{startOfMonth, endOfMonth};
     }
 
     private boolean yearTabExists(String year) {
-        Log.d("Check if year tab exists", "Checking if tab exists");
         for (int i = 0; i < yearTabLayout.getTabCount(); i++) {
-            Log.d("Check if year tab exists", "Tab child count: " + yearTabLayout.getTabCount()
-                    + "\nExisting year tab is: " + yearTabLayout.getTabAt(0).getText().toString());
             if (yearTabLayout.getTabAt(i) != null && yearTabLayout.getTabAt(i).getText().toString().equals(year)) {
                 return true;
             }
@@ -169,18 +149,17 @@ public class StatsActivity extends AppCompatActivity {
     }
 
     private void addYearTab(String year) {
-        Log.d("Add year tab method", "Adding tab and setting text to: " + year);
         yearTabLayout.addTab(yearTabLayout.newTab().setText(year));
     }
 
     private void populateChart(List<BarEntry> entries) {
-        Log.d("Populate chart", "Populating chart");
         BarDataSet dataSet = new BarDataSet(entries, "Time studied per day");
         dataSet.setValueFormatter(new DurationBarValueFormatter());
         BarData barData = new BarData(dataSet);
-        Log.d("Populate chart", "Bar width set");
+        barData.setValueTextSize(12f);
+        barData.setBarWidth(0.9f);
+        barData.setHighlightEnabled(false);
         barChart.setData(barData);
-        Log.d("Populate chart", "Invalidating");
         barChart.invalidate();
     }
 

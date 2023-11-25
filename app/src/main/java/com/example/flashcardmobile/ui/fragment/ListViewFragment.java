@@ -149,14 +149,8 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.onCard
     }
 
     public void observeCardsFilteredByTag(String tag) {
-        Log.d("Observe filterd card method", "Observing");
         deckCardViewModel.getCardsByTag(tag).observe(getViewLifecycleOwner(), newCards -> {
-            for (DeckCard card: newCards) {
-                Log.d("Fetch Cards Filtered By Tag", "Card front: " + card.getFrontSide() +
-                "\nDeck name: " + card.getDeckName());
-            }
             listViewAdapter.setCards(new ArrayList<>(newCards));
-            Log.d("Observe filterd card method", "Cards set, notifying data set changed");
             listViewAdapter.notifyDataSetChanged();
         });
     }
