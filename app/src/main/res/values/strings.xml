@@ -86,5 +86,9 @@
         <item>November</item>
         <item>December</item>
     </string-array>
-                  
+    <string name="title_activity_placeholder_stats">placeholder_activity_stats</string>
+    <string name="tab_text_1">Progress</string>
+    <string name="tab_text_2">Performance</string>
+    <string name="tab_text_3">Milestones</string>
+
 </resources>

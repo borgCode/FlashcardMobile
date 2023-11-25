@@ -2,12 +2,18 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.FlashcardMobile" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-         <item name="colorPrimary">@color/primaryColorLight</item>
+        <item name="colorPrimary">@color/primaryColorLight</item>
         <item name="colorSecondary">@color/secondaryColorLight</item>
         <item name="android:windowBackground">@color/backgroundColorLight</item>
         <item name="android:textColor">@color/textColorLight</item>
-        
+
     </style>
 
     <style name="Theme.FlashcardMobile" parent="Base.Theme.FlashcardMobile"/>
+    <style name="Theme.FlashcardMobile.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Theme.FlashcardMobile.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="Theme.FlashcardMobile.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 </resources>
