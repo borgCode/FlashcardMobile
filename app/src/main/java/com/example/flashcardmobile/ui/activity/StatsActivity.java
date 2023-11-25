@@ -1,6 +1,7 @@
 package com.example.flashcardmobile.ui.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,9 +10,12 @@ import com.example.flashcardmobile.R;
 import com.example.flashcardmobile.entity.StudySession;
 import com.example.flashcardmobile.viewmodel.StudySessionViewModel;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.google.android.material.tabs.TabLayout;
 
 import java.time.LocalDate;
@@ -19,6 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class StatsActivity extends AppCompatActivity {
     private BarChart barChart;
@@ -36,26 +41,32 @@ public class StatsActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_stats);
 
-        
-        
+
         yearTabLayout = findViewById(R.id.years_tab_layout);
         yearTabLayout.addTab(yearTabLayout.newTab().setText("2023"));
 
         LocalDate currentDate = LocalDate.now();
+        Log.d("Current Month/Year check", "Getting current date: " + currentDate);
         int currentYear = currentDate.getYear();
+        Log.d("Current Month/Year check", "Current year: " + currentYear);
         int currentMonth = currentDate.getMonthValue();
+        Log.d("Current Month/Year check", "Current month: " + currentMonth);
         selectedYear = currentYear;
         if (!yearTabExists(String.valueOf(currentYear))) {
+            Log.d("Current Month/Year check", "Year does not exist, adding to tab");
             addYearTab(String.valueOf(currentYear));
+
+        } else {
+            Log.d("Current Month/Year check", "Year exists");
         }
-        
+
         yearTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 selectedYear = Integer.parseInt(tab.getText().toString());
                 Log.d("Year tab ", "Selected year: " + selectedYear);
-                
-                
+
+
             }
 
             @Override
@@ -68,7 +79,7 @@ public class StatsActivity extends AppCompatActivity {
 
             }
         });
-        
+
         TabLayout monthTabLayout = findViewById(R.id.months_tab_layout);
         String[] months = getResources().getStringArray(R.array.months);
         for (String month : months) {
@@ -94,9 +105,27 @@ public class StatsActivity extends AppCompatActivity {
             }
         });
         barChart = findViewById(R.id.study_time_chart);
-        getDataForChart(currentYear, currentMonth);
+        barChart.getAxisLeft().setEnabled(false);
+        barChart.getAxisRight().setEnabled(false);
+        barChart.getXAxis().setGranularityEnabled(true);
+        Description description = new Description();
+        description.setText("");
+        barChart.setDescription(description);
+        
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (yearTabLayout.getTabCount() > 0) {
+                    yearTabLayout.getTabAt(yearTabLayout.getTabCount() - 1).select();
+                }
+                if (monthTabLayout.getTabCount() > currentMonth - 1) {
+                    monthTabLayout.getTabAt(currentMonth - 1).select();
+                }
+            }
+        }, 100);
     }
-    
+
 
     private void getDataForChart(int selectedYear, int selectedMonth) {
         List<BarEntry> entries = new ArrayList<>();
@@ -111,19 +140,13 @@ public class StatsActivity extends AppCompatActivity {
                 entries.add(new BarEntry(xValue, yValue));
             }
             initXAxisValueFormatter(monthLength[0]);
+            
             populateChart(entries);
 
         });
 
     }
-
-    private void initXAxisValueFormatter(LocalDate localDate) {
-        barChart.getXAxis().setValueFormatter((value, axis) -> {
-            LocalDate date = localDate.plusDays((long) value);
-            return date.format(DateTimeFormatter.ofPattern("dd"));
-        });
-    }
-
+    
     private LocalDate[] getMonthDateRange(int selectedYear, int selectedMonth) {
         LocalDate startOfMonth = LocalDate.of(selectedYear, selectedMonth, 1);
         Log.d("Get Month Range", "Start of month: " + startOfMonth);
@@ -152,13 +175,37 @@ public class StatsActivity extends AppCompatActivity {
 
     private void populateChart(List<BarEntry> entries) {
         Log.d("Populate chart", "Populating chart");
-        BarDataSet dataSet = new BarDataSet(entries, "Session Data");
+        BarDataSet dataSet = new BarDataSet(entries, "Time studied per day");
+        dataSet.setValueFormatter(new DurationBarValueFormatter());
         BarData barData = new BarData(dataSet);
-        barData.setBarWidth(0.3f);
         Log.d("Populate chart", "Bar width set");
         barChart.setData(barData);
         Log.d("Populate chart", "Invalidating");
         barChart.invalidate();
+    }
+
+    private void initXAxisValueFormatter(LocalDate localDate) {
+        barChart.getXAxis().setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getAxisLabel(float value, AxisBase axis) {
+                LocalDate date = localDate.plusDays((long) value);
+                return date.format(DateTimeFormatter.ofPattern("dd"));
+            }
+        });
+    }
+
+    private class DurationBarValueFormatter extends ValueFormatter {
+        public String getBarLabel(BarEntry barEntry) {
+            int totalSeconds = (int) barEntry.getY();
+            int hours = totalSeconds / 3600;
+            int minutes = (totalSeconds % 3600) / 60;
+
+            if (hours > 0) {
+                return String.format(Locale.ENGLISH, "%dh %dmin", hours, minutes);
+            } else {
+                return String.format(Locale.ENGLISH, "%dmin", minutes);
+            }
+        }
     }
 
 
