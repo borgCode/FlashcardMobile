@@ -18,10 +18,7 @@ import com.example.flashcardmobile.R;
 import com.example.flashcardmobile.entity.Card;
 import com.example.flashcardmobile.entity.StudySession;
 import com.example.flashcardmobile.ui.view.CardAdapter;
-import com.example.flashcardmobile.viewmodel.CardViewModel;
-import com.example.flashcardmobile.viewmodel.DeckViewModel;
-import com.example.flashcardmobile.viewmodel.SharedDeckAndCardViewModel;
-import com.example.flashcardmobile.viewmodel.StudySessionViewModel;
+import com.example.flashcardmobile.viewmodel.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
@@ -34,13 +31,15 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
     private SharedDeckAndCardViewModel sharedDeckAndCardViewModel;
     private DeckViewModel deckViewModel;
     private StudySessionViewModel studySessionViewModel;
+    private SharedAnalyticsViewModel sharedAnalyticsViewModel;
     private List<Card> cards;
     private CardAdapter cardAdapter;
     private ViewPager2 viewPager2;
     private int currentCardPosition = -1;
     private SharedPreferences sharedPreferences;
-    private  SharedPreferences.Editor editor;
+    private SharedPreferences.Editor editor;
     private int numOfCardsStudied = 0;
+    private int numOfCardsMastered = 0;
 
     @Nullable
     @Override
@@ -50,18 +49,19 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
 
         sharedPreferences = getActivity().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        
+
         cardViewModel = new ViewModelProvider(requireActivity()).get(CardViewModel.class);
         sharedDeckAndCardViewModel = new ViewModelProvider(requireActivity()).get(SharedDeckAndCardViewModel.class);
         deckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
         studySessionViewModel = new ViewModelProvider(requireActivity()).get(StudySessionViewModel.class);
-        
+        sharedAnalyticsViewModel = new ViewModelProvider(requireActivity()).get(SharedAnalyticsViewModel.class);
+
         viewPager2 = view.findViewById(R.id.practiceView);
         viewPager2.setUserInputEnabled(false);
         cards = new ArrayList<>();
         cardAdapter = new CardAdapter(cards, this);
         viewPager2.setAdapter(cardAdapter);
-        
+
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -69,7 +69,7 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
                 currentCardPosition = position;
             }
         });
-        
+
         sharedDeckAndCardViewModel.getDeckId().observe(getViewLifecycleOwner(), deckId -> {
             cardViewModel.getDueCards(deckId).observe(getViewLifecycleOwner(), newCards -> {
                 cards.clear();
@@ -85,11 +85,12 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
 
         });
         requireActivity().addMenuProvider(new MenuProvider() {
-            
+
             @Override
             public void onCreateMenu(@NonNull @NotNull Menu menu, @NonNull @NotNull MenuInflater menuInflater) {
                 menuInflater.inflate(R.menu.menu_practice_dropdown, menu);
             }
+
             @Override
             public boolean onMenuItemSelected(@NonNull @NotNull MenuItem menuItem) {
                 int id = menuItem.getItemId();
@@ -117,8 +118,8 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
         Card newCard = calculateDueDate(card, difficulty);
         cardViewModel.update(newCard);
         numOfCardsStudied++;
-        saveNumOfCards(numOfCardsStudied);
-        
+        saveCardAnalytics("cardsStudied", numOfCardsStudied);
+
     }
 
     private Card calculateDueDate(Card card, int difficulty) {
@@ -129,7 +130,7 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
 
         easiness = Math.max(1.3, easiness + 0.1 - (5.0 - difficulty)
                 * (0.08 + (5.0 - difficulty) * 0.02));
-        
+
         if (difficulty >= 3) {
             repetitions += 1;
         } else {
@@ -143,15 +144,18 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
         } else {
             interval = (int) Math.round(interval * easiness);
         }
-        
+
         card.setEasiness(easiness);
         card.setInterval(interval);
         card.setRepetitions(repetitions);
 
         LocalDateTime now = LocalDateTime.now();
         card.setDueDate(now.plusDays(interval));
-        
-        
+
+        if (card.getDueDate().isAfter(now.plusDays(180))) {
+            numOfCardsMastered++;
+            saveCardAnalytics("cardsMastered", numOfCardsMastered);
+        }
 
         return card;
 
@@ -161,35 +165,39 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
     public void onResume() {
         super.onResume();
         long startTime = System.currentTimeMillis();
-        saveAndResetSession(startTime, numOfCardsStudied);
+        saveAndResetSession(startTime, numOfCardsStudied, numOfCardsMastered);
         saveTime("start", startTime);
     }
 
-    
+
     @Override
     public void onPause() {
         super.onPause();
         long endTime = System.currentTimeMillis();
-        saveAndResetSession(endTime, numOfCardsStudied);
+        saveAndResetSession(endTime, numOfCardsStudied, numOfCardsMastered);
     }
 
-    private void saveAndResetSession(long time, int numOfCardsStudied) {
+    private void saveAndResetSession(long time, int numOfCardsStudied, int numOfCardsMastered) {
         long startTime = sharedPreferences.getLong("start", 0);
         if (startTime != 0) {
             long duration = time - startTime;
             long durationInSec = duration / 1000;
             LocalDate today = LocalDate.now();
             studySessionViewModel.getSessionByDate(today, existingSession -> {
-                    if (existingSession != null) {
-                        long newDuration = durationInSec + existingSession.getDuration();
-                        existingSession.setDuration(newDuration);
-                        studySessionViewModel.update(existingSession);
-                    } else {
-                        studySessionViewModel.insert(new StudySession(today, durationInSec));
-                    }
-                    editor.remove("start");
-                    editor.apply();
-                });
+                if (existingSession != null) {
+                    long newDuration = durationInSec + existingSession.getDuration();
+                    existingSession.setDuration(newDuration);
+                    studySessionViewModel.update(existingSession);
+                } else {
+                    studySessionViewModel.insert(new StudySession(today, durationInSec));
+                }
+                sharedAnalyticsViewModel.updateCardsStudied(numOfCardsStudied);
+                sharedAnalyticsViewModel.updateCardsMastered(numOfCardsMastered);
+                editor.remove("start");
+                editor.remove("cardsStudied");
+                editor.remove("cardsMastered");
+                editor.apply();
+            });
         }
     }
 
@@ -198,8 +206,8 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
         editor.apply();
     }
 
-    private void saveNumOfCards(int numOfCardsStudied) {
-        editor.putInt("numOfCards", numOfCardsStudied);
+    private void saveCardAnalytics(String key, int type) {
+        editor.putInt(key, type);
         editor.apply();
     }
 }

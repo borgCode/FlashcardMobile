@@ -1,15 +1,17 @@
 package com.example.flashcardmobile.entity;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.time.LocalDate;
 
-@Entity
+@Entity(tableName = "learning_analytics")
 public class LearningAnalytics {
-    
+
     @PrimaryKey
+    @NonNull
     private LocalDate date;
     @ColumnInfo(name = "cards_studied")
     private int cardsStudied;

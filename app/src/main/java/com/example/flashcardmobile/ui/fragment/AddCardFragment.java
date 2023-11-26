@@ -22,6 +22,7 @@ import com.example.flashcardmobile.entity.CardTagCrossRef;
 import com.example.flashcardmobile.entity.Tag;
 import com.example.flashcardmobile.ui.dialog.CreateTagDialog;
 import com.example.flashcardmobile.viewmodel.CardViewModel;
+import com.example.flashcardmobile.viewmodel.SharedAnalyticsViewModel;
 import com.example.flashcardmobile.viewmodel.SharedDeckAndCardViewModel;
 import com.example.flashcardmobile.viewmodel.TagViewModel;
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +39,7 @@ public class AddCardFragment extends Fragment {
     
     private CardViewModel cardViewModel;
     private SharedDeckAndCardViewModel sharedDeckAndCardViewModel;
+    private SharedAnalyticsViewModel sharedAnalyticsViewModel;
     private TagViewModel tagViewModel;
     private EditText frontSide;
     private EditText backSide;
@@ -49,10 +51,9 @@ public class AddCardFragment extends Fragment {
     private Map<Long, Tag> selectedTagsMap = new HashMap<>();
     private Map<String, Tag> tagMap = new HashMap<>();
     private ArrayAdapter<String> adapter;
-
     private SharedPreferences sharedPreferences;
     private  SharedPreferences.Editor editor;
-    private int cardsAdded;
+    private int cardsAdded = 0;
 
     @Nullable
     
@@ -71,6 +72,7 @@ public class AddCardFragment extends Fragment {
 
         cardViewModel = new ViewModelProvider(requireActivity()).get(CardViewModel.class);
         sharedDeckAndCardViewModel = new ViewModelProvider(requireActivity()).get(SharedDeckAndCardViewModel.class);
+        sharedAnalyticsViewModel = new ViewModelProvider(requireActivity()).get(SharedAnalyticsViewModel.class);
         tagViewModel = new ViewModelProvider(requireActivity()).get(TagViewModel.class);
         
         frontSide = view.findViewById(R.id.frontSideEditText);
@@ -146,6 +148,16 @@ public class AddCardFragment extends Fragment {
         createTagDialog.show(getActivity().getSupportFragmentManager(), "createTag");
     }
 
+    public void clearTags() {
+        for (Tag tag: selectedTagsMap.values()) {
+            adapter.add(tag.getTagName());
+            tagMap.put(tag.getTagName(), tag);
+        }
+        adapter.notifyDataSetChanged();
+        selectedTagsMap.clear();
+        tagContainer.removeAllViews();
+    }
+
     private void addCard() {
         String frontText = frontSide.getText().toString().trim();
         String backText = backSide.getText().toString().trim();
@@ -173,17 +185,36 @@ public class AddCardFragment extends Fragment {
                     clearTags();
                     Toast.makeText(getActivity(), "Card added!", Toast.LENGTH_SHORT).show();
                     cardsAdded++;
+                    saveNumOfCardsAdded(cardsAdded);
                 });
             }, Executors.newSingleThreadExecutor());
         }
     }
-    public void clearTags() {
-        for (Tag tag: selectedTagsMap.values()) {
-            adapter.add(tag.getTagName());
-            tagMap.put(tag.getTagName(), tag);
-        }
-        adapter.notifyDataSetChanged();
-        selectedTagsMap.clear();
-        tagContainer.removeAllViews();
+
+    private void saveNumOfCardsAdded(int cardsAdded) {
+        editor.putInt("cardsAdded", cardsAdded);
+        editor.apply();
     }
+    
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        saveAndResetSession(cardsAdded);
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        saveAndResetSession(cardsAdded);
+    }
+
+    private void saveAndResetSession(int cardsAdded) {
+        sharedAnalyticsViewModel.updateCardsAdded(cardsAdded);
+        editor.remove("cardsAdded");
+        editor.apply();
+    }
+
+
 }
