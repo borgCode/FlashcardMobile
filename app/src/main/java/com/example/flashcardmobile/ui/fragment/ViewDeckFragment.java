@@ -18,7 +18,7 @@ import com.example.flashcardmobile.entity.Card;
 import com.example.flashcardmobile.ui.view.DeckViewAdapter;
 import com.example.flashcardmobile.viewmodel.CardViewModel;
 import com.example.flashcardmobile.viewmodel.DeckViewModel;
-import com.example.flashcardmobile.viewmodel.SharedViewModel;
+import com.example.flashcardmobile.viewmodel.SharedDeckAndCardViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import java.util.List;
 
 public class ViewDeckFragment extends Fragment {
     
-    private SharedViewModel sharedViewModel;
+    private SharedDeckAndCardViewModel sharedDeckAndCardViewModel;
     private CardViewModel cardViewModel;
     private DeckViewModel deckViewModel;
     private RecyclerView recyclerView;
@@ -41,7 +41,7 @@ public class ViewDeckFragment extends Fragment {
         cards = new ArrayList<>();
 
         cardViewModel = new ViewModelProvider(requireActivity()).get(CardViewModel.class);
-        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        sharedDeckAndCardViewModel = new ViewModelProvider(requireActivity()).get(SharedDeckAndCardViewModel.class);
         deckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
         
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -52,7 +52,7 @@ public class ViewDeckFragment extends Fragment {
 
         ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
 
-        sharedViewModel.getDeckId().observe(getViewLifecycleOwner(), deckId -> {
+        sharedDeckAndCardViewModel.getDeckId().observe(getViewLifecycleOwner(), deckId -> {
             cardViewModel.getAllDeckCards(deckId).observe(getViewLifecycleOwner(), newCards -> {
                 cards.clear();
                 cards.addAll(newCards);

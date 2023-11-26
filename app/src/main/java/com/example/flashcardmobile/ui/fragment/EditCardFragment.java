@@ -20,7 +20,7 @@ import com.example.flashcardmobile.entity.*;
 import com.example.flashcardmobile.ui.dialog.CreateTagDialog;
 import com.example.flashcardmobile.viewmodel.CardViewModel;
 import com.example.flashcardmobile.viewmodel.DeckViewModel;
-import com.example.flashcardmobile.viewmodel.SharedViewModel;
+import com.example.flashcardmobile.viewmodel.SharedDeckAndCardViewModel;
 import com.example.flashcardmobile.viewmodel.TagViewModel;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 public class EditCardFragment extends Fragment {
 
     private CardViewModel cardViewModel;
-    private SharedViewModel sharedViewModel;
+    private SharedDeckAndCardViewModel sharedDeckAndCardViewModel;
     private DeckViewModel deckViewModel;
     private TagViewModel tagViewModel;
     private EditText frontSide;
@@ -60,11 +60,11 @@ public class EditCardFragment extends Fragment {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         cardViewModel = new ViewModelProvider(requireActivity()).get(CardViewModel.class);
-        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        sharedDeckAndCardViewModel = new ViewModelProvider(requireActivity()).get(SharedDeckAndCardViewModel.class);
         deckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
         tagViewModel = new ViewModelProvider(requireActivity()).get(TagViewModel.class);
 
-        card = sharedViewModel.getSelectedCard().getValue();
+        card = sharedDeckAndCardViewModel.getSelectedCard().getValue();
 
         frontSide = view.findViewById(R.id.frontSideEditText);
         backSide = view.findViewById(R.id.backSideEditText);
@@ -87,7 +87,7 @@ public class EditCardFragment extends Fragment {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, deckNames);
             deckNameSelection.setAdapter(adapter);
 
-            sharedViewModel.getDeckId().observe(getViewLifecycleOwner(), deckId -> {
+            sharedDeckAndCardViewModel.getDeckId().observe(getViewLifecycleOwner(), deckId -> {
                 deckViewModel.getDeckById(deckId).observe(getViewLifecycleOwner(), deck -> {
                     if (deck != null) {
                         deckNameSelection.setText(deck.getDeckName(), false);

@@ -19,7 +19,7 @@ import com.example.flashcardmobile.entity.Deck;
 import com.example.flashcardmobile.ui.dialog.DeleteConfirmationDialog;
 import com.example.flashcardmobile.ui.view.DeckAdapter;
 import com.example.flashcardmobile.viewmodel.DeckViewModel;
-import com.example.flashcardmobile.viewmodel.SharedViewModel;
+import com.example.flashcardmobile.viewmodel.SharedDeckAndCardViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -30,11 +30,12 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
 
 
     private DeckViewModel deckViewModel;
-    private SharedViewModel sharedViewModel;
+    private SharedDeckAndCardViewModel sharedDeckAndCardViewModel;
     private RecyclerView recyclerView;
     private DeckAdapter deckAdapter;
     private List<Deck> decks;
     private long deckToDelete;
+    
     
 
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState) {
@@ -42,9 +43,9 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
 
         decks = new ArrayList<>();
 
-        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-
+        sharedDeckAndCardViewModel = new ViewModelProvider(requireActivity()).get(SharedDeckAndCardViewModel.class);
         deckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
+        
         deckViewModel.getAllDecks().observe(getViewLifecycleOwner(), new Observer<List<Deck>>() {
             @Override
             public void onChanged(List<Deck> newDecks) {
@@ -104,7 +105,7 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
 
     @Override
     public void onPracticeDeck(long deckId) {
-        sharedViewModel.setDeckId(deckId);
+        sharedDeckAndCardViewModel.setDeckId(deckId);
         
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
@@ -115,7 +116,7 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
     }
 
     public void onViewDeck(long deckId) {
-        sharedViewModel.setDeckId(deckId);
+        sharedDeckAndCardViewModel.setDeckId(deckId);
         
         ViewDeckFragment viewDeckFragment = new ViewDeckFragment();
         FragmentManager fragmentManager = getParentFragmentManager();
@@ -128,7 +129,7 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
 
     @Override
     public void onAddCard(long deckId) {
-        sharedViewModel.setDeckId(deckId);
+        sharedDeckAndCardViewModel.setDeckId(deckId);
 
         AddCardFragment addCardFragment = new AddCardFragment();
         FragmentManager fragmentManager = getParentFragmentManager();

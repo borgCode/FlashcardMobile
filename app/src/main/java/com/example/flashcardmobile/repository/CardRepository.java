@@ -24,7 +24,6 @@ public class CardRepository {
     }
 
     public CompletableFuture<Long> insert(Card card) {
-        Log.d("Card R", "Inserting into db");
         return CompletableFuture.supplyAsync(() -> cardDao.insert(card), executorService);
     }
 

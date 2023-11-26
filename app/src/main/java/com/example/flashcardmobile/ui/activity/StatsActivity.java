@@ -1,21 +1,21 @@
 package com.example.flashcardmobile.ui.activity;
 
 import android.os.Bundle;
+import com.example.flashcardmobile.databinding.ActivityStatsBinding;
 import com.google.android.material.tabs.TabLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.flashcardmobile.ui.view.StatsTabsAdapter;
-import com.example.flashcardmobile.databinding.ActivityPlaceholderStatsBinding;
 
 public class StatsActivity extends AppCompatActivity {
 
-    private ActivityPlaceholderStatsBinding binding;
+    private ActivityStatsBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityPlaceholderStatsBinding.inflate(getLayoutInflater());
+        binding = ActivityStatsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         StatsTabsAdapter sectionsPagerAdapter = new StatsTabsAdapter(this, getSupportFragmentManager());

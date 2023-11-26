@@ -18,11 +18,10 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.flashcardmobile.R;
-import com.example.flashcardmobile.entity.DeckCard;
 import com.example.flashcardmobile.ui.view.ListViewAdapter;
 import com.example.flashcardmobile.viewmodel.CardViewModel;
 import com.example.flashcardmobile.viewmodel.DeckCardViewModel;
-import com.example.flashcardmobile.viewmodel.SharedViewModel;
+import com.example.flashcardmobile.viewmodel.SharedDeckAndCardViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.onCard
 
     private DeckCardViewModel deckCardViewModel;
     private CardViewModel cardViewModel;
-    private SharedViewModel sharedViewModel;
+    private SharedDeckAndCardViewModel sharedDeckAndCardViewModel;
     private RecyclerView recyclerView;
     private ListViewAdapter listViewAdapter;
     private String selectedOption;
@@ -43,7 +42,7 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.onCard
         
         deckCardViewModel = new ViewModelProvider(requireActivity()).get(DeckCardViewModel.class);
         cardViewModel = new ViewModelProvider(requireActivity()).get(CardViewModel.class);
-        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        sharedDeckAndCardViewModel = new ViewModelProvider(requireActivity()).get(SharedDeckAndCardViewModel.class);
 
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -123,8 +122,8 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.onCard
     public void onCardEdit(long deckId, long cardId) {
         cardViewModel.getCardById(cardId).observe(getViewLifecycleOwner(), card -> {
             if (card != null) {
-                sharedViewModel.setSelectedCard(card);
-                sharedViewModel.setDeckId(deckId);
+                sharedDeckAndCardViewModel.setSelectedCard(card);
+                sharedDeckAndCardViewModel.setDeckId(deckId);
                 EditCardFragment editCardFragment = new EditCardFragment();
 
                 FragmentManager fragmentManager = getParentFragmentManager();

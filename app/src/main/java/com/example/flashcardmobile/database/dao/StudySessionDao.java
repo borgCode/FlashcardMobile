@@ -18,12 +18,12 @@ public interface StudySessionDao {
     void delete(StudySession studySession);
     @Query("SELECT * FROM study_sessions")
     LiveData<List<StudySession>> getAllSessions();
-    @Query("SELECT sessionDate FROM study_sessions LIMIT 1")
+    @Query("SELECT session_date FROM study_sessions LIMIT 1")
     LiveData<LocalDate> getFirstValue();
 
-    @Query("SELECT * FROM study_sessions WHERE sessionDate >= :startOfMonth AND sessionDate <= :endOfMonth")
+    @Query("SELECT * FROM study_sessions WHERE session_date >= :startOfMonth AND session_date <= :endOfMonth")
     LiveData<List<StudySession>> getSessionsForMonth(LocalDate startOfMonth, LocalDate endOfMonth);
 
-    @Query("SELECT * FROM study_sessions WHERE sessionDate = :today")
+    @Query("SELECT * FROM study_sessions WHERE session_date = :today")
     StudySession getSessionByDate(LocalDate today);
 }

@@ -1,5 +1,6 @@
 package com.example.flashcardmobile.entity;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -10,6 +11,7 @@ public class StudySession {
     
     @PrimaryKey(autoGenerate = true)
     private long id;
+    @ColumnInfo(name = "session_date")
     private LocalDate sessionDate;
     private long duration;
 

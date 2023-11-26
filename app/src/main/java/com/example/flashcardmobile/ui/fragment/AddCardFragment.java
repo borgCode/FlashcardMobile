@@ -1,9 +1,10 @@
 package com.example.flashcardmobile.ui.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,7 @@ import com.example.flashcardmobile.entity.CardTagCrossRef;
 import com.example.flashcardmobile.entity.Tag;
 import com.example.flashcardmobile.ui.dialog.CreateTagDialog;
 import com.example.flashcardmobile.viewmodel.CardViewModel;
-import com.example.flashcardmobile.viewmodel.SharedViewModel;
+import com.example.flashcardmobile.viewmodel.SharedDeckAndCardViewModel;
 import com.example.flashcardmobile.viewmodel.TagViewModel;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,7 +37,7 @@ import java.util.stream.Collectors;
 public class AddCardFragment extends Fragment {
     
     private CardViewModel cardViewModel;
-    private SharedViewModel sharedViewModel;
+    private SharedDeckAndCardViewModel sharedDeckAndCardViewModel;
     private TagViewModel tagViewModel;
     private EditText frontSide;
     private EditText backSide;
@@ -48,6 +49,10 @@ public class AddCardFragment extends Fragment {
     private Map<Long, Tag> selectedTagsMap = new HashMap<>();
     private Map<String, Tag> tagMap = new HashMap<>();
     private ArrayAdapter<String> adapter;
+
+    private SharedPreferences sharedPreferences;
+    private  SharedPreferences.Editor editor;
+    private int cardsAdded;
 
     @Nullable
     
@@ -61,8 +66,11 @@ public class AddCardFragment extends Fragment {
 
         view.findViewById(R.id.deckSelectionBox).setVisibility(View.GONE);
 
+        sharedPreferences = getActivity().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
         cardViewModel = new ViewModelProvider(requireActivity()).get(CardViewModel.class);
-        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        sharedDeckAndCardViewModel = new ViewModelProvider(requireActivity()).get(SharedDeckAndCardViewModel.class);
         tagViewModel = new ViewModelProvider(requireActivity()).get(TagViewModel.class);
         
         frontSide = view.findViewById(R.id.frontSideEditText);
@@ -141,7 +149,7 @@ public class AddCardFragment extends Fragment {
     private void addCard() {
         String frontText = frontSide.getText().toString().trim();
         String backText = backSide.getText().toString().trim();
-        long deckId = sharedViewModel.getDeckId().getValue();
+        long deckId = sharedDeckAndCardViewModel.getDeckId().getValue();
         
         if (frontText.isEmpty() || backText.isEmpty()) {
             Toast.makeText(getActivity(),
@@ -164,6 +172,7 @@ public class AddCardFragment extends Fragment {
                 tagViewModel.insertCrossRefs(crossRefs).thenRun(() -> {
                     clearTags();
                     Toast.makeText(getActivity(), "Card added!", Toast.LENGTH_SHORT).show();
+                    cardsAdded++;
                 });
             }, Executors.newSingleThreadExecutor());
         }
