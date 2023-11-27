@@ -12,11 +12,6 @@ import java.util.List;
 
 public class SharedAnalyticsViewModel extends AndroidViewModel {
     
-    private enum UpdateType {
-        STUDIED,
-        ADDED,
-        MASTERED
-    }
     
     private LocalDate date;
     private LearningAnalyticsRepository repository;
@@ -26,43 +21,32 @@ public class SharedAnalyticsViewModel extends AndroidViewModel {
         this.date = LocalDate.now();
         repository = new LearningAnalyticsRepository(application);
     }
-
-    public void updateCardsStudied(int count) {
-        updateAnalytics(UpdateType.STUDIED, count);
-    }
-
-    public void updateCardsAdded(int count) {
-        updateAnalytics(UpdateType.ADDED, count);
-    }
-
-    public void updateCardsMastered(int count) {
-        updateAnalytics(UpdateType.MASTERED, count);
-    }
     
-    private void updateAnalytics(UpdateType updateType, int count) {
+    public void updateCardsAdded(int count) {
         LearningAnalytics record = repository.getAnalyticsByDate(date);
         if (record != null) {
-            switch (updateType) {
-                case STUDIED:
-                    record.setCardsStudied(record.getCardsStudied() + count);
-                    break;
-                case ADDED:
-                    record.setCardsAdded(record.getCardsAdded() + count);
-                    break;
-                case MASTERED:
-                    record.setCardsMastered(record.getCardsMastered() + count);
-                    break;
-            }
-            repository.update(record);
+            record.setCardsAdded(record.getCardsAdded() + count);
         } else {
-            int studied = (updateType == UpdateType.STUDIED) ? count : 0;
-            int added = (updateType == UpdateType.ADDED) ? count : 0;
-            int mastered = (updateType == UpdateType.MASTERED) ? count : 0;
-            LearningAnalytics newRecord = new LearningAnalytics(date, studied, added, mastered);
+            LearningAnalytics newRecord = new LearningAnalytics(date, 0, count, 0, 0, 0, 0);
             repository.insert(newRecord);
         }
     }
-
+    
+    public void updateAllAnalytics(int studied, int mastered, int easy, int medium, int hard) {
+        LearningAnalytics record = repository.getAnalyticsByDate(date);
+        if (record != null) {
+            record.setCardsStudied(record.getCardsStudied() + studied);
+            record.setCardsMastered(record.getCardsMastered() + mastered);
+            record.setEasyCounter(record.getEasyCounter() + easy);
+            record.setMediumCounter(record.getMediumCounter() + medium);
+            record.setHardCounter(record.getHardCounter() + hard);
+            repository.update(record);
+        } else {
+            LearningAnalytics newRecord = new LearningAnalytics(date, studied, 0, mastered, easy, medium, hard);
+            repository.insert(newRecord);
+        }
+    }
+    
     public LiveData<List<LearningAnalytics>> getAnalyticsForMonth(LocalDate startOfMonth, LocalDate endOfMonth) {
         return repository.getAnalyticsForMonth(startOfMonth, endOfMonth);
     }

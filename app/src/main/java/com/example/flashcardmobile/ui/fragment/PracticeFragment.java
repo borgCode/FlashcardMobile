@@ -40,6 +40,9 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
     private SharedPreferences.Editor editor;
     private int numOfCardsStudied = 0;
     private int numOfCardsMastered = 0;
+    private int easyCounter;
+    private int mediumCounter;
+    private int hardCounter;
 
     @Nullable
     @Override
@@ -119,7 +122,17 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
         cardViewModel.update(newCard);
         numOfCardsStudied++;
         saveCardAnalytics("cardsStudied", numOfCardsStudied);
-
+        switch (difficulty) {
+            case 1: easyCounter++;
+                saveCardAnalytics("easy", easyCounter);
+            break;
+            case 3: mediumCounter++;
+                saveCardAnalytics("medium", mediumCounter);
+            break;
+            case 5: hardCounter++;
+            saveCardAnalytics("hard", hardCounter);
+            break;
+        }
     }
 
     private Card calculateDueDate(Card card, int difficulty) {
@@ -191,11 +204,13 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
                 } else {
                     studySessionViewModel.insert(new StudySession(today, durationInSec));
                 }
-                sharedAnalyticsViewModel.updateCardsStudied(numOfCardsStudied);
-                sharedAnalyticsViewModel.updateCardsMastered(numOfCardsMastered);
+                sharedAnalyticsViewModel.updateAllAnalytics(numOfCardsStudied, numOfCardsMastered, easyCounter, mediumCounter, hardCounter);
                 editor.remove("start");
                 editor.remove("cardsStudied");
                 editor.remove("cardsMastered");
+                editor.remove("easy");
+                editor.remove("medium");
+                editor.remove("hard");
                 editor.apply();
             });
         }
