@@ -1,5 +1,6 @@
 package com.example.flashcardmobile.ui.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -7,16 +8,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.flashcardmobile.R;
+import com.example.flashcardmobile.entity.LearningAnalytics;
 import com.example.flashcardmobile.entity.StudySession;
+import com.example.flashcardmobile.viewmodel.SharedAnalyticsViewModel;
 import com.example.flashcardmobile.viewmodel.StudySessionViewModel;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.*;
+import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.google.android.material.tabs.TabLayout;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +36,9 @@ import java.util.Locale;
 
 public class ProgressFragment extends Fragment {
     private BarChart barChart;
+    private PieChart pieChart;
     private StudySessionViewModel studySessionViewModel;
+    private SharedAnalyticsViewModel sharedAnalyticsViewModel;
     private TabLayout yearTabLayout;
     private int selectedYear;
     private int selectedMonth;
@@ -39,10 +47,9 @@ public class ProgressFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_progress, container, false);
-
         
-        
-        studySessionViewModel = new ViewModelProvider(this).get(StudySessionViewModel.class);
+        studySessionViewModel = new ViewModelProvider(requireActivity()).get(StudySessionViewModel.class);
+        sharedAnalyticsViewModel = new ViewModelProvider(requireActivity()).get(SharedAnalyticsViewModel.class);
 
         yearTabLayout = view.findViewById(R.id.years_tab_layout);
         yearTabLayout.addTab(yearTabLayout.newTab().setText("2023"));
@@ -79,7 +86,7 @@ public class ProgressFragment extends Fragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 selectedMonth = tab.getPosition() + 1;
-                getDataForChart(selectedYear, selectedMonth);
+                getDataForCharts(selectedYear, selectedMonth);
             }
 
             @Override
@@ -102,7 +109,26 @@ public class ProgressFragment extends Fragment {
         barChart.setDragEnabled(true);
         barChart.setVisibleXRangeMaximum(10);
         barChart.setHighlightPerTapEnabled(false);
+        
+        pieChart = view.findViewById(R.id.progress_piechart);
+        pieChart.setUsePercentValues(true);
+        pieChart.getDescription().setEnabled(false);
+        pieChart.setDrawEntryLabels(false);
+        pieChart.setHoleRadius(40f);
+        pieChart.setTransparentCircleAlpha(0);
+        
+        
+        
+        
+        
+        
 
+        Legend pieLegend = pieChart.getLegend();
+        pieLegend.setVerticalAlignment(Legend.LegendVerticalAlignment.CENTER);
+        pieLegend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+        pieLegend.setOrientation(Legend.LegendOrientation.VERTICAL);
+        
+        
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -116,27 +142,67 @@ public class ProgressFragment extends Fragment {
             }
         }, 100);
         
-        
         return view;
     }
 
 
-    private void getDataForChart(int selectedYear, int selectedMonth) {
-        List<BarEntry> entries = new ArrayList<>();
+    private void getDataForCharts(int selectedYear, int selectedMonth) {
+        List<BarEntry> barEntries = new ArrayList<>();
         LocalDate[] monthLength = getMonthDateRange(selectedYear, selectedMonth);
-        studySessionViewModel.getSessionsForMonth(monthLength[0], monthLength[1]).observe(this, studySessions -> {
-            entries.clear();
+        studySessionViewModel.getSessionsForMonth(monthLength[0], monthLength[1]).observe(getViewLifecycleOwner(), studySessions -> {
+            barEntries.clear();
             for (StudySession session : studySessions) {
                 LocalDate sessionDate = session.getSessionDate();
                 long xValue = ChronoUnit.DAYS.between(monthLength[0], sessionDate);
                 float yValue = session.getDuration();
-                entries.add(new BarEntry(xValue, yValue));
+                barEntries.add(new BarEntry(xValue, yValue));
             }
             initXAxisValueFormatter(monthLength[0]);
 
-            populateChart(entries);
+            populateBarChart(barEntries);
 
         });
+        List<PieEntry> pieEntries = new ArrayList<>();
+        
+        sharedAnalyticsViewModel.getAnalyticsForMonth(monthLength[0], monthLength[1]).observe(getViewLifecycleOwner(), analytics -> {
+            int cardsStudied = 0;
+            int cardsAdded = 0;
+            int cardsMastered = 0;
+            pieEntries.clear();
+            for (LearningAnalytics record: analytics) {
+                cardsStudied += record.getCardsStudied();
+                cardsAdded += record.getCardsAdded();
+                cardsMastered += record.getCardsMastered();
+            }
+            pieEntries.add(new PieEntry(cardsStudied, "Cards studied this month"));
+            pieEntries.add(new PieEntry(cardsAdded, "Cards added this month"));
+            pieEntries.add(new PieEntry(cardsMastered, "Cards mastered this month"));
+            populatePieChart(pieEntries);
+        });
+                
+    }
+
+    private void populateBarChart(List<BarEntry> entries) {
+        BarDataSet dataSet = new BarDataSet(entries, "Time studied per day");
+        dataSet.setValueFormatter(new ProgressFragment.DurationBarValueFormatter());
+        BarData barData = new BarData(dataSet);
+        barData.setValueTextSize(12f);
+        barData.setBarWidth(0.9f);
+        barData.setHighlightEnabled(false);
+        barChart.setData(barData);
+        barChart.invalidate();
+    }
+    
+    private void populatePieChart(List<PieEntry> entries) {
+        int[] pieChartColors = new int[]{Color.GREEN, Color.CYAN, Color.MAGENTA};
+        PieDataSet dataSet = new PieDataSet(entries, "");
+        dataSet.setColors(pieChartColors);
+        PieData pieData = new PieData(dataSet);
+        pieData.setValueFormatter(new PercentFormatter(pieChart));
+        pieData.setValueTextSize(11f);
+        
+        pieChart.setData(pieData);
+        pieChart.invalidate();
     }
 
     private LocalDate[] getMonthDateRange(int selectedYear, int selectedMonth) {
@@ -157,17 +223,6 @@ public class ProgressFragment extends Fragment {
 
     private void addYearTab(String year) {
         yearTabLayout.addTab(yearTabLayout.newTab().setText(year));
-    }
-
-    private void populateChart(List<BarEntry> entries) {
-        BarDataSet dataSet = new BarDataSet(entries, "Time studied per day");
-        dataSet.setValueFormatter(new ProgressFragment.DurationBarValueFormatter());
-        BarData barData = new BarData(dataSet);
-        barData.setValueTextSize(12f);
-        barData.setBarWidth(0.9f);
-        barData.setHighlightEnabled(false);
-        barChart.setData(barData);
-        barChart.invalidate();
     }
 
     private void initXAxisValueFormatter(LocalDate localDate) {
@@ -193,4 +248,6 @@ public class ProgressFragment extends Fragment {
             }
         }
     }
+    
+    
 }

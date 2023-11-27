@@ -1,14 +1,17 @@
 package com.example.flashcardmobile.viewmodel;
 
 import android.app.Application;
-import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import com.example.flashcardmobile.entity.LearningAnalytics;
 import com.example.flashcardmobile.repository.LearningAnalyticsRepository;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
+import java.util.List;
 
-public class SharedAnalyticsViewModel extends ViewModel {
-
+public class SharedAnalyticsViewModel extends AndroidViewModel {
+    
     private enum UpdateType {
         STUDIED,
         ADDED,
@@ -18,7 +21,8 @@ public class SharedAnalyticsViewModel extends ViewModel {
     private LocalDate date;
     private LearningAnalyticsRepository repository;
 
-    public SharedAnalyticsViewModel(Application application) {
+    public SharedAnalyticsViewModel(@NotNull Application application) {
+        super(application);
         this.date = LocalDate.now();
         repository = new LearningAnalyticsRepository(application);
     }
@@ -57,6 +61,10 @@ public class SharedAnalyticsViewModel extends ViewModel {
             LearningAnalytics newRecord = new LearningAnalytics(date, studied, added, mastered);
             repository.insert(newRecord);
         }
+    }
+
+    public LiveData<List<LearningAnalytics>> getAnalyticsForMonth(LocalDate startOfMonth, LocalDate endOfMonth) {
+        return repository.getAnalyticsForMonth(startOfMonth, endOfMonth);
     }
     
 }

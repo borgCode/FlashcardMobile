@@ -90,5 +90,6 @@
     <string name="tab_text_1">Progress</string>
     <string name="tab_text_2">Performance</string>
     <string name="tab_text_3">Milestones</string>
+    <string name="statistics_and_milestones">Statistics and Milestones</string>
 
 </resources>

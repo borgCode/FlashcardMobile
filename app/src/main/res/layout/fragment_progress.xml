@@ -31,14 +31,26 @@
             android:layout_marginEnd="5dp"
             android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@+id/months_tab_layout"
-            app:layout_constraintBottom_toTopOf="@+id/placeholder"
+            app:layout_constraintBottom_toTopOf="@+id/piechart_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintVertical_bias="0.29000002"/>
-    <TextView android:layout_width="match_parent" android:layout_height="0dp"
-              app:layout_constraintTop_toBottomOf="@+id/study_time_chart"
-              app:layout_constraintBottom_toBottomOf="parent
-"
-              android:id="@+id/placeholder"/>
+
+    <TextView
+            android:id="@+id/piechart_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Card Statistics This Month"
+            android:gravity="center"
+            android:padding="4dp"
+            android:background="#EFEFEF"
+            android:textStyle="bold" app:layout_constraintBottom_toTopOf="@+id/progress_piechart"
+            app:layout_constraintTop_toBottomOf="@+id/study_time_chart" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    <com.github.mikephil.charting.charts.PieChart android:layout_width="match_parent" android:layout_height="0dp"
+              app:layout_constraintTop_toBottomOf="@+id/piechart_title"
+              app:layout_constraintBottom_toBottomOf="parent"
+              android:id="@+id/progress_piechart"/>
 
 
 
