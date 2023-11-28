@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import com.example.flashcardmobile.entity.CardTagCrossRef;
 import com.example.flashcardmobile.entity.CardWithTags;
 import com.example.flashcardmobile.entity.Tag;
+import com.example.flashcardmobile.entity.TagWithCards;
 import com.example.flashcardmobile.repository.TagRepository;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,5 +51,9 @@ public class TagViewModel extends AndroidViewModel {
     }
     public LiveData<CardWithTags> getCardWithTags(long cardId) {
         return tagRepository.getTagsForCard(cardId);
+    }
+    
+    public LiveData<TagWithCards> getTagWithCards(long tagId) {
+        return tagRepository.getCardsForTag(tagId);
     }
 }

@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.flashcardmobile.R;
 import com.example.flashcardmobile.entity.DeckCard;
@@ -16,14 +15,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHolder> implements Filterable {
-
+public class CardListViewAdapter extends RecyclerView.Adapter<CardListViewAdapter.ViewHolder> implements Filterable {
     
-
     public interface onCardOperationListener {
         void onCardEdit(long deckId, long cardId);
         void onResetDueDate(int position);
-        void onCardDelete(long cardId);
+        void onCardDelete(long cardId);                                                         
         
     }
 
@@ -33,7 +30,7 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
     private String currentSearchColumn;
     private ArrayList<DeckCard> cardsFilteredByTag;
 
-    public ListViewAdapter(onCardOperationListener listener) {
+    public CardListViewAdapter(onCardOperationListener listener) {
         this.listener = listener;
         cards = new ArrayList<>();
         cardsFull = new ArrayList<>();
@@ -70,14 +67,14 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
     @NonNull
     @NotNull
     @Override
-    public ListViewAdapter.ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+    public CardListViewAdapter.ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_table_cell_list_view, parent, false);
+                .inflate(R.layout.item_card_table_list_cell_view, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull @NotNull ListViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull @NotNull CardListViewAdapter.ViewHolder holder, int position) {
         DeckCard card = cards.get(position);
 
         Log.d("ListView", "Setting column text: " +
@@ -90,7 +87,7 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
         
         holder.cardOptions.setOnClickListener(v -> {
             PopupMenu popupMenu = new PopupMenu(holder.itemView.getContext(), holder.cardOptions);
-            popupMenu.getMenuInflater().inflate(R.menu.list_popup_menu, popupMenu.getMenu());
+            popupMenu.getMenuInflater().inflate(R.menu.card_list_popup_menu, popupMenu.getMenu());
             
             popupMenu.setOnMenuItemClickListener(item -> {
                 Log.d("PopupMenu", "item Clicked");

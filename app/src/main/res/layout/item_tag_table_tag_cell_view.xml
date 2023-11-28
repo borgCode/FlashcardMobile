@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/table_cell_borders"
+              android:showDividers="middle|end"
+              android:divider="@drawable/table_divider"
+              android:orientation="horizontal"
+              android:paddingTop="8dp"
+              android:paddingBottom="8dp"
+              android:paddingStart="4dp"
+android:weightSum="4">
+
+    <TextView
+            android:id="@+id/tagName"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:layout_gravity="center"
+            android:padding="2dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:text="Column 1"
+    />
+
+    <View
+            android:id="@+id/colorCircle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/circle_shape"
+    android:layout_weight="1.2"/>
+    
+    <TextView
+            android:id="@+id/tagSize"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:layout_gravity="center"
+            android:padding="2dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:text="Column 1"
+    />
+    <ImageButton android:layout_width="0dp" android:layout_height="match_parent"
+                 android:id="@+id/list_tag_popup_menu" android:src="@drawable/ic_more_vert"
+                 android:background="?attr/selectableItemBackgroundBorderless"
+    android:layout_weight="0.4"/>
+
+</LinearLayout>
+

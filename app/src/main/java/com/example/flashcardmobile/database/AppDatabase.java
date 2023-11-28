@@ -9,7 +9,7 @@ import com.example.flashcardmobile.database.dao.*;
 import com.example.flashcardmobile.entity.*;
 
 @Database(entities = {Deck.class, Card.class, Tag.class, CardTagCrossRef.class,
-        StudySession.class, LearningAnalytics.class}, version = 8)
+        StudySession.class, LearningAnalytics.class}, version = 9)
 @TypeConverters(Converters.class)
 public abstract class AppDatabase extends RoomDatabase {
 

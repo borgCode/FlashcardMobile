@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+            android:id="@+id/view_cards_item"
+            android:title="View cards"
+            app:showAsAction="never"
+    />
+    <item
+            android:id="@+id/edit_tag_item"
+            android:title="Edit tag name"
+            app:showAsAction="never"
+    />
+    <item android:id="@+id/change_color_item"
+          android:title="Change color"
+          app:showAsAction="never"/>
+    <item
+            android:id="@+id/delete_tag_item"
+            android:title="Delete tag"
+            app:showAsAction="never"
+    />
+</menu>

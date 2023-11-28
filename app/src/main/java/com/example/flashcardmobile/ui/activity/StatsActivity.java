@@ -21,15 +21,8 @@ public class StatsActivity extends AppCompatActivity {
         binding = ActivityStatsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         ImageView backButton = findViewById(R.id.back_button);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-
-
-
+        backButton.setOnClickListener(view -> onBackPressed());
+        
         StatsTabsAdapter sectionsPagerAdapter = new StatsTabsAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = binding.viewPager;
         viewPager.setAdapter(sectionsPagerAdapter);

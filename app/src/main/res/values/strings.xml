@@ -87,9 +87,17 @@
         <item>December</item>
     </string-array>
     <string name="title_activity_placeholder_stats">placeholder_activity_stats</string>
-    <string name="tab_text_1">Progress</string>
-    <string name="tab_text_2">Performance</string>
-    <string name="tab_text_3">Milestones</string>
+    <string name="stats_tab_text_1">Progress</string>
+    <string name="stats_tab_text_2">Performance</string>
+    <string name="stats_tab_text_3">Milestones</string>
     <string name="statistics_and_milestones">Statistics and Milestones</string>
+    <string name="list_tab_text_1">Decks</string>
+    <string name="list_tab_text_2">Cards</string>
+    <string name="list_tab_text_3">Tags</string>
+    <string name="deck_size">Deck Size</string>
+    <string name="deck_name_list">Deck Name</string>
+    <string name="due_cards">Due Cards</string>
+    <string name="front_side">Front Side</string>
+    <string name="back_side">Back Side</string>
 
 </resources>

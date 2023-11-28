@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.flashcardmobile.R;
-import com.example.flashcardmobile.ui.view.ListViewAdapter;
+import com.example.flashcardmobile.ui.view.CardListViewAdapter;
 import com.example.flashcardmobile.viewmodel.CardViewModel;
 import com.example.flashcardmobile.viewmodel.DeckCardViewModel;
 import com.example.flashcardmobile.viewmodel.SharedDeckAndCardViewModel;
@@ -26,19 +26,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class ListViewFragment extends Fragment implements ListViewAdapter.onCardOperationListener {
+public class CardListViewFragment extends Fragment implements CardListViewAdapter.onCardOperationListener {
 
     private DeckCardViewModel deckCardViewModel;
     private CardViewModel cardViewModel;
     private SharedDeckAndCardViewModel sharedDeckAndCardViewModel;
     private RecyclerView recyclerView;
-    private ListViewAdapter listViewAdapter;
+    private CardListViewAdapter cardListViewAdapter;
     private String selectedOption;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_list_view, container, false);
+        View view = inflater.inflate(R.layout.fragment_card_list_view, container, false);
         
         deckCardViewModel = new ViewModelProvider(requireActivity()).get(DeckCardViewModel.class);
         cardViewModel = new ViewModelProvider(requireActivity()).get(CardViewModel.class);
@@ -46,14 +46,14 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.onCard
 
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        listViewAdapter = new ListViewAdapter(this);
-        recyclerView.setAdapter(listViewAdapter);
+        cardListViewAdapter = new CardListViewAdapter(this);
+        recyclerView.setAdapter(cardListViewAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), RecyclerView.VERTICAL));
 
         deckCardViewModel.getAllCards().observe(getViewLifecycleOwner(), newCards -> {
-            listViewAdapter.setCards(new ArrayList<>(newCards));
-            listViewAdapter.setCardsFull(new ArrayList<>(newCards));
-            listViewAdapter.notifyDataSetChanged();
+            cardListViewAdapter.setCards(new ArrayList<>(newCards));
+            cardListViewAdapter.setCardsFull(new ArrayList<>(newCards));
+            cardListViewAdapter.notifyDataSetChanged();
         });
         
         requireActivity().addMenuProvider(new MenuProvider() {
@@ -81,7 +81,7 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.onCard
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             selectedOption = parent.getItemAtPosition(position).toString().toLowerCase().trim();
                             Log.d("Item Selection", "Item selected: " + selectedOption);
-                                listViewAdapter.setCurrentSearchColumn(selectedOption);
+                                cardListViewAdapter.setCurrentSearchColumn(selectedOption);
 
                         }
 
@@ -105,7 +105,7 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.onCard
                                 Log.d("Search view", "options is equal to tag, calling method with param: " + newText);
                                 observeCardsFilteredByTag(newText);
                             } else {
-                                listViewAdapter.getFilter().filter(newText);
+                                cardListViewAdapter.getFilter().filter(newText);
                             }
                             return false;
                         }
@@ -149,8 +149,8 @@ public class ListViewFragment extends Fragment implements ListViewAdapter.onCard
 
     public void observeCardsFilteredByTag(String tag) {
         deckCardViewModel.getCardsByTag(tag).observe(getViewLifecycleOwner(), newCards -> {
-            listViewAdapter.setCards(new ArrayList<>(newCards));
-            listViewAdapter.notifyDataSetChanged();
+            cardListViewAdapter.setCards(new ArrayList<>(newCards));
+            cardListViewAdapter.notifyDataSetChanged();
         });
     }
 }

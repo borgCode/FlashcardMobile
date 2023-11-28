@@ -1,51 +1,33 @@
 package com.example.flashcardmobile.ui.activity;
 
 import android.os.Bundle;
-import android.view.MenuItem;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
+import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
 import com.example.flashcardmobile.R;
-import com.example.flashcardmobile.ui.fragment.ListViewFragment;
+import com.example.flashcardmobile.databinding.ActivityListBinding;
+import com.example.flashcardmobile.ui.view.ListTabsAdapter;
+import com.google.android.material.tabs.TabLayout;
 
 public class ListActivity extends AppCompatActivity {
 
+    private ActivityListBinding binding;
+
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                getSupportFragmentManager().popBackStack();
-            } else {
-                getOnBackPressedDispatcher().onBackPressed();
-            }
-        }
-        return super.onOptionsItemSelected(item);
-    }
-    
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        binding = ActivityListBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        ImageView backButton = findViewById(R.id.back_button);
         
-        setContentView(R.layout.activity_list);
+        backButton.setOnClickListener(view -> onBackPressed());
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        ListTabsAdapter sectionsPagerAdapter = new ListTabsAdapter(this, getSupportFragmentManager());
+        ViewPager viewPager = binding.viewPager;
+        viewPager.setAdapter(sectionsPagerAdapter);
+        TabLayout tabs = binding.tabs;
+        tabs.setupWithViewPager(viewPager);
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.back);
-            actionBar.setTitle("All Cards");
-        }
-        
-
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new ListViewFragment())
-                    .commit();
-        }
     }
 }

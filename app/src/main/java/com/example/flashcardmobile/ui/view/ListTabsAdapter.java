@@ -7,26 +7,30 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import com.example.flashcardmobile.R;
-import com.example.flashcardmobile.ui.fragment.ProgressFragment;
+import com.example.flashcardmobile.ui.fragment.CardListViewFragment;
+import com.example.flashcardmobile.ui.fragment.DeckListViewFragment;
+import com.example.flashcardmobile.ui.fragment.TagListViewFragment;
 
-/**
- * A [FragmentPagerAdapter] that returns a fragment corresponding to
- * one of the sections/tabs/pages.
- */
-public class StatsTabsAdapter extends FragmentPagerAdapter {
+public class ListTabsAdapter extends FragmentPagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.stats_tab_text_1, R.string.stats_tab_text_2, R.string.stats_tab_text_3};
+    private static final int[] TAB_TITLES = new int[]{R.string.list_tab_text_1, R.string.list_tab_text_2, R.string.list_tab_text_3};
     private final Context mContext;
 
-    public StatsTabsAdapter(Context context, FragmentManager fm) {
+    public ListTabsAdapter(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return new ProgressFragment();
+        switch(position) {
+            case 0:
+                return new DeckListViewFragment();
+            case 1:
+                return new CardListViewFragment();
+        }
+        return new TagListViewFragment();
     }
 
     @Nullable
