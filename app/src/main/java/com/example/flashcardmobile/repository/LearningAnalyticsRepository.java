@@ -34,8 +34,8 @@ public class LearningAnalyticsRepository {
         CompletableFuture.runAsync(() -> learningAnalyticsDao.delete(learningAnalytics), executorService);
     }
 
-    public LearningAnalytics getAnalyticsByDate(LocalDate date) {
-        return getAnalyticsByDate(date);
+    public CompletableFuture<LearningAnalytics> getAnalyticsByDate(LocalDate date) {
+        return CompletableFuture.supplyAsync(() -> learningAnalyticsDao.getAnalyticsByDate(date), executorService);
     }
 
     public LiveData<List<LearningAnalytics>> getAnalyticsForMonth(LocalDate startOfMonth, LocalDate endOfMonth) {

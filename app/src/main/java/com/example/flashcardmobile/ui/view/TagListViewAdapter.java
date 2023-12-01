@@ -1,8 +1,9 @@
 package com.example.flashcardmobile.ui.view;
 
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,22 +17,29 @@ import com.example.flashcardmobile.entity.Card;
 import com.example.flashcardmobile.entity.Tag;
 import com.example.flashcardmobile.entity.TagWithCards;
 import org.jetbrains.annotations.NotNull;
+import yuku.ambilwarna.AmbilWarnaDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TagListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    
+    public interface onTagOperationListener {
+        void onViewCards(long tagId);
+        
+    }
 
     private static final int VIEW_TYPE_TAG = 0;
     private static final int VIEW_TYPE_CARD = 1;
 
     private List<Tag> tags = new ArrayList<>();
-    private List<TagWithCards> cards = new ArrayList<>();
-
+    private List<Card> cards = new ArrayList<>();
+    private onTagOperationListener listener;
     private boolean showingTags = true;
 
-    public TagListViewAdapter() {
-
+    public TagListViewAdapter(onTagOperationListener listener) {
+        this.listener = listener;
+        
     }
 
     @Override
@@ -96,7 +104,9 @@ public class TagListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             tagHolder.tagName.setText(tag.getTagName());
 
             Drawable background = tagHolder.tagColor.getBackground();
-            ((GradientDrawable) background).setColor(tag.getColor());
+            int rgbColor = tag.getColor(); 
+            int argbColor = Color.argb(255, Color.red(rgbColor), Color.green(rgbColor), Color.blue(rgbColor));
+            ((GradientDrawable) background).setColor(argbColor);
 
             tagHolder.tagSize.setText("0");
 
@@ -107,9 +117,9 @@ public class TagListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 popupMenu.setOnMenuItemClickListener(item -> {
                     int id = item.getItemId();
                     if (id == R.id.view_cards_item) {
-
+                        listener.onViewCards(tag.getId());
                     } else if (id == R.id.change_color_item) {
-
+                        
                     } else if (id == R.id.edit_tag_item) {
 
                     } else if (id == R.id.delete_tag_item) {
@@ -119,12 +129,21 @@ public class TagListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     }
                     return true;
                 });
+                popupMenu.show();
             });
         } else if (holder instanceof CardViewHolder) {
-
+            CardViewHolder cardHolder = (CardViewHolder) holder;
+            Card card = cards.get(position);
+            cardHolder.frontSideCol.setText(card.getFrontSide());
+            cardHolder.backSideCol.setText(card.getBackSide());
+            
+//            cardHolder.cardOptions.setOnClickListener(v -> {
+//                
+//            });
         }
 
     }
+    
 
     @Override
     public int getItemCount() {
@@ -136,7 +155,7 @@ public class TagListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         showingTags = true;
     }
 
-    public void setCards(List<TagWithCards> cards) {
+    public void setCards(List<Card> cards) {
         this.cards = cards;
         showingTags = false;
     }

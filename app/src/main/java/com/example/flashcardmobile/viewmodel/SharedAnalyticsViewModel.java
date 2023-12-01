@@ -23,28 +23,31 @@ public class SharedAnalyticsViewModel extends AndroidViewModel {
     }
     
     public void updateCardsAdded(int count) {
-        LearningAnalytics record = repository.getAnalyticsByDate(date);
-        if (record != null) {
-            record.setCardsAdded(record.getCardsAdded() + count);
-        } else {
-            LearningAnalytics newRecord = new LearningAnalytics(date, 0, count, 0, 0, 0, 0);
-            repository.insert(newRecord);
-        }
+        repository.getAnalyticsByDate(date).thenAccept(learningAnalytics -> {
+            if (learningAnalytics != null) {
+                learningAnalytics.setCardsAdded(learningAnalytics.getCardsAdded() + count);
+            } else {
+                LearningAnalytics newRecord = new LearningAnalytics(date, 0, count, 0, 0, 0, 0);
+                repository.insert(newRecord);
+            }
+        });
+        
     }
     
     public void updateAllAnalytics(int studied, int mastered, int easy, int medium, int hard) {
-        LearningAnalytics record = repository.getAnalyticsByDate(date);
-        if (record != null) {
-            record.setCardsStudied(record.getCardsStudied() + studied);
-            record.setCardsMastered(record.getCardsMastered() + mastered);
-            record.setEasyCounter(record.getEasyCounter() + easy);
-            record.setMediumCounter(record.getMediumCounter() + medium);
-            record.setHardCounter(record.getHardCounter() + hard);
-            repository.update(record);
-        } else {
-            LearningAnalytics newRecord = new LearningAnalytics(date, studied, 0, mastered, easy, medium, hard);
-            repository.insert(newRecord);
-        }
+        repository.getAnalyticsByDate(date).thenAccept(learningAnalytics -> {
+            if (learningAnalytics != null) {
+                learningAnalytics.setCardsStudied(learningAnalytics.getCardsStudied() + studied);
+                learningAnalytics.setCardsMastered(learningAnalytics.getCardsMastered() + mastered);
+                learningAnalytics.setEasyCounter(learningAnalytics.getEasyCounter() + easy);
+                learningAnalytics.setMediumCounter(learningAnalytics.getMediumCounter() + medium);
+                learningAnalytics.setHardCounter(learningAnalytics.getHardCounter() + hard);
+                repository.update(learningAnalytics);
+            } else {
+                LearningAnalytics newRecord = new LearningAnalytics(date, studied, 0, mastered, easy, medium, hard);
+                repository.insert(newRecord);
+            }
+        });
     }
     
     public LiveData<List<LearningAnalytics>> getAnalyticsForMonth(LocalDate startOfMonth, LocalDate endOfMonth) {

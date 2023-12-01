@@ -13,17 +13,20 @@
                   android:layout_weight="1.2"
                   android:textSize="20sp"
                   android:gravity="center"
-                  android:text="Name"/>
+                  android:text="Name"
+        android:id="@+id/firstCol"/>
         <TextView android:layout_width="0dp" android:layout_height="wrap_content"
                   android:layout_weight="1.2"
                   android:gravity="center"
                   android:textSize="20sp"
-                  android:text="Color"/>
+                  android:text="Color"
+        android:id="@+id/secondCol"/>
         <TextView android:layout_width="0dp" android:layout_height="wrap_content"
                   android:layout_weight="1.2"
                   android:gravity="center"
                   android:textSize="20sp"
-                  android:text="Size"/>
+                  android:text="Size"
+        android:id="@+id/thirdCol"/>
         <TextView android:layout_width="0dp"
                   android:layout_height="wrap_content"
                   android:layout_weight="0.4"

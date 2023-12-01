@@ -5,8 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -15,20 +15,20 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.flashcardmobile.R;
-import com.example.flashcardmobile.entity.Tag;
 import com.example.flashcardmobile.ui.view.TagListViewAdapter;
 import com.example.flashcardmobile.viewmodel.TagViewModel;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
 
-public class TagListViewFragment extends Fragment {
+
+public class TagListViewFragment extends Fragment implements TagListViewAdapter.onTagOperationListener {
     private TagViewModel tagViewModel;
     private TagListViewAdapter tagListViewAdapter;
-    private long selectedTagId;
+    private TextView firstColumn;
+    private TextView secondColumn;
+    private TextView thirdColumn;
+    
+   
 
     @Nullable
     @Override
@@ -36,14 +36,17 @@ public class TagListViewFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tag_list_view, container, false);
 
         tagViewModel = new ViewModelProvider(requireActivity()).get(TagViewModel.class);
-        
-        
+
+        firstColumn = view.findViewById(R.id.firstCol);
+        secondColumn = view.findViewById(R.id.secondCol);
+        thirdColumn = view.findViewById(R.id.thirdCol);
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        tagListViewAdapter = new TagListViewAdapter();
+        tagListViewAdapter = new TagListViewAdapter(this);
         recyclerView.setAdapter(tagListViewAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), recyclerView.VERTICAL));
+        
 
         tagViewModel.getAllTags().observe(getViewLifecycleOwner(), newTags -> {
             tagListViewAdapter.setTags(newTags);
@@ -51,21 +54,36 @@ public class TagListViewFragment extends Fragment {
         });
         
         
-
-//        tagSelection.setOnItemClickListener(((parent, view1, position, id) -> {
-//            String selectedTagName = (String) parent.getItemAtPosition(position);
-//            selectedTagId = tagMap.get(selectedTagName);
-//            tagViewModel.getTagWithCards(selectedTagId).observe(getViewLifecycleOwner(), tagWithCards -> {
-//                
-//
-//            });
-//        }));
-        
-        
-        
-        
-        
-        //TODO
         return view;
+    }
+
+    @Override
+    public void onViewCards(long tagId) {
+        thirdColumn.setVisibility(View.GONE);
+
+        setParams(1.8F);
+        setColumnNames("Front side", "Back side");
+        
+        tagViewModel.getTagWithCards(tagId).observe(getViewLifecycleOwner(), tagWithCards -> {
+            tagListViewAdapter.setCards(tagWithCards.cards);
+            tagListViewAdapter.notifyDataSetChanged();
+
+        });
+        
+    }
+    
+    private void setParams(Float weight) {
+        LinearLayout.LayoutParams firstColParams = (LinearLayout.LayoutParams) firstColumn.getLayoutParams();
+        firstColParams.weight = weight;
+
+        LinearLayout.LayoutParams secondColParams = (LinearLayout.LayoutParams) secondColumn.getLayoutParams();
+        secondColParams.weight = weight;
+
+        firstColumn.setLayoutParams(firstColParams);
+        secondColumn.setLayoutParams(secondColParams);
+    }
+    private void setColumnNames(String columnOne, String columnTwo) {
+        firstColumn.setText(columnOne);
+        secondColumn.setText(columnTwo);
     }
 }

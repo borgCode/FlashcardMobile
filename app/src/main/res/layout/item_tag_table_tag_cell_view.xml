@@ -9,7 +9,7 @@
               android:paddingTop="8dp"
               android:paddingBottom="8dp"
               android:paddingStart="4dp"
-android:weightSum="4">
+              android:weightSum="4">
 
     <TextView
             android:id="@+id/tagName"
@@ -22,13 +22,26 @@ android:weightSum="4">
             android:text="Column 1"
     />
 
-    <View
-            android:id="@+id/colorCircle"
+    <FrameLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="@drawable/circle_shape"
-    android:layout_weight="1.2"/>
+            android:layout_gravity="center"
+            android:padding="16dp"
+            android:layout_weight="1.2">
+
+        <View
+                android:id="@+id/colorCircle"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_shape"
+                
+        />
+    </FrameLayout>
+
+
     
+
     <TextView
             android:id="@+id/tagSize"
             android:layout_width="0dp"
@@ -42,7 +55,7 @@ android:weightSum="4">
     <ImageButton android:layout_width="0dp" android:layout_height="match_parent"
                  android:id="@+id/list_tag_popup_menu" android:src="@drawable/ic_more_vert"
                  android:background="?attr/selectableItemBackgroundBorderless"
-    android:layout_weight="0.4"/>
+                 android:layout_weight="0.4"/>
 
 </LinearLayout>
 
