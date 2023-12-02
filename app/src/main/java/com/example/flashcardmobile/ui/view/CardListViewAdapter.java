@@ -19,7 +19,7 @@ public class CardListViewAdapter extends RecyclerView.Adapter<CardListViewAdapte
     
     public interface onCardOperationListener {
         void onCardEdit(long deckId, long cardId);
-        void onResetDueDate(int position);
+        void onResetDueDate(long cardId);
         void onCardDelete(long cardId);                                                         
         
     }
@@ -95,7 +95,7 @@ public class CardListViewAdapter extends RecyclerView.Adapter<CardListViewAdapte
                 if (id == R.id.editCardItem) {
                     listener.onCardEdit(card.getDeckId(), card.getCardId());
                 } else if (id == R.id.resetDueDateItem) {
-                    listener.onResetDueDate(position);
+                    listener.onResetDueDate(card.getCardId());
                 } else if (id == R.id.deleteCardItem) {
                     listener.onCardDelete(card.getCardId());
                 } else {

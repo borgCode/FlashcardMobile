@@ -49,12 +49,10 @@ public class CreateTagDialog extends DialogFragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 tagPreview.setText(textInput.getText().toString());
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
 
@@ -69,34 +67,24 @@ public class CreateTagDialog extends DialogFragment {
 
         return view;
     }
-
-
     private void openColorPicker() {
         AmbilWarnaDialog colorPicker = new AmbilWarnaDialog(getActivity(), defaultColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
             @Override
             public void onCancel(AmbilWarnaDialog dialog) {
-
             }
 
             @Override
             public void onOk(AmbilWarnaDialog dialog, int color) {
                 defaultColor = color;
                 tagPreview.setBackgroundColor(defaultColor);
-                
             }
         });
-        
         colorPicker.show();
     }
 
     private void createTag() {
-        
-
         tagViewModel.insert(new Tag(textInput.getText().toString(), defaultColor));
-
-        textInput.setText("");
-        
-
+        dismiss();
     }
 
 

@@ -34,6 +34,10 @@ public class CardRepository {
     public void delete(Card card) {
         CompletableFuture.runAsync(() -> cardDao.delete(card), executorService);
     }
+    public void deleteById(long id) {
+        CompletableFuture.runAsync(() -> cardDao.deleteById(id), executorService);
+        
+    }
     
     public LiveData<List<Card>> getAllDeckCards(long id) {
         return cardDao.getCardsByDeckId(id);
@@ -46,4 +50,6 @@ public class CardRepository {
     public LiveData<Card> getCardById(long id) {
         return cardDao.getCardById(id);
     }
+
+    
 }

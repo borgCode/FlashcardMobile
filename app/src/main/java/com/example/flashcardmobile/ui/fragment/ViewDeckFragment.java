@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,10 +22,11 @@ import com.example.flashcardmobile.viewmodel.DeckViewModel;
 import com.example.flashcardmobile.viewmodel.SharedDeckAndCardViewModel;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewDeckFragment extends Fragment {
+public class ViewDeckFragment extends Fragment implements DeckViewAdapter.onCardOperationListener{
     
     private SharedDeckAndCardViewModel sharedDeckAndCardViewModel;
     private CardViewModel cardViewModel;
@@ -46,7 +48,7 @@ public class ViewDeckFragment extends Fragment {
         
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        deckViewAdapter = new DeckViewAdapter(cards);
+        deckViewAdapter = new DeckViewAdapter(cards, this);
         recyclerView.setAdapter(deckViewAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),RecyclerView.VERTICAL));
 
@@ -67,5 +69,39 @@ public class ViewDeckFragment extends Fragment {
 
         });
         return view; 
+    }
+
+    @Override
+    public void onCardEdit(long deckId, long cardId) {
+        cardViewModel.getCardById(cardId).observe(getViewLifecycleOwner(), card -> {
+            if (card != null) {
+                sharedDeckAndCardViewModel.setSelectedCard(card);
+                sharedDeckAndCardViewModel.setDeckId(deckId);
+                EditCardFragment editCardFragment = new EditCardFragment();
+
+                FragmentManager fragmentManager = getParentFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, editCardFragment)
+                        .addToBackStack(null)
+                        .commit();
+
+            }
+        });
+    }
+
+    @Override
+    public void onResetDueDate(long cardId) {
+        cardViewModel.getCardById(cardId).observe(getViewLifecycleOwner(), card -> {
+            if (card != null) {
+                card.setDueDate(LocalDateTime.now());
+                cardViewModel.update(card);
+            }
+        });
+
+    }
+
+    @Override
+    public void onCardDelete(long cardId) {
+        cardViewModel.deleteCardById(cardId);
     }
 }

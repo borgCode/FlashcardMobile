@@ -4,6 +4,37 @@
                                                      android:layout_height="match_parent"
                                                      xmlns:tools="http://schemas.android.com/tools">
 
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+                  android:padding="6dp"
+                  android:weightSum="4"
+                  android:id="@+id/column_box">
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                  android:layout_weight="1.2"
+                  android:textSize="20sp"
+                  android:gravity="center"
+                  android:text="@string/front"
+                  android:id="@+id/firstCol"/>
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                  android:layout_weight="1.2"
+                  android:gravity="center"
+                  android:textSize="20sp"
+                  android:text="@string/back"
+                  android:id="@+id/secondCol"/>
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                  android:layout_weight="1.2"
+                  android:gravity="center"
+                  android:textSize="20sp"
+                  android:text="@string/due_date"
+                  android:id="@+id/thirdCol"/>
+        <TextView android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="0.4"
+                  android:gravity="center"
+                  android:text=""/>
+
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"

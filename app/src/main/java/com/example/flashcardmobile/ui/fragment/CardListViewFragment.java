@@ -24,6 +24,7 @@ import com.example.flashcardmobile.viewmodel.DeckCardViewModel;
 import com.example.flashcardmobile.viewmodel.SharedDeckAndCardViewModel;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class CardListViewFragment extends Fragment implements CardListViewAdapter.onCardOperationListener {
@@ -137,14 +138,19 @@ public class CardListViewFragment extends Fragment implements CardListViewAdapte
     }
 
     @Override
-    public void onResetDueDate(int position) {
-
+    public void onResetDueDate(long cardId) {
+        cardViewModel.getCardById(cardId).observe(getViewLifecycleOwner(), card -> {
+            if (card != null) {
+                card.setDueDate(LocalDateTime.now());
+                cardViewModel.update(card);
+            }
+        });
 
     }
 
     @Override
     public void onCardDelete(long cardId) {
-
+        cardViewModel.deleteCardById(cardId);
     }
 
     public void observeCardsFilteredByTag(String tag) {

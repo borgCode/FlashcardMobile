@@ -33,6 +33,9 @@ public class CardViewModel extends AndroidViewModel {
     public void delete(Card card) {
         cardRepository.delete(card);
     }
+    public void deleteCardById(long id) {
+        cardRepository.deleteById(id);
+    }
     
     public LiveData<List<Card>> getDueCards(long deckId) {
         cards = cardRepository.getAllDueCards(deckId);

@@ -14,6 +14,8 @@ public interface CardDao {
     void update(Card card);
     @Delete
     void delete(Card card);
+    @Query("DELETE FROM cards WHERE id = :id")
+    void deleteById(long id);
     @Query("SELECT * FROM cards WHERE deck_id = :deckId")
     LiveData<List<Card>> getCardsByDeckId(long deckId);
     @Query("SELECT * FROM cards WHERE deck_id = :deckId AND due_date <= :localTime")
@@ -21,4 +23,6 @@ public interface CardDao {
 
     @Query("SELECT * FROM cards WHERE id = :id")
     LiveData<Card> getCardById(long id);
+
+    
 }
