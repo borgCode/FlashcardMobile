@@ -99,5 +99,6 @@
     <string name="due_cards">Due Cards</string>
     <string name="front_side">Front Side</string>
     <string name="back_side">Back Side</string>
+    <string name="back_to_all_tags">Back to all tags</string>
 
 </resources>

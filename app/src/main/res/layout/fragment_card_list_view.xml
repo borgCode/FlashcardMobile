@@ -41,7 +41,21 @@
 
 
     </LinearLayout>
-    
-    <include layout="@layout/list_recyclerview"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="3dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="3dp"
+            android:paddingBottom="5dp"
+            android:clipToPadding="false"
+            android:scrollbars="vertical"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/column_box"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

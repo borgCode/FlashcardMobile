@@ -1,7 +1,6 @@
 package com.example.flashcardmobile.repository;
 
 import android.app.Application;
-import android.util.Log;
 import androidx.lifecycle.LiveData;
 import com.example.flashcardmobile.database.AppDatabase;
 import com.example.flashcardmobile.database.dao.CardDao;
@@ -16,11 +15,11 @@ import java.util.concurrent.Executors;
 public class CardRepository {
     private CardDao cardDao;
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
-    
+
     public CardRepository(Application application) {
         AppDatabase database = AppDatabase.getInstance(application);
         cardDao = database.cardDao();
-        
+
     }
 
     public CompletableFuture<Long> insert(Card card) {
@@ -34,15 +33,16 @@ public class CardRepository {
     public void delete(Card card) {
         CompletableFuture.runAsync(() -> cardDao.delete(card), executorService);
     }
+
     public void deleteById(long id) {
         CompletableFuture.runAsync(() -> cardDao.deleteById(id), executorService);
-        
+
     }
-    
+
     public LiveData<List<Card>> getAllDeckCards(long id) {
         return cardDao.getCardsByDeckId(id);
     }
-    
+
     public LiveData<List<Card>> getAllDueCards(long id) {
         return cardDao.getDueCardsByDeckId(id, LocalDateTime.now().toString());
     }
@@ -51,5 +51,5 @@ public class CardRepository {
         return cardDao.getCardById(id);
     }
 
-    
+
 }

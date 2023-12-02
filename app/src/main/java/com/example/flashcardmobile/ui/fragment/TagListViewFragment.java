@@ -1,10 +1,10 @@
 package com.example.flashcardmobile.ui.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -27,6 +27,7 @@ public class TagListViewFragment extends Fragment implements TagListViewAdapter.
     private TextView firstColumn;
     private TextView secondColumn;
     private TextView thirdColumn;
+    private Button backToTagsBtn;
     
    
 
@@ -40,6 +41,14 @@ public class TagListViewFragment extends Fragment implements TagListViewAdapter.
         firstColumn = view.findViewById(R.id.firstCol);
         secondColumn = view.findViewById(R.id.secondCol);
         thirdColumn = view.findViewById(R.id.thirdCol);
+        backToTagsBtn = view.findViewById(R.id.back_to_tags_button);
+        
+        backToTagsBtn.setOnClickListener(v -> {
+            thirdColumn.setVisibility(View.VISIBLE);
+            backToTagsBtn.setVisibility(View.GONE);
+            setParams(1.2F);
+            setColumnNames("Name", "Color");
+        });
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -60,6 +69,7 @@ public class TagListViewFragment extends Fragment implements TagListViewAdapter.
     @Override
     public void onViewCards(long tagId) {
         thirdColumn.setVisibility(View.GONE);
+        backToTagsBtn.setVisibility(View.VISIBLE);
 
         setParams(1.8F);
         setColumnNames("Front side", "Back side");
