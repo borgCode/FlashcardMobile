@@ -20,7 +20,7 @@ import com.example.flashcardmobile.R;
 import com.example.flashcardmobile.entity.Card;
 import com.example.flashcardmobile.entity.CardTagCrossRef;
 import com.example.flashcardmobile.entity.Tag;
-import com.example.flashcardmobile.ui.dialog.CreateTagDialog;
+import com.example.flashcardmobile.ui.dialog.TagDialog;
 import com.example.flashcardmobile.viewmodel.CardViewModel;
 import com.example.flashcardmobile.viewmodel.SharedAnalyticsViewModel;
 import com.example.flashcardmobile.viewmodel.SharedDeckAndCardViewModel;
@@ -144,8 +144,8 @@ public class AddCardFragment extends Fragment {
     }
 
     private void createTag() {
-        CreateTagDialog createTagDialog = new CreateTagDialog();
-        createTagDialog.show(getActivity().getSupportFragmentManager(), "createTag");
+        TagDialog tagDialog = new TagDialog();
+        tagDialog.show(getActivity().getSupportFragmentManager(), "createTag");
     }
 
     public void clearTags() {

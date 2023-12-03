@@ -32,7 +32,7 @@ android:weightSum="4">
             android:text="Column 1"
     />
     <ImageButton android:layout_width="0dp" android:layout_height="match_parent"
-                 android:id="@+id/list_tag_popup_menu" android:src="@drawable/ic_more_vert"
+                 android:id="@+id/list_card_popup_menu" android:src="@drawable/ic_more_vert"
                  android:background="?attr/selectableItemBackgroundBorderless"
     android:layout_weight="0.4"/>
 

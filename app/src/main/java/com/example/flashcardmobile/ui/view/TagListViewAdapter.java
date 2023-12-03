@@ -3,7 +3,6 @@ package com.example.flashcardmobile.ui.view;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,18 +14,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.flashcardmobile.R;
 import com.example.flashcardmobile.entity.Card;
 import com.example.flashcardmobile.entity.Tag;
-import com.example.flashcardmobile.entity.TagWithCards;
 import org.jetbrains.annotations.NotNull;
-import yuku.ambilwarna.AmbilWarnaDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TagListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    
+
     public interface onTagOperationListener {
         void onViewCards(long tagId);
-        
+
+        void onEditTag(Tag tag);
+
+        void onDeleteTag(Tag tag);
+
+        void onChangeTags(long id);
+
+        void onResetDueDate(long cardId);
+
+        void onDeleteCard(Card card);
     }
 
     private static final int VIEW_TYPE_TAG = 0;
@@ -39,7 +45,7 @@ public class TagListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public TagListViewAdapter(onTagOperationListener listener) {
         this.listener = listener;
-        
+
     }
 
     @Override
@@ -104,7 +110,7 @@ public class TagListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             tagHolder.tagName.setText(tag.getTagName());
 
             Drawable background = tagHolder.tagColor.getBackground();
-            int rgbColor = tag.getColor(); 
+            int rgbColor = tag.getColor();
             int argbColor = Color.argb(255, Color.red(rgbColor), Color.green(rgbColor), Color.blue(rgbColor));
             ((GradientDrawable) background).setColor(argbColor);
 
@@ -118,12 +124,10 @@ public class TagListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     int id = item.getItemId();
                     if (id == R.id.view_cards_item) {
                         listener.onViewCards(tag.getId());
-                    } else if (id == R.id.change_color_item) {
-                        
                     } else if (id == R.id.edit_tag_item) {
-
+                        listener.onEditTag(tag);
                     } else if (id == R.id.delete_tag_item) {
-
+                        listener.onDeleteTag(tag);
                     } else {
                         return false;
                     }
@@ -136,14 +140,30 @@ public class TagListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             Card card = cards.get(position);
             cardHolder.frontSideCol.setText(card.getFrontSide());
             cardHolder.backSideCol.setText(card.getBackSide());
-            
-//            cardHolder.cardOptions.setOnClickListener(v -> {
-//                
-//            });
+
+            cardHolder.cardOptions.setOnClickListener(v -> {
+                PopupMenu popupMenu = new PopupMenu(cardHolder.itemView.getContext(), cardHolder.cardOptions);
+                popupMenu.getMenuInflater().inflate(R.menu.tag_card_list_popup_menu, popupMenu.getMenu());
+
+                popupMenu.setOnMenuItemClickListener(item -> {
+                    int id = item.getItemId();
+                    if (id == R.id.change_tags_item) {
+                        listener.onChangeTags(card.getId());
+                    } else if (id == R.id.reset_due_date_item) {
+                        listener.onResetDueDate(card.getId());
+                    } else if (id == R.id.delete_card_item) {
+                        listener.onDeleteCard(card);
+                    } else {
+                        return false;
+                    }
+                    return true;
+                });
+                popupMenu.show();
+            });
         }
 
     }
-    
+
 
     @Override
     public int getItemCount() {
@@ -158,5 +178,9 @@ public class TagListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void setCards(List<Card> cards) {
         this.cards = cards;
         showingTags = false;
+    }
+
+    public void setShowingTags(Boolean showing) {
+        showingTags = showing;
     }
 }

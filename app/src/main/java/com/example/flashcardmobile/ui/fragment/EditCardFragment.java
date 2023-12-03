@@ -17,7 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.flashcardmobile.R;
 import com.example.flashcardmobile.entity.*;
-import com.example.flashcardmobile.ui.dialog.CreateTagDialog;
+import com.example.flashcardmobile.ui.dialog.TagDialog;
 import com.example.flashcardmobile.viewmodel.CardViewModel;
 import com.example.flashcardmobile.viewmodel.DeckViewModel;
 import com.example.flashcardmobile.viewmodel.SharedDeckAndCardViewModel;
@@ -138,9 +138,7 @@ public class EditCardFragment extends Fragment {
         addTagButton.setOnClickListener(v -> createTag());
 
         clearButton = view.findViewById(R.id.clear_tags_button);
-        clearButton.setOnClickListener(v -> {
-            clearTags();
-        });
+        clearButton.setOnClickListener(v -> clearTags());
         
         saveButton = view.findViewById(R.id.addCardButton);
         saveButton.setText(R.string.save);
@@ -177,8 +175,8 @@ public class EditCardFragment extends Fragment {
     }
 
     private void createTag() {
-        CreateTagDialog createTagDialog = new CreateTagDialog();
-        createTagDialog.show(getActivity().getSupportFragmentManager(), "createTag");
+        TagDialog tagDialog = new TagDialog();
+        tagDialog.show(getActivity().getSupportFragmentManager(), "createTag");
     }
 
     private void saveCard() {

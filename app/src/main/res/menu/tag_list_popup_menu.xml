@@ -3,20 +3,17 @@
 
     <item
             android:id="@+id/view_cards_item"
-            android:title="View cards"
+            android:title="@string/view_cards"
             app:showAsAction="never"
     />
     <item
             android:id="@+id/edit_tag_item"
-            android:title="Edit tag name"
+            android:title="@string/edit_tag"
             app:showAsAction="never"
     />
-    <item android:id="@+id/change_color_item"
-          android:title="Change color"
-          app:showAsAction="never"/>
     <item
             android:id="@+id/delete_tag_item"
-            android:title="Delete tag"
+            android:title="@string/delete_tag"
             app:showAsAction="never"
     />
 </menu>

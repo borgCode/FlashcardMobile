@@ -100,5 +100,12 @@
     <string name="front_side">Front Side</string>
     <string name="back_side">Back Side</string>
     <string name="back_to_all_tags">Back to all tags</string>
+    <string name="input_tag">Input tag</string>
+    <string name="view_cards">View cards</string>
+    <string name="edit_tag">Edit tag</string>
+    <string name="delete_tag">Delete tag</string>
+    <string name="change_tags">Change tags</string>
+    <string name="reset_due_date">Reset due date</string>
+    <string name="delete_card">Delete card</string>
 
 </resources>

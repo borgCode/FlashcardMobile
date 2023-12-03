@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,17 +20,29 @@ import com.example.flashcardmobile.viewmodel.TagViewModel;
 import org.jetbrains.annotations.NotNull;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
-public class CreateTagDialog extends DialogFragment {
+public class TagDialog extends DialogFragment {
 
-    TagViewModel tagViewModel;
-    int defaultColor;
-    EditText textInput;
-    Button colorPickerBtn;
-    TextView tagPreview;
-    Button createBtn;
+    private TagViewModel tagViewModel;
+    private int defaultColor;
+    private EditText textInput;
+    private Button colorPickerBtn;
+    private TextView tagPreview;
+    private Button createBtn;
+    private static final String ARG_TAG_ID = "tag_id";
+    private static final String ARG_TAG_NAME = "tag_name";
+    private static final String ARG_TAG_COLOR = "tag_color";
+    private boolean isEditMode = false;
 
+    public static TagDialog newInstance(long tagId, String tagName, int tagColor) {
+        TagDialog fragment = new TagDialog();
+        Bundle args = new Bundle();
+        args.putLong(ARG_TAG_ID, tagId);
+        args.putString(ARG_TAG_NAME, tagName);
+        args.putInt(ARG_TAG_COLOR, tagColor);
+        fragment.setArguments(args);
+        return fragment;
+    }
     @Nullable
-
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_create_tag, container, false);
@@ -55,6 +66,7 @@ public class CreateTagDialog extends DialogFragment {
             public void afterTextChanged(Editable s) {
             }
         });
+        
 
         colorPickerBtn = view.findViewById(R.id.dialog_open_color_picker);
         colorPickerBtn.setOnClickListener(l -> openColorPicker());
@@ -63,10 +75,28 @@ public class CreateTagDialog extends DialogFragment {
         tagPreview.setBackgroundColor(defaultColor);
 
         createBtn = view.findViewById(R.id.dialog_create_tag_button);
-        createBtn.setOnClickListener(l -> createTag());
+
+        if (getArguments() != null && getArguments().containsKey(ARG_TAG_NAME)) {
+            isEditMode = true;
+            String tagName = getArguments().getString(ARG_TAG_NAME);
+            defaultColor = getArguments().getInt(ARG_TAG_COLOR);
+            textInput.setText(tagName);
+            tagPreview.setBackgroundColor(defaultColor);
+            createBtn.setText("Save Changes");
+        }
+        
+        createBtn.setOnClickListener(l -> {
+            if (isEditMode) {
+                updateTag();
+            } else {
+                createTag();
+            }
+        });
 
         return view;
     }
+
+
     private void openColorPicker() {
         AmbilWarnaDialog colorPicker = new AmbilWarnaDialog(getActivity(), defaultColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
             @Override
@@ -87,6 +117,13 @@ public class CreateTagDialog extends DialogFragment {
         dismiss();
     }
 
-
+    private void updateTag() {
+        tagViewModel.getTagById(getArguments().getLong(ARG_TAG_ID)).observe(getViewLifecycleOwner(), tag -> {
+            tag.setTagName(textInput.getText().toString());
+            tag.setColor(defaultColor);
+            tagViewModel.update(tag);
+        });
+    }
+    
 }
 

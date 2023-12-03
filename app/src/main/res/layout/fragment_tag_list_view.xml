@@ -4,12 +4,19 @@
                                                    android:layout_height="match_parent"
 >
 
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_gravity="end" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" android:id="@+id/back_to_tags_button"
+            app:layout_constraintBottom_toTopOf="@id/column_box"
+            android:visibility="gone"
+            android:text="@string/back_to_all_tags"/>
+
 
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:orientation="horizontal"
                   android:padding="6dp"
                   android:weightSum="4"
-                  android:id="@+id/column_box" app:layout_constraintTop_toTopOf="parent"
+                  android:id="@+id/column_box" app:layout_constraintTop_toBottomOf="@id/back_to_tags_button" 
                   app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent">
         <TextView android:layout_width="0dp" android:layout_height="wrap_content"
                   android:layout_weight="1.2"
@@ -36,22 +43,6 @@
                   android:text=""/>
 
     </LinearLayout>
-    <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:layout_gravity="end" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/column_box" android:id="@+id/back_to_tags_button"
-    android:visibility="gone"
-    android:text="@string/back_to_all_tags"/>
-
-    <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/barrier_above_recycler"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:barrierDirection="bottom"
-            
-            app:constraint_referenced_ids="back_to_tags_button,column_box"
-            app:layout_constraintTop_toBottomOf="@id/column_box" />
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -62,7 +53,7 @@
             android:paddingBottom="5dp"
             android:clipToPadding="false"
             android:scrollbars="vertical"
-            app:layout_constraintTop_toBottomOf="@id/barrier_above_recycler"
+            app:layout_constraintTop_toBottomOf="@id/column_box"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
             android:layout_height="0dp" android:layout_width="0dp"/>
