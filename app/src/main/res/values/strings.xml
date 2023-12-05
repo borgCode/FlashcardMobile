@@ -107,5 +107,6 @@
     <string name="change_tags">Change tags</string>
     <string name="reset_due_date">Reset due date</string>
     <string name="delete_card">Delete card</string>
+    <string name="back_to_all_decks">Back to all decks</string>
 
 </resources>

@@ -180,7 +180,7 @@ public class TagListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         showingTags = false;
     }
 
-    public void setShowingTags(Boolean showing) {
-        showingTags = showing;
+    public void setShowingTags(boolean isShowing) {
+        showingTags = isShowing;
     }
 }
