@@ -1,0 +1,24 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <EditText
+            android:id="@+id/edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/deck_name"  
+            android:inputType="text"
+            android:layout_toStartOf="@+id/save_button"
+            android:layout_alignParentStart="true"
+    />
+
+<!--    programatically set hint-->
+    
+
+    <Button
+            android:id="@+id/save_button"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:layout_alignParentEnd="true"/>
+
+</RelativeLayout>

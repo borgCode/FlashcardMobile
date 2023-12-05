@@ -45,10 +45,8 @@ public class AddDeckFragment extends Fragment {
             deckViewModel.insert(newDeck);
             deckName.setText("");
             if (getParentFragmentManager() != null) {
-                Log.d("Add Deck Fragment", "popping back stack");
                 getParentFragmentManager().popBackStack();
             }
-            Log.d("Add Deck Fragment", "stack is null");
         } else {
             Toast.makeText(getActivity(), "Please insert a deck name", Toast.LENGTH_SHORT).show();
         }

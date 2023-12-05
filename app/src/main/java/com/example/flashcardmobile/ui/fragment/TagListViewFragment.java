@@ -96,6 +96,8 @@ public class TagListViewFragment extends Fragment implements TagListViewAdapter.
         TagDialog editDialog = TagDialog.newInstance(tag.getId(), tag.getTagName(), tag.getColor());
         editDialog.show(getActivity().getSupportFragmentManager(), "editTag");
     }
+    
+    //TODO GO THROUGH EDITTAG AND ONCHANGETAGS METHODS
 
     @Override
     public void onDeleteTag(Tag tag) {

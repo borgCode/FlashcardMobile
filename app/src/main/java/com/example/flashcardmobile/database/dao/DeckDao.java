@@ -26,6 +26,8 @@ public interface DeckDao {
 
     @Query("SELECT * FROM decks WHERE id = :id")
     LiveData<Deck> getDeckById(long id);
+    @Query("SELECT * FROM decks WHERE id = :id")
+    Deck getDeckByIdSync(long id);
     
     @Transaction
     @Query("SELECT decks.*, (SELECT COUNT(*) FROM cards WHERE cards.deck_id = decks.id) as deckSize," +

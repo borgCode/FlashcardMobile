@@ -26,4 +26,8 @@ public class Deck {
     public String getDeckName() {
         return deckName;
     }
+
+    public void setDeckName(String deckName) {
+        this.deckName = deckName;
+    }
 }

@@ -9,7 +9,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.flashcardmobile.R;
-import com.example.flashcardmobile.entity.CardWithTags;
 import com.example.flashcardmobile.entity.DeckWithInfo;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,10 +17,19 @@ import java.util.List;
 
 public class DeckListViewAdapter extends RecyclerView.Adapter<DeckListViewAdapter.ViewHolder> {
     
-    private List<DeckWithInfo> decks;
+    public interface onDeckOperationListener {
+        void onEditDeckName(long deckId, String deckName);
+        void onViewAllCards(long deckId);
+        void onViewDueCards(long deckId);
+    }
     
-    public DeckListViewAdapter() {
+    private List<DeckWithInfo> decks;
+    private onDeckOperationListener listener;
+    
+    public DeckListViewAdapter(onDeckOperationListener listener) {
         decks = new ArrayList<>();
+        this.listener = listener;
+        
     }
     
     public void setDecks(ArrayList<DeckWithInfo> decks) {
@@ -70,11 +78,11 @@ public class DeckListViewAdapter extends RecyclerView.Adapter<DeckListViewAdapte
             popupMenu.setOnMenuItemClickListener(item -> {
                 int id = item.getItemId();
                 if (id == R.id.edit_deck_name_item) {
-                    
+                    listener.onEditDeckName(deck.getDeck().getId(), deck.getDeck().getDeckName());
                 } else if (id == R.id.view_all_cards_item) {
-                    
+                    //TODO same approach as tag tab?
                 } else if (id == R.id.view_due_cards_item) {
-                    
+                    //TODO -||-
                 } else {
                     return false;
                 }

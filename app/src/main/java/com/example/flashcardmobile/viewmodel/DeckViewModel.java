@@ -46,4 +46,8 @@ public class DeckViewModel extends AndroidViewModel {
     public LiveData<List<DeckWithInfo>> getAllDecksWithInfo() {
         return deckRepository.getAllDecksWithInfo(LocalDateTime.now().toString());
     }
+
+    public void updateDeckName(long deckId, String newName) {
+        deckRepository.updateDeckName(deckId, newName);
+    }
 }

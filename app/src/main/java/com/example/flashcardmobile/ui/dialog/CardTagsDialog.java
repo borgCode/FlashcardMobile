@@ -45,9 +45,9 @@ public class CardTagsDialog extends DialogFragment {
     }
 
     @Nullable
-    @org.jetbrains.annotations.Nullable
+   
     @Override
-    public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_edit_card_tag, container, false);
 
         tagViewModel = new ViewModelProvider(requireActivity()).get(TagViewModel.class);
@@ -126,4 +126,6 @@ public class CardTagsDialog extends DialogFragment {
         selectedTagsMap.clear();
         tagContainer.removeAllViews();
     }
+    
+    //TODO UPDATE DB LOGIC
 }

@@ -12,13 +12,14 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.flashcardmobile.R;
+import com.example.flashcardmobile.ui.dialog.EditDeckNameDialog;
 import com.example.flashcardmobile.ui.view.DeckListViewAdapter;
 import com.example.flashcardmobile.viewmodel.DeckViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class DeckListViewFragment extends Fragment {
+public class DeckListViewFragment extends Fragment implements DeckListViewAdapter.onDeckOperationListener {
 
     private DeckViewModel deckViewModel;
     private RecyclerView recyclerView;
@@ -34,7 +35,7 @@ public class DeckListViewFragment extends Fragment {
         
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        deckListViewAdapter = new DeckListViewAdapter();
+        deckListViewAdapter = new DeckListViewAdapter(this);
         recyclerView.setAdapter(deckListViewAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), RecyclerView.VERTICAL));
         
@@ -44,5 +45,21 @@ public class DeckListViewFragment extends Fragment {
         });
         
         return view;
+    }
+
+    @Override
+    public void onEditDeckName(long deckId, String deckName) {
+        EditDeckNameDialog dialog = EditDeckNameDialog.newInstance(deckId, deckName);
+        dialog.show(getActivity().getSupportFragmentManager(), "editName");
+    }
+
+    @Override
+    public void onViewAllCards(long deckId) {
+
+    }
+
+    @Override
+    public void onViewDueCards(long deckId) {
+
     }
 }

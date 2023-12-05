@@ -8,7 +8,6 @@ import com.example.flashcardmobile.database.dao.DeckDao;
 import com.example.flashcardmobile.entity.Deck;
 import com.example.flashcardmobile.entity.DeckWithInfo;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -56,5 +55,15 @@ public class DeckRepository {
     
     public LiveData<List<DeckWithInfo>> getAllDecksWithInfo(String now) {
         return deckDao.getAllDecksWithInfo(now);
+    }
+
+    public void updateDeckName(long deckId, String newName) {
+        executorService.execute(() -> {
+            Deck deck = deckDao.getDeckByIdSync(deckId);
+            if (deck != null) {
+                deck.setDeckName(newName);
+                deckDao.update(deck);
+            }
+        });
     }
 }
