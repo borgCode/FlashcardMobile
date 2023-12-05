@@ -6,7 +6,9 @@ import androidx.lifecycle.LiveData;
 import com.example.flashcardmobile.database.AppDatabase;
 import com.example.flashcardmobile.database.dao.DeckDao;
 import com.example.flashcardmobile.entity.Deck;
+import com.example.flashcardmobile.entity.DeckWithInfo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -50,5 +52,9 @@ public class DeckRepository {
 
     public LiveData<Deck> getDeckById(long id) {
         return deckDao.getDeckById(id);
+    }
+    
+    public LiveData<List<DeckWithInfo>> getAllDecksWithInfo(String now) {
+        return deckDao.getAllDecksWithInfo(now);
     }
 }

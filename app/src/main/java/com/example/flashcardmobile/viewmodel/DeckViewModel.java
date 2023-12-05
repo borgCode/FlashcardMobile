@@ -5,9 +5,11 @@ import android.util.Log;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import com.example.flashcardmobile.entity.Deck;
+import com.example.flashcardmobile.entity.DeckWithInfo;
 import com.example.flashcardmobile.repository.DeckRepository;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class DeckViewModel extends AndroidViewModel {
@@ -40,5 +42,8 @@ public class DeckViewModel extends AndroidViewModel {
     }
     public LiveData<List<Deck>> getAllDecks() {
         return allDecks;
+    }
+    public LiveData<List<DeckWithInfo>> getAllDecksWithInfo() {
+        return deckRepository.getAllDecksWithInfo(LocalDateTime.now().toString());
     }
 }

@@ -28,13 +28,11 @@ public class CardListViewAdapter extends RecyclerView.Adapter<CardListViewAdapte
     private List<DeckCard> cardsFull;
     private onCardOperationListener listener;
     private String currentSearchColumn;
-    private ArrayList<DeckCard> cardsFilteredByTag;
 
     public CardListViewAdapter(onCardOperationListener listener) {
         this.listener = listener;
         cards = new ArrayList<>();
         cardsFull = new ArrayList<>();
-        cardsFilteredByTag = new ArrayList<>();
     }
 
     public void setCards(ArrayList<DeckCard> cards) {
@@ -76,9 +74,7 @@ public class CardListViewAdapter extends RecyclerView.Adapter<CardListViewAdapte
     @Override
     public void onBindViewHolder(@NonNull @NotNull CardListViewAdapter.ViewHolder holder, int position) {
         DeckCard card = cards.get(position);
-
-        Log.d("ListView", "Setting column text: " +
-                card.getFrontSide() + " " + card.getBackSide());
+        
         holder.deckNameCol.setText(card.getDeckName());
         holder.frontSideCol.setText(card.getFrontSide());
         holder.backSideCol.setText(card.getBackSide());
@@ -90,7 +86,6 @@ public class CardListViewAdapter extends RecyclerView.Adapter<CardListViewAdapte
             popupMenu.getMenuInflater().inflate(R.menu.card_list_popup_menu, popupMenu.getMenu());
             
             popupMenu.setOnMenuItemClickListener(item -> {
-                Log.d("PopupMenu", "item Clicked");
                 int id = item.getItemId();
                 if (id == R.id.editCardItem) {
                     listener.onCardEdit(card.getDeckId(), card.getCardId());
@@ -103,7 +98,6 @@ public class CardListViewAdapter extends RecyclerView.Adapter<CardListViewAdapte
                 }
                 return true;
             });
-            Log.d("PopupMenu", "Showing menu");
             popupMenu.show();
             
         });
@@ -121,53 +115,34 @@ public class CardListViewAdapter extends RecyclerView.Adapter<CardListViewAdapte
     private Filter filter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            Log.d("ListViewAdapter", "Checking list size: " +
-                    "\n cards: " + cards.size() +
-                    "\n cardsFull: " + cardsFull.size());
             List<DeckCard> filteredList = new ArrayList<>();
             if (constraint == null || constraint.length() == 0) {
-                Log.d("Search Empty", "Search is empty, adding all cards to list");
                 filteredList.addAll(cardsFull);
-                Log.d("Search Empty", "All Cards added");
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
-                Log.d("Filter pattern", filterPattern);
-                
                 for (DeckCard card : cardsFull) {
                     switch (currentSearchColumn) {
                         case "deck":
-                            Log.d("Filter Column", "Column is decks");
                             if (card.getDeckName().equalsIgnoreCase(filterPattern)) {
-                                Log.d("Add card to Filter", "Card contains DECK filter pattern, adding to filtered list");
                                 filteredList.add(card);
                                 break;
                             }
                         case "front side":
-                            Log.d("Filter Column", "Column is front");
                             if (card.getFrontSide().toLowerCase().contains(filterPattern)) {
-                                Log.d("Add card to Filter", "Card contains FRONT filter pattern, adding to filtered list");
                                 filteredList.add(card);
                                 break;
                             }
                         case "back side":
-                            Log.d("Filter Column", "Column is back");
                             if (card.getBackSide().toLowerCase().contains(filterPattern)) {
-                                Log.d("Add card to Filter", "Card contains BACK filter pattern, adding to filtered list");
                                 filteredList.add(card);
                                 break;
                             }
                         case "tag":
-                            Log.d("Filter Column", "Column is Tag");
                             filteredList.addAll(cardsFull);
-                            for (DeckCard test: filteredList) {
-                                Log.d("Filter Column", "Card front: " + test.getFrontSide() +
-                                        "\nDeck name: " + test.getDeckName());
-                            }
                             break;
                     }
                 }
             }
-            Log.d("Filtered List", "Size: " + filteredList.size());
             FilterResults results = new FilterResults();
             results.values = filteredList;
 
