@@ -205,6 +205,12 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
                     studySessionViewModel.insert(new StudySession(today, durationInSec));
                 }
                 sharedAnalyticsViewModel.updateAllAnalytics(numOfCardsStudied, numOfCardsMastered, easyCounter, mediumCounter, hardCounter);
+                
+                // Update Deck Performance
+                
+                sharedAnalyticsViewModel.updateDeckPerformance(sharedDeckAndCardViewModel.getDeckId().getValue(), numOfCardsStudied, easyCounter, mediumCounter, hardCounter);
+                
+                
                 editor.remove("start");
                 editor.remove("cardsStudied");
                 editor.remove("cardsMastered");

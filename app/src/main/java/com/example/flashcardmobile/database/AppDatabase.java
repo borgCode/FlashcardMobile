@@ -9,7 +9,7 @@ import com.example.flashcardmobile.database.dao.*;
 import com.example.flashcardmobile.entity.*;
 
 @Database(entities = {Deck.class, Card.class, Tag.class, CardTagCrossRef.class,
-        StudySession.class, LearningAnalytics.class}, version = 9)
+        StudySession.class, LearningAnalytics.class, DeckPerformance.class}, version = 10)
 @TypeConverters(Converters.class)
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -19,7 +19,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract DeckCardDao deckCardDao();
     public abstract TagDao tagDao();
     public abstract StudySessionDao studySessionDao();
-    public abstract LearningAnalyticsDao learningAnalyticsDao();
+    public abstract AnalyticsDao learningAnalyticsDao();
 
     public static synchronized AppDatabase getInstance(Context context) {
         if (instance == null) {

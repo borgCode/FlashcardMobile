@@ -26,17 +26,23 @@ public class StatsTabsAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        switch (position) {
+            case 0:
+                return new ProgressFragment();
+            case 1:
+                return new ProgressFragment();
+        }
         return new ProgressFragment();
     }
 
-    @Nullable
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return mContext.getResources().getString(TAB_TITLES[position]);
-    }
+        @Nullable
+        @Override
+        public CharSequence getPageTitle ( int position){
+            return mContext.getResources().getString(TAB_TITLES[position]);
+        }
 
-    @Override
-    public int getCount() {
-        return 3;
+        @Override
+        public int getCount () {
+            return 3;
+        }
     }
-}
