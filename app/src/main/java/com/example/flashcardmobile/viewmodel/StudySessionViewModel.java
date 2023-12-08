@@ -41,9 +41,7 @@ public class StudySessionViewModel extends AndroidViewModel {
         return studySessionRepository.getFirstDateValue();
     }
     public void getSessionByDate(LocalDate date, Consumer<StudySession> onResult) {
-        CompletableFuture<StudySession> futureSession =
-                studySessionRepository.getSessionByDate(date);
-
+        CompletableFuture<StudySession> futureSession = studySessionRepository.getSessionByDate(date);
         futureSession.thenAcceptAsync(onResult, executorService);
     }
 

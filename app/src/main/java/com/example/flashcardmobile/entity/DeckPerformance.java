@@ -8,11 +8,13 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "deck_performance",
         foreignKeys = @ForeignKey(entity = Deck.class,
                 parentColumns = "id",
-                childColumns = "deckId",
+                childColumns = "deck_id",
                 onDelete = ForeignKey.CASCADE))
 public class DeckPerformance {
     @PrimaryKey(autoGenerate = true)
     private long id;
+    
+    @ColumnInfo(name = "deck_id")
     private long deckId;
     @ColumnInfo(name = "cards_studied")
     private int cardsStudied;

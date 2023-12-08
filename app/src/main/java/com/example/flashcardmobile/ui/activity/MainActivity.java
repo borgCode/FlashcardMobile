@@ -8,6 +8,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatDelegate;
 import com.example.flashcardmobile.R;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.flashcardmobile.util.BadgeManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
 
+        BadgeManager badgeManager = BadgeManager.getInstance(getApplication());
+        badgeManager.initializeBadges();
+        
         setContentView(R.layout.activity_main);
 
 

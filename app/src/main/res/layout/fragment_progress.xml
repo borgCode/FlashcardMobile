@@ -42,7 +42,7 @@
             android:text="Card Statistics This Month"
             android:gravity="center"
             android:padding="4dp"
-            android:background="#EFEFEF"
+            android:background="@drawable/top_border"
             android:textStyle="bold" app:layout_constraintBottom_toTopOf="@+id/progress_piechart"
             app:layout_constraintTop_toBottomOf="@+id/study_time_chart" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>

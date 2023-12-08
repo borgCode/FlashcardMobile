@@ -65,19 +65,19 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:id="@+id/buttonEasy"
-                android:backgroundTint="#3D9E23"
-                android:layout_weight="1" android:textColorHighlight="#9F3C3C"/>
+                android:backgroundTint="#298b28"
+                android:layout_weight="1"/>
         <Button
                 android:text="@string/medium"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:id="@+id/buttonMedium"
-                android:layout_weight="1" android:backgroundTint="#959816"/>
+                android:layout_weight="1" android:backgroundTint="#8E790C"/>
         <Button
                 android:text="@string/hard"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:id="@+id/buttonHard"
-                android:layout_weight="1" android:backgroundTint="#B60F0F"/>
+                android:layout_weight="1" android:backgroundTint="#B22222"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

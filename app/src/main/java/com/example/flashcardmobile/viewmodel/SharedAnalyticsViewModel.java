@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class SharedAnalyticsViewModel extends AndroidViewModel {
 
@@ -70,5 +71,10 @@ public class SharedAnalyticsViewModel extends AndroidViewModel {
             }
         });
     }
+
+    public CompletableFuture<DeckPerformance> getDeckPerformanceByDeckId(Long deckId) {
+        return repository.getDeckPerformanceByDeckId(deckId);
+    }
+    
 }
 

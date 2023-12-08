@@ -118,11 +118,6 @@ public class ProgressFragment extends Fragment {
         pieChart.setTransparentCircleAlpha(0);
         
         
-        
-        
-        
-        
-
         Legend pieLegend = pieChart.getLegend();
         pieLegend.setVerticalAlignment(Legend.LegendVerticalAlignment.CENTER);
         pieLegend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);

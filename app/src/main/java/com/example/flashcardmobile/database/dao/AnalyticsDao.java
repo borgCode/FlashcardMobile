@@ -30,6 +30,6 @@ public interface AnalyticsDao {
     @Delete
     void deleteDeckPerformance(DeckPerformance deckPerformance);
 
-    @Query("SELECT * FROM deck_performance WHERE deckId = :id")
+    @Query("SELECT * FROM deck_performance WHERE deck_id = :id")
     DeckPerformance getDeckPerformanceByDeckId(Long id);
 }
