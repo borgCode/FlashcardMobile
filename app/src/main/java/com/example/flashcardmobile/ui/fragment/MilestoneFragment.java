@@ -1,5 +1,6 @@
 package com.example.flashcardmobile.ui.fragment;
 
+import android.app.AlertDialog;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
@@ -70,8 +71,20 @@ public class MilestoneFragment extends Fragment {
             Log.d("Badge fetch", "Fetching badges, size of badges is: " + badges.size());
             if (badges.size() >= badgeImages.size() && badges.size() >= badgeNames.size()) {
                 for (int i = 0; i < badgeImages.size(); i++) {
-                    setBadgeAppearance(badgeImages.get(i), badges.get(i));
                     badgeNames.get(i).setText(badges.get(i).getName());
+                    setBadgeAppearance(badgeImages.get(i), badges.get(i));
+                    
+                    final String message = badges.get(i).getDescription();
+                    
+                    badgeImages.get(i).setOnClickListener(v -> {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+                        builder.setTitle("Badge Requirements");
+                        builder.setMessage(message + " to achieve this badge");
+                        builder.setPositiveButton("OK", null);
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    });
+                    
                 }
             }
         });
