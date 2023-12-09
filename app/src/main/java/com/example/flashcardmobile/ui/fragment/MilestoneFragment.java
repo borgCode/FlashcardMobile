@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -46,17 +47,31 @@ public class MilestoneFragment extends Fragment {
                 view.findViewById(R.id.unique_days_3)
         );
         
+        List<TextView> badgeNames = Arrays.asList(
+                view.findViewById(R.id.cards_studied_1_text),
+                view.findViewById(R.id.cards_studied_2_text),
+                view.findViewById(R.id.cards_studied_3_text),
+                view.findViewById(R.id.cards_mastered_1_text),
+                view.findViewById(R.id.cards_mastered_2_text),
+                view.findViewById(R.id.cards_mastered_3_text),
+                view.findViewById(R.id.cards_added_1_text),
+                view.findViewById(R.id.cards_added_2_text),
+                view.findViewById(R.id.cards_added_3_text),
+                view.findViewById(R.id.unique_days_1_text),
+                view.findViewById(R.id.unique_days_2_text),
+                view.findViewById(R.id.unique_days_3_text)
+        );
+        
         
 
         badgeViewModel = new ViewModelProvider(requireActivity()).get(BadgeViewModel.class);
 
         badgeViewModel.getAllBadges(getViewLifecycleOwner()).observe(getViewLifecycleOwner(), badges -> {
             Log.d("Badge fetch", "Fetching badges, size of badges is: " + badges.size());
-            if (badges.size() >= badgeImages.size()) {
+            if (badges.size() >= badgeImages.size() && badges.size() >= badgeNames.size()) {
                 for (int i = 0; i < badgeImages.size(); i++) {
-                    Log.d("Setting Badge Appearance", "Badge image: " + badgeImages.get(i) +
-                            "\n badge: " + badges.get(i).getName());
                     setBadgeAppearance(badgeImages.get(i), badges.get(i));
+                    badgeNames.get(i).setText(badges.get(i).getName());
                 }
             }
         });

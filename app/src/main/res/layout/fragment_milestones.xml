@@ -4,19 +4,23 @@
               android:layout_height="match_parent" android:orientation="vertical">
 
     <TextView
-            android:text="TextView"
+            android:text="Badges"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/textView"/>
+            android:layout_height="wrap_content" android:id="@+id/textView"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:layout_marginBottom="10dp"
+    />
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-    android:padding="5dp">
+            android:padding="5dp">
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/cards_studied_1" android:layout_weight="1"
                 tools:srcCompat="@drawable/bell"
-        android:padding="5dp"/>
+                android:padding="5dp"/>
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/cards_studied_2" android:layout_weight="1"
@@ -27,6 +31,30 @@
                 android:layout_height="wrap_content" android:id="@+id/cards_studied_3" android:layout_weight="1"
                 tools:srcCompat="@drawable/bell"
                 android:padding="5dp"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="PlaceHolder"
+                  android:textAlignment="center"
+                  android:layout_weight="1"
+                  android:textSize="12sp"
+                  android:id="@+id/cards_studied_1_text"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="PlaceHolder"
+                  android:textAlignment="center"
+                  android:layout_weight="1"
+                  android:textSize="12sp"
+                  android:id="@+id/cards_studied_2_text"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="PlaceHolder"
+                  android:textAlignment="center"
+                  android:layout_weight="1"
+                  android:textSize="12sp"
+                  android:id="@+id/cards_studied_3_text"/>
     </LinearLayout>
     <LinearLayout
             android:orientation="horizontal"
@@ -53,6 +81,30 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:weightSum="3">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="PlaceHolder"
+                  android:textAlignment="center"
+                  android:layout_weight="1"
+                  android:textSize="12sp"
+                  android:id="@+id/cards_mastered_1_text"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="PlaceHolder"
+                  android:textAlignment="center"
+                  android:layout_weight="1"
+                  android:textSize="12sp"
+                  android:id="@+id/cards_mastered_2_text"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="PlaceHolder"
+                  android:textAlignment="center"
+                  android:layout_weight="1"
+                  android:textSize="12sp"
+                  android:id="@+id/cards_mastered_3_text"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:padding="5dp">
         <ImageView
                 android:layout_width="wrap_content"
@@ -74,6 +126,30 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:weightSum="3">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="PlaceHolder"
+                  android:textAlignment="center"
+                  android:layout_weight="1"
+                  android:textSize="12sp"
+                  android:id="@+id/cards_added_1_text"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="PlaceHolder"
+                  android:textAlignment="center"
+                  android:layout_weight="1"
+                  android:textSize="12sp"
+                  android:id="@+id/cards_added_2_text"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="PlaceHolder"
+                  android:textAlignment="center"
+                  android:layout_weight="1"
+                  android:textSize="12sp"
+                  android:id="@+id/cards_added_3_text"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:padding="5dp">
         <ImageView
                 android:layout_width="wrap_content"
@@ -90,5 +166,29 @@
                 android:layout_height="wrap_content" android:id="@+id/unique_days_3" android:layout_weight="1"
                 tools:srcCompat="@drawable/label"
                 android:padding="5dp"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="PlaceHolder"
+                  android:textAlignment="center"
+                  android:layout_weight="1"
+                  android:textSize="12sp"
+                  android:id="@+id/unique_days_1_text"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="PlaceHolder"
+                  android:textAlignment="center"
+                  android:layout_weight="1"
+                  android:textSize="12sp"
+                  android:id="@+id/unique_days_2_text"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="PlaceHolder"
+                  android:textAlignment="center"
+                  android:layout_weight="1"
+                  android:textSize="12sp"
+                  android:id="@+id/unique_days_3_text"/>
     </LinearLayout>
 </LinearLayout>
