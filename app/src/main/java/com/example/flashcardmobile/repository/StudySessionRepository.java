@@ -34,9 +34,10 @@ public class StudySessionRepository {
         CompletableFuture.runAsync(() -> studySessionDao.delete(studySession), executorService);
     }
 
-    public LiveData<List<StudySession>> getAllSessions() {
-        return studySessionDao.getAllSessions();
+    public CompletableFuture<Integer> getSessionCount() {
+        return CompletableFuture.supplyAsync(() -> studySessionDao.getSessionCount(), executorService);
     }
+    
 
     public LiveData<LocalDate> getFirstDateValue() {
         return studySessionDao.getFirstValue();

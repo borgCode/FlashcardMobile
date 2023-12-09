@@ -17,6 +17,7 @@ import java.util.function.Consumer;
 public class StudySessionViewModel extends AndroidViewModel {
     private StudySessionRepository studySessionRepository;
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    
 
 
     public StudySessionViewModel(@NotNull Application application) {
@@ -34,9 +35,7 @@ public class StudySessionViewModel extends AndroidViewModel {
     public void delete(StudySession studySession) {
         studySessionRepository.delete(studySession);
     }
-    public LiveData<List<StudySession>> getAllSessions() {
-        return studySessionRepository.getAllSessions();
-    }
+    
     public LiveData<LocalDate> getFirstDateValue() {
         return studySessionRepository.getFirstDateValue();
     }

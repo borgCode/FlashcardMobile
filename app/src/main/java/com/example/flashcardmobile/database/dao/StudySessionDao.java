@@ -6,6 +6,7 @@ import com.example.flashcardmobile.entity.StudySession;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Dao
 public interface StudySessionDao {
@@ -16,8 +17,8 @@ public interface StudySessionDao {
     void update(StudySession studySession);
     @Delete
     void delete(StudySession studySession);
-    @Query("SELECT * FROM study_sessions")
-    LiveData<List<StudySession>> getAllSessions();
+    @Query("SELECT COUNT (*) FROM study_sessions")
+    int getSessionCount();
     @Query("SELECT session_date FROM study_sessions LIMIT 1")
     LiveData<LocalDate> getFirstValue();
 

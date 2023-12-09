@@ -1,14 +1,18 @@
 package com.example.flashcardmobile.util;
 
 import android.app.Application;
+import android.util.Log;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
 import com.example.flashcardmobile.entity.Badge;
+import com.example.flashcardmobile.entity.LearningAnalytics;
 import com.example.flashcardmobile.repository.AnalyticsRepository;
 import com.example.flashcardmobile.repository.BadgeRepository;
 import com.example.flashcardmobile.repository.StudySessionRepository;
-import com.github.javafaker.App;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class BadgeManager {
 
@@ -16,6 +20,10 @@ public class BadgeManager {
     private BadgeRepository badgeRepository;
     private AnalyticsRepository analyticsRepository;
     private StudySessionRepository studySessionRepository;
+    private int cardsStudied;
+    private int cardsAdded;
+    private int cardsMastered;
+    private int uniqueDays;
 
     public BadgeManager(Application application) {
         badgeRepository = new BadgeRepository(application);
@@ -35,24 +43,99 @@ public class BadgeManager {
         badgeRepository.hasBadges().thenAccept(badgeCount -> {
             if (badgeCount == 0) {
                 List<Badge> badges = Arrays.asList(
-                        new Badge("New Learner", "Study 100 cards", false, "cards_studied >= 100"),
-                        new Badge("Intermediate Learner", "Study 1000 cards", false, "cards_studied >= 1000"),
-                        new Badge("Advanced Learner", "Study 10000 cards", false, "cards_studied >= 10000"),
-                        new Badge("Memory Apprentice", "Master 50 cards", false, "cards_mastered >= 50"),
-                        new Badge("Memory Maestro", "Master 200 cards", false, "cards_mastered >= 200"),
-                        new Badge("Memory Virtuoso", "Master 500 cards", false, "cards_mastered >= 500"),
-                        new Badge("Creator initiate", "Add 100 cards", false, "cards_added >= 100"),
-                        new Badge("Creator Scholar", "Add 500 cards", false, "cards_added >= 500"),
-                        new Badge("Creator Sage", "Add 1000 cards", false, "cards_added >= 1000"),
-                        new Badge("Study Novice", "Study on 30 different days", false, "daysCount >= 30"),
-                        new Badge("Study Adept", "Study on 90 different days", false, "daysCount >= 90"),
-                        new Badge("Study Guru", "Study on 180 different days", false, "daysCount >= 180")
+                        new Badge("New Learner", "study", "Study 100 cards", false, "cards_studied >= 100", 1),
+                        new Badge("Intermediate Learner", "study", "Study 1000 cards", false, "cards_studied >= 1000", 2),
+                        new Badge("Advanced Learner", "study", "Study 10000 cards", false, "cards_studied >= 10000", 3),
+                        new Badge("Memory Apprentice", "master", "Master 50 cards", false, "cards_mastered >= 50", 1),
+                        new Badge("Memory Maestro", "master", "Master 200 cards", false, "cards_mastered >= 200", 2),
+                        new Badge("Memory Virtuoso", "master", "Master 500 cards", false, "cards_mastered >= 500", 3),
+                        new Badge("Creator initiate", "add", "Add 100 cards", false, "cards_added >= 100", 1),
+                        new Badge("Creator Scholar", "add", "Add 500 cards", false, "cards_added >= 500", 2),
+                        new Badge("Creator Sage", "add", "Add 1000 cards", false, "cards_added >= 1000", 3),
+                        new Badge("Study Novice", "days", "Study on 30 different days", false, "daysCount >= 30", 1),
+                        new Badge("Study Adept", "days", "Study on 90 different days", false, "daysCount >= 90", 2),
+                        new Badge("Study Guru", "days", "Study on 180 different days", false, "daysCount >= 180", 3)
                 );
                 for (Badge badge : badges) {
                     badgeRepository.insert(badge);
                 }
             }
         });
+    }
+
+    public LiveData<List<Badge>> getAllBadges(LifecycleOwner lifecycleOwner) {
+        getUserData();
+        updateBadgeProgress(lifecycleOwner);
+        return badgeRepository.getAllBadges();
+    }
+
+    public void updateBadgeProgress(LifecycleOwner lifecycleOwner) {
+        Log.d("Update badge progress", "Getting user data for update");
+
+        badgeRepository.getAllBadges().observe(lifecycleOwner, badges -> {
+            System.out.println("I am being observec");
+            for (Badge badge : badges) {
+                Log.d("isAchieved", "isAchieved: " + badge.isAchieved());
+                if (!badge.isAchieved() && checkIfCriteriaMet(badge)) {
+                    Log.d("Check if achieved", "checking if " + badge.getName() + " is achieved");
+                    badge.setAchieved(true);
+                    Log.d("Check if achieved", "updating: " + badge.getName());
+                    badgeRepository.update(badge);
+                }
+            }
+        });
+        
+    }
+
+    private CompletableFuture<Void> getUserData() {
+        CompletableFuture<Integer> sessionCountFuture = studySessionRepository.getSessionCount();
+        CompletableFuture<List<LearningAnalytics>> analyticsFuture = analyticsRepository.getAllAnalytics();
+
+        return CompletableFuture.allOf(sessionCountFuture, analyticsFuture)
+                .thenRun(() -> {
+                    this.uniqueDays = sessionCountFuture.join();
+                    Log.d("Update badge progress", "Unique days: " + this.uniqueDays);
+                    List<LearningAnalytics> analytics = analyticsFuture.join();
+                    for (LearningAnalytics analytic : analytics) {
+                        this.cardsAdded += analytic.getCardsAdded();
+                        this.cardsStudied += analytic.getCardsStudied();
+                        this.cardsMastered += analytic.getCardsMastered();
+
+                        Log.d("Update badge progress", "Other values: " + this.cardsAdded + ", " + this.cardsStudied + ", " + this.cardsMastered);
+                    }
+                });
+    }
+
+    private boolean checkIfCriteriaMet(Badge badge) {
+
+        switch (badge.getName()) {
+            case "New Learner":
+                return cardsStudied >= 100;
+            case "Intermediate Learner":
+                return cardsStudied >= 1000;
+            case "Advanced Learner":
+                return cardsStudied >= 10000;
+            case "Memory Apprentice":
+                return cardsMastered >= 50;
+            case "Memory Maestro":
+                return cardsMastered >= 200;
+            case "Memory Virtuoso":
+                return cardsMastered >= 500;
+            case "Creator initiate":
+                return cardsAdded >= 100;
+            case "Creator Scholar":
+                return cardsAdded >= 500;
+            case "Creator Sage":
+                return cardsAdded >= 1000;
+            case "Study Novice":
+                return uniqueDays >= 30;
+            case "Study Adept":
+                return uniqueDays >= 90;
+            case "Study Guru":
+                return uniqueDays >= 180;
+            default:
+                return false;
+        }
     }
 }
     

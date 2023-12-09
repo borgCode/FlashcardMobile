@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+              android:layout_height="match_parent" android:orientation="vertical">
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/textView"/>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+    android:padding="5dp">
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/cards_studied_1" android:layout_weight="1"
+                tools:srcCompat="@drawable/bell"
+        android:padding="5dp"/>
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/cards_studied_2" android:layout_weight="1"
+                tools:srcCompat="@drawable/bell"
+                android:padding="5dp"/>
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/cards_studied_3" android:layout_weight="1"
+                tools:srcCompat="@drawable/bell"
+                android:padding="5dp"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/cards_mastered_1" android:layout_weight="1"
+                tools:srcCompat="@drawable/book"
+                android:padding="5dp"/>
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/cards_mastered_2" android:layout_weight="1"
+                tools:srcCompat="@drawable/book"
+                android:padding="5dp"/>
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/cards_mastered_3" android:layout_weight="1"
+                tools:srcCompat="@drawable/book"
+                android:padding="5dp"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/cards_added_1" android:layout_weight="1"
+                tools:srcCompat="@drawable/key"
+                android:padding="5dp"/>
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/cards_added_2" android:layout_weight="1"
+                tools:srcCompat="@drawable/key"
+                android:padding="5dp"/>
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/cards_added_3" android:layout_weight="1"
+                tools:srcCompat="@drawable/key"
+                android:padding="5dp"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/unique_days_1" android:layout_weight="1"
+                tools:srcCompat="@drawable/label"
+                android:padding="5dp"/>
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/unique_days_2" android:layout_weight="1"
+                tools:srcCompat="@drawable/label"
+                android:padding="5dp"/>
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/unique_days_3" android:layout_weight="1"
+                tools:srcCompat="@drawable/label"
+                android:padding="5dp"/>
+    </LinearLayout>
+</LinearLayout>

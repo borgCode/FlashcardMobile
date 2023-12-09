@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import com.example.flashcardmobile.R;
+import com.example.flashcardmobile.ui.fragment.MilestoneFragment;
 import com.example.flashcardmobile.ui.fragment.PerformanceFragment;
 import com.example.flashcardmobile.ui.fragment.ProgressFragment;
 
@@ -33,7 +34,7 @@ public class StatsTabsAdapter extends FragmentPagerAdapter {
             case 1:
                 return new PerformanceFragment();
         }
-        return new ProgressFragment();
+        return new MilestoneFragment();
     }
 
         @Nullable

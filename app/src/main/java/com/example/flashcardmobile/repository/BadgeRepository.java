@@ -1,11 +1,11 @@
 package com.example.flashcardmobile.repository;
 
 import android.app.Application;
+import androidx.lifecycle.LiveData;
 import com.example.flashcardmobile.database.AppDatabase;
 import com.example.flashcardmobile.database.dao.BadgeDao;
 import com.example.flashcardmobile.entity.Badge;
-import com.example.flashcardmobile.entity.Card;
-
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -29,5 +29,9 @@ public class BadgeRepository {
 
     public CompletableFuture<Integer> hasBadges() {
         return CompletableFuture.supplyAsync(() -> badgeDao.countBadges(), executorService);
+    }
+
+    public LiveData<List<Badge>> getAllBadges() {
+        return badgeDao.getAllBadges();
     }
 }

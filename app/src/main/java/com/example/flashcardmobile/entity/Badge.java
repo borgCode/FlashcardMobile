@@ -12,18 +12,22 @@ public class Badge {
     private long id;
     @ColumnInfo(name = "name")
     private String name;
+    private String tag;
     @ColumnInfo(name = "description")
     private String description;
     @ColumnInfo(name = "achieved")
     private boolean achieved;
     @ColumnInfo(name = "achievement_criteria")
     private String achievementCriteria;
+    private int level;
 
-    public Badge(String name, String description, boolean achieved, String achievementCriteria) {
+    public Badge(String name, String tag, String description, boolean achieved, String achievementCriteria, int level) {
         this.name = name;
+        this.tag = tag;
         this.description = description;
         this.achieved = achieved;
         this.achievementCriteria = achievementCriteria;
+        this.level = level;
     }
 
     public long getId() {
@@ -40,6 +44,14 @@ public class Badge {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public String getDescription() {
@@ -64,5 +76,13 @@ public class Badge {
 
     public void setAchievementCriteria(String achievementCriteria) {
         this.achievementCriteria = achievementCriteria;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }

@@ -42,6 +42,10 @@ public class AnalyticsRepository {
     public LiveData<List<LearningAnalytics>> getAnalyticsForMonth(LocalDate startOfMonth, LocalDate endOfMonth) {
         return analyticsDao.getAnalyticsForMonth(startOfMonth, endOfMonth);
     }
+    
+    public CompletableFuture<List<LearningAnalytics>> getAllAnalytics() {
+        return CompletableFuture.supplyAsync(() -> analyticsDao.getAllAnalytics(), executorService);
+    }
 
     public void insertDeckPerformance(DeckPerformance deckPerformance) {
         CompletableFuture.runAsync(() -> analyticsDao.insertDeckPerformance(deckPerformance), executorService);

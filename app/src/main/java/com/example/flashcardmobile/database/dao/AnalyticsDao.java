@@ -22,6 +22,8 @@ public interface AnalyticsDao {
     LearningAnalytics getAnalyticsByDate(LocalDate date);
     @Query("SELECT * FROM learning_analytics WHERE date >= :startOfMonth AND date <= :endOfMonth")
     LiveData<List<LearningAnalytics>> getAnalyticsForMonth(LocalDate startOfMonth, LocalDate endOfMonth);
+    @Query("SELECT * FROM learning_analytics")
+    List<LearningAnalytics> getAllAnalytics();
     
     @Insert
     void insertDeckPerformance(DeckPerformance deckPerformance);
