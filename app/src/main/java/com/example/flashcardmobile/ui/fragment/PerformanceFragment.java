@@ -1,23 +1,25 @@
 package com.example.flashcardmobile.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.flashcardmobile.R;
 import com.example.flashcardmobile.entity.Deck;
+import com.example.flashcardmobile.ui.dialog.CustomizeStreaksDialog;
 import com.example.flashcardmobile.viewmodel.DeckViewModel;
 import com.example.flashcardmobile.viewmodel.SharedAnalyticsViewModel;
+import com.example.flashcardmobile.viewmodel.StudySessionViewModel;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
@@ -32,7 +34,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class PerformanceFragment extends Fragment {
+import static android.content.Context.MODE_PRIVATE;
+
+public class PerformanceFragment extends Fragment implements CustomizeStreaksDialog.OnButtonSelectedListener {
 
     private DeckViewModel deckViewModel;
     private SharedAnalyticsViewModel sharedAnalyticsViewModel;
@@ -41,12 +45,17 @@ public class PerformanceFragment extends Fragment {
     private Map<String, Long> deckMap = new HashMap<>();
     private PieChart pieChart;
     private TextView streakTitle;
-
+    private TextView streakDisplay;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_performance, container, false);
+
+        sharedPreferences = getActivity().getSharedPreferences("AppSettings", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
 
         deckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
         sharedAnalyticsViewModel = new ViewModelProvider(requireActivity()).get(SharedAnalyticsViewModel.class);
@@ -93,10 +102,29 @@ public class PerformanceFragment extends Fragment {
         pieLegend.setVerticalAlignment(Legend.LegendVerticalAlignment.CENTER);
         pieLegend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
         pieLegend.setOrientation(Legend.LegendOrientation.VERTICAL);
+        
+        
+        Button streaksButton = view.findViewById(R.id.customize_streaks);
+        streaksButton.setOnClickListener(v -> {
+            CustomizeStreaksDialog dialog = new CustomizeStreaksDialog();
+            dialog.setButtonSelectedListener(this);
+            dialog.show(getParentFragmentManager(), "streaksDialog");
+        });
+        
+        streakDisplay = view.findViewById(R.id.streaks_display);
+                
+        SwitchCompat streaksBtn = view.findViewById(R.id.streaks_toggle_button);
+        if (streaksBtn.isChecked()) {
+            getCurrentUserStreak();
+        }
 
+
+
+        
 
         return view;
     }
+    
 
     private void loadPieChartData(long deckId) {
         List<PieEntry> pieEntries = new ArrayList<>();
@@ -126,5 +154,31 @@ public class PerformanceFragment extends Fragment {
 
         pieChart.setData(pieData);
         pieChart.invalidate();
+    }
+
+    private void getCurrentUserStreak() {
+        String streakPref = sharedPreferences.getString("streak", "daily");
+        if (streakPref.equals("daily")) {
+            String streakText = "Your current daily streak is: " + sharedPreferences.getInt("currentDailyStreak", 0);
+            streakDisplay.setText(streakText);
+        } else if (streakPref.equals("weekly")) {
+            String streakText = "Your current weekly streak is: " + sharedPreferences.getInt("currentWeeklyStreak", 0);
+            streakDisplay.setText(streakText);
+        }
+    }
+
+    @Override
+    public void onDailyStreakSelected() {
+        editor.putString("streak", "daily");
+        editor.apply();
+        getCurrentUserStreak();
+    }
+
+    @Override
+    public void onWeeklyStreakSelected(int selectedDays) {
+        editor.putString("streak", "weekly");
+        editor.putInt("numOfDays", selectedDays);
+        editor.apply();
+        getCurrentUserStreak();
     }
 }

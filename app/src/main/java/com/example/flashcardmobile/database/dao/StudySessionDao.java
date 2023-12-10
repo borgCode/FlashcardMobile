@@ -27,4 +27,7 @@ public interface StudySessionDao {
 
     @Query("SELECT * FROM study_sessions WHERE session_date = :today")
     StudySession getSessionByDate(LocalDate today);
+    
+    @Query("SELECT COUNT(DISTINCT DATE(session_date)) FROM study_sessions WHERE session_date BETWEEN :startDate AND :endDate;")
+    LiveData<Integer> countUniqueStudyDays(LocalDate startDate, LocalDate endDate);
 }

@@ -47,4 +47,8 @@ public class StudySessionViewModel extends AndroidViewModel {
     public LiveData<List<StudySession>> getSessionsForMonth(LocalDate startOfMonth, LocalDate endOfMonth) {
         return studySessionRepository.getSessionsForMonth(startOfMonth, endOfMonth);
     }
+    
+    public LiveData<Integer> getUniqueStudyDays(LocalDate startDate, LocalDate endDate) {
+        return studySessionRepository.getUniqueStudyDays(startDate, endDate);
+    }
 }

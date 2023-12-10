@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         SharedPreferences sharedPreferences = getSharedPreferences("AppSettings", MODE_PRIVATE);
+        
         String theme = sharedPreferences.getString("Theme", "Light");
         if (theme != null) {
             Log.d("Theme check", "Fetched theme: " + theme);

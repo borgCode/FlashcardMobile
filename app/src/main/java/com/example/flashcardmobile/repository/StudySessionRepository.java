@@ -50,4 +50,8 @@ public class StudySessionRepository {
     public CompletableFuture<StudySession> getSessionByDate(LocalDate today) {
         return CompletableFuture.supplyAsync(() -> studySessionDao.getSessionByDate(today), executorService);
     }
+    
+    public LiveData<Integer> getUniqueStudyDays(LocalDate startDate, LocalDate endDate) {
+        return studySessionDao.countUniqueStudyDays(startDate, endDate);
+    }
 }

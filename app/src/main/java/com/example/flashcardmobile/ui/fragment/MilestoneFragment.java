@@ -88,8 +88,7 @@ public class MilestoneFragment extends Fragment {
                 }
             }
         });
-
-
+        
         return view;
     }
 

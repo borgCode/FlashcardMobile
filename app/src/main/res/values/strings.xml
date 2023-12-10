@@ -108,5 +108,14 @@
     <string name="reset_due_date">Reset due date</string>
     <string name="delete_card">Delete card</string>
     <string name="back_to_all_decks">Back to all decks</string>
+    <string-array name="streak_numbers">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+    </string-array>
 
 </resources>

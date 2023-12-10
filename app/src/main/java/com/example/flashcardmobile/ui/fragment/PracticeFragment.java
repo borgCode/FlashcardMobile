@@ -21,8 +21,11 @@ import com.example.flashcardmobile.ui.view.CardAdapter;
 import com.example.flashcardmobile.viewmodel.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjuster;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -210,6 +213,27 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
                 
                 sharedAnalyticsViewModel.updateDeckPerformance(sharedDeckAndCardViewModel.getDeckId().getValue(), numOfCardsStudied, easyCounter, mediumCounter, hardCounter);
                 
+                //Update streak
+                
+                LocalDate lastSessionDate = LocalDate.parse(sharedPreferences.getString("lastSession", LocalDate.now().toString()));
+                if (lastSessionDate.equals(today.minusDays(1))) {
+                    int currentDailyStreak = sharedPreferences.getInt("currentDailyStreak", 0);
+                    editor.putInt("currentDailyStreak", currentDailyStreak + 1);
+                } else if (!lastSessionDate.equals(today)) {
+                    editor.putInt("currentDailyStreak", 1);
+                }
+                
+                LocalDate startOfWeek = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+                LocalDate endOfWeek = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+                
+                studySessionViewModel.getUniqueStudyDays(startOfWeek, endOfWeek).observe(getViewLifecycleOwner(), count -> {
+                    if (count >= sharedPreferences.getInt("numOfDays", 0)) {
+                        int currentWeeklyStreak = sharedPreferences.getInt("currentWeeklyStreak", 0);
+                        editor.putInt("currentWeeklyStreak", currentWeeklyStreak +1);
+                    } else {
+                        editor.putInt("currentWeeklyStreak", 1);
+                    }
+                });
                 
                 editor.remove("start");
                 editor.remove("cardsStudied");
