@@ -1,8 +1,10 @@
 package com.example.flashcardmobile.ui.dialog;
 
+import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,6 +97,18 @@ public class CardTagsDialog extends DialogFragment {
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        int width = metrics.widthPixels;
+        int height = metrics.heightPixels;
+
+        Dialog dialog = this.getDialog();
+        dialog.getWindow().setLayout((6 * width)/7, (height/5));
+    }
+    
     private void addTagToContainer(Tag selectedTag) {
         View tagView = getLayoutInflater().inflate(R.layout.tag_layout, null);
         TextView tagText = tagView.findViewById(R.id.tag_text);
