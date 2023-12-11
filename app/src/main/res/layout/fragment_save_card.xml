@@ -1,7 +1,7 @@
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="wrap_content" xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:padding="16dp">
 
@@ -29,12 +29,12 @@
                   android:layout_marginBottom="20dp"
                   android:orientation="horizontal"
                   android:weightSum="2"
-    android:id="@+id/deckSelectionBox">
+                  android:id="@+id/deckSelectionBox">
         <TextView android:layout_width="0dp" android:layout_height="wrap_content"
                   android:layout_weight="1"
-        android:text="@string/select_deck"
-        android:gravity="center"
-        android:textSize="25sp"/>
+                  android:text="@string/select_deck"
+                  android:gravity="center"
+                  android:textSize="25sp"/>
 
         <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -43,15 +43,15 @@
                 android:layout_weight="1">
             <AutoCompleteTextView
                     android:id="@+id/deckSelectionAutoComplete"
-                    android:layout_width="match_parent" 
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
             />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:weightSum="3">
+                  android:orientation="horizontal"
+                  android:weightSum="3">
 
         <AutoCompleteTextView
                 android:id="@+id/tagInputBox"
@@ -59,35 +59,35 @@
                 android:layout_height="wrap_content"
                 android:hint="Input tag"
                 android:gravity="top"
-        android:layout_weight="2"
+                android:layout_weight="2"
                 android:layout_marginEnd="10dp"
         />
-        
+
         <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:src="@drawable/add"
+                     android:src="@drawable/add"
                      android:id="@+id/create_tag_button"
-        android:tooltipText="@string/create_new_tag"/>
+                     android:tooltipText="@string/create_new_tag"/>
     </LinearLayout>
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:weightSum="3" android:background="@color/white">
-        
-        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent"
-                      android:id="@+id/tag_container" android:orientation="horizontal"
-                      android:padding="8dp"
-                      android:background="@drawable/customborder"
-        android:layout_weight="2"/>
+                  android:weightSum="3" android:background="@color/white">
+
+        <com.google.android.flexbox.FlexboxLayout android:layout_width="0dp" android:layout_height="match_parent"
+                                                  android:id="@+id/tag_container" android:orientation="horizontal"
+                                                  android:padding="8dp"
+                                                  app:alignItems="flex_start"
+                                                  app:justifyContent="flex_start"
+                                                  app:flexWrap="wrap"
+                                                  android:background="@drawable/customborder"
+                                                  android:layout_weight="2"/>
         <Button android:layout_width="0dp" android:layout_height="wrap_content"
                 android:layout_weight="1"
-        android:text="@string/clear_tags"
-        android:id="@+id/clear_tags_button"/>
-        
-        
-        
+                android:text="@string/clear_tags"
+                android:id="@+id/clear_tags_button"/>
+
+
     </LinearLayout>
-    
-    
-    
-    
+
+
     <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginTop="20dp"

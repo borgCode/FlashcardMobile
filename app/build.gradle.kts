@@ -50,6 +50,7 @@ dependencies {
     implementation ("com.github.javafaker:javafaker:1.0.2")
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("com.github.yukuku:ambilwarna:2.0.1")
+    implementation ("com.google.android.flexbox:flexbox:3.0.0")
     annotationProcessor("androidx.room:room-compiler:$room_version")
     annotationProcessor("androidx.lifecycle:lifecycle-compiler:$lifecycle_version")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")

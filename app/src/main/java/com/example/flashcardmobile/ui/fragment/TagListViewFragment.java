@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.flashcardmobile.R;
 import com.example.flashcardmobile.entity.Card;
+import com.example.flashcardmobile.entity.CardTagCrossRef;
 import com.example.flashcardmobile.entity.Tag;
 import com.example.flashcardmobile.ui.dialog.CardTagsDialog;
 import com.example.flashcardmobile.ui.dialog.TagDialog;
@@ -25,9 +26,11 @@ import com.example.flashcardmobile.viewmodel.TagViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class TagListViewFragment extends Fragment implements TagListViewAdapter.onTagOperationListener {
+public class TagListViewFragment extends Fragment implements TagListViewAdapter.onTagOperationListener, CardTagsDialog.OnButtonSelectedListener {
     private TagViewModel tagViewModel;
     private TagListViewAdapter tagListViewAdapter;
     private CardViewModel cardViewModel;
@@ -96,8 +99,6 @@ public class TagListViewFragment extends Fragment implements TagListViewAdapter.
         TagDialog editDialog = TagDialog.newInstance(tag.getId(), tag.getTagName(), tag.getColor());
         editDialog.show(getActivity().getSupportFragmentManager(), "editTag");
     }
-    
-    //TODO GO THROUGH EDITTAG AND ONCHANGETAGS METHODS
 
     @Override
     public void onDeleteTag(Tag tag) {
@@ -107,6 +108,7 @@ public class TagListViewFragment extends Fragment implements TagListViewAdapter.
     @Override
     public void onChangeTags(long id) {
         CardTagsDialog dialog = CardTagsDialog.newInstance(id);
+        dialog.setButtonSelectedListener(this);
         dialog.show(getActivity().getSupportFragmentManager(), "changeTags");
     }
 
@@ -139,5 +141,15 @@ public class TagListViewFragment extends Fragment implements TagListViewAdapter.
     private void setColumnNames(String columnOne, String columnTwo) {
         firstColumn.setText(columnOne);
         secondColumn.setText(columnTwo);
+    }
+
+    @Override
+    public void onTagsChanged(long id, List<Tag> tags) {
+        List<CardTagCrossRef> crossRefs = new ArrayList<>();
+        for (Tag tag : tags) {
+            CardTagCrossRef crossRef = new CardTagCrossRef(id, tag.getId());
+            crossRefs.add(crossRef);
+        }
+        tagViewModel.updateCrossRefs(id, crossRefs);
     }
 }

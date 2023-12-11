@@ -25,6 +25,7 @@ import com.example.flashcardmobile.viewmodel.CardViewModel;
 import com.example.flashcardmobile.viewmodel.SharedAnalyticsViewModel;
 import com.example.flashcardmobile.viewmodel.SharedDeckAndCardViewModel;
 import com.example.flashcardmobile.viewmodel.TagViewModel;
+import com.google.android.flexbox.FlexboxLayout;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
@@ -47,7 +48,7 @@ public class AddCardFragment extends Fragment {
     private AutoCompleteTextView tagInput;
     private ImageButton addTagButton;
     private Button clearButton;
-    private LinearLayout tagContainer;
+    private FlexboxLayout tagContainer;
     private Map<Long, Tag> selectedTagsMap = new HashMap<>();
     private Map<String, Tag> tagMap = new HashMap<>();
     private ArrayAdapter<String> adapter;
@@ -177,7 +178,7 @@ public class AddCardFragment extends Fragment {
             List<CardTagCrossRef> crossRefs = new ArrayList<>();
 
             cardViewModel.insert(card).thenAcceptAsync(cardId -> {
-                for (long tagId: selectedTagsMap.keySet()) {
+                for (Long tagId: selectedTagsMap.keySet()) {
                     CardTagCrossRef crossRef = new CardTagCrossRef(cardId,tagId);
                     crossRefs.add(crossRef);
                 }

@@ -22,6 +22,7 @@ import com.example.flashcardmobile.viewmodel.CardViewModel;
 import com.example.flashcardmobile.viewmodel.DeckViewModel;
 import com.example.flashcardmobile.viewmodel.SharedDeckAndCardViewModel;
 import com.example.flashcardmobile.viewmodel.TagViewModel;
+import com.google.android.flexbox.FlexboxLayout;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class EditCardFragment extends Fragment {
     private Card card;
     private AutoCompleteTextView tagInput;
     private ImageButton addTagButton;
-    private LinearLayout tagContainer;
+    private FlexboxLayout tagContainer;
     private Map<Long, Tag> selectedTagsMap = new HashMap<>();
     private Map<String, Tag> tagMap = new HashMap<>();
     private ArrayAdapter<String> adapter;
