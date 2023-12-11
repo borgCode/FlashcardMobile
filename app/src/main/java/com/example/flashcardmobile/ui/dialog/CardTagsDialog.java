@@ -1,9 +1,12 @@
 package com.example.flashcardmobile.ui.dialog;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +38,10 @@ public class CardTagsDialog extends DialogFragment {
     private Map<String, Tag> tagMap = new HashMap<>();
     private ArrayAdapter<String> adapter;
 
+    private DisplayMetrics metrics;
+    private int screenWidth;
+    private int screenHeight;
+
 
     private static final String ARG_TAG_ID = "card_id";
 
@@ -52,13 +59,16 @@ public class CardTagsDialog extends DialogFragment {
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_edit_card_tag, container, false);
 
+        metrics = getResources().getDisplayMetrics();
+        screenWidth = metrics.widthPixels;
+        screenHeight = metrics.heightPixels;
+
         tagViewModel = new ViewModelProvider(requireActivity()).get(TagViewModel.class);
 
         tagContainer = view.findViewById(R.id.tag_container);
 
-        tagInput = view.findViewById(R.id.tagInputBox);
-        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, new ArrayList<>());
-        tagInput.setAdapter(adapter);
+        setupAutoCompleteTextView(view);
+        
 
         tagViewModel.getAllTags().observe(getViewLifecycleOwner(), tags -> {
             tagMap.clear();
@@ -71,6 +81,43 @@ public class CardTagsDialog extends DialogFragment {
         tagViewModel.getCardWithTags(getArguments().getLong(ARG_TAG_ID)).observe(getViewLifecycleOwner(), card -> {
             for (Tag tag: card.tags) {
                 addTagToContainer(tag);
+            }
+        });
+
+        clearButton = view.findViewById(R.id.clear_tags_button);
+        clearButton.setOnClickListener(v -> clearTags());
+
+        return view;
+
+    }
+
+    private void setupAutoCompleteTextView(View view) {
+        tagInput = view.findViewById(R.id.tagInputBox);
+        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, new ArrayList<>());
+        tagInput.setAdapter(adapter);
+        tagInput.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                tagInput.showDropDown();
+            }
+        });
+        
+        int dropdownHeight = screenHeight / 5;
+        tagInput.setDropDownHeight(dropdownHeight);
+        
+        tagInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0) {
+                    tagInput.showDropDown();
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
@@ -88,25 +135,16 @@ public class CardTagsDialog extends DialogFragment {
             tagInput.setText("");
 
         }));
-
-        clearButton = view.findViewById(R.id.clear_tags_button);
-        clearButton.setOnClickListener(v -> clearTags());
-
-
-        return view;
-
+        
+        
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-        int width = metrics.widthPixels;
-        int height = metrics.heightPixels;
-
+        
         Dialog dialog = this.getDialog();
-        dialog.getWindow().setLayout((6 * width)/7, (height/5));
+        dialog.getWindow().setLayout((6 * screenWidth)/7, (2 * screenHeight/5));
     }
     
     private void addTagToContainer(Tag selectedTag) {
