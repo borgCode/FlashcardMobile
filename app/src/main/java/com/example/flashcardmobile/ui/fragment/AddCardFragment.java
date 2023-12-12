@@ -2,8 +2,6 @@ package com.example.flashcardmobile.ui.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.flashcardmobile.R;
@@ -21,6 +18,7 @@ import com.example.flashcardmobile.entity.Card;
 import com.example.flashcardmobile.entity.CardTagCrossRef;
 import com.example.flashcardmobile.entity.Tag;
 import com.example.flashcardmobile.ui.dialog.TagDialog;
+import com.example.flashcardmobile.util.TagHandler;
 import com.example.flashcardmobile.viewmodel.CardViewModel;
 import com.example.flashcardmobile.viewmodel.SharedAnalyticsViewModel;
 import com.example.flashcardmobile.viewmodel.SharedDeckAndCardViewModel;
@@ -34,7 +32,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
 public class AddCardFragment extends Fragment {
     
@@ -45,10 +42,9 @@ public class AddCardFragment extends Fragment {
     private EditText frontSide;
     private EditText backSide;
     private AutoCompleteTextView tagInput;
-    private FlexboxLayout tagContainer;
+    private TagHandler tagHandler;
     private Map<Long, Tag> selectedTagsMap = new HashMap<>();
     private Map<String, Tag> tagMap = new HashMap<>();
-    private ArrayAdapter<String> adapter;
     private  SharedPreferences.Editor editor;
     private int cardsAdded = 0;
 
@@ -74,42 +70,21 @@ public class AddCardFragment extends Fragment {
         
         frontSide = view.findViewById(R.id.frontSideEditText);
         backSide = view.findViewById(R.id.backSideEditText);
-        
+
+        FlexboxLayout tagContainer = view.findViewById(R.id.tag_container);
         tagInput = view.findViewById(R.id.tagInputBox);
-        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, new ArrayList<>());
-        tagInput.setAdapter(adapter);
+        
+        tagHandler = new TagHandler(getContext(), tagInput, tagMap, selectedTagsMap, tagContainer);
         
         tagViewModel.getAllTags().observe(getViewLifecycleOwner(), newTags -> {
-            tagMap.clear();
-            tagMap = newTags.stream().collect(Collectors.toMap(Tag::getTagName, tag -> tag, (existing, replacement) -> existing, HashMap::new));
-            adapter.clear();
-            adapter.addAll(new ArrayList<>(tagMap.keySet()));
-            adapter.notifyDataSetChanged();
+            tagHandler.addAll(newTags);
         });
-        tagInput.setOnItemClickListener(((parent, view1, position, id) -> {
-            String selectedTagName = (String) parent.getItemAtPosition(position);
-            Tag selectedTag = tagMap.get(selectedTagName);
-
-            tagMap.remove(selectedTagName);
-            adapter.remove(selectedTagName);
-            adapter.notifyDataSetChanged();
-            
-            selectedTagsMap.put(selectedTag.getId(), selectedTag);
-            addTagToContainer(selectedTag);
-            
-            tagInput.setText("");
-            
-        }));
-
+        
         ImageButton addTagButton = view.findViewById(R.id.create_tag_button);
         addTagButton.setOnClickListener(v -> createTag());
         
-        tagContainer = view.findViewById(R.id.tag_container);
-
         Button clearButton = view.findViewById(R.id.clear_tags_button);
-        clearButton.setOnClickListener(v -> {
-            clearTags();
-        });
+        clearButton.setOnClickListener(v -> tagHandler.clearTags());
 
         Button addButton = view.findViewById(R.id.addCardButton);
         addButton.setOnClickListener(v -> addCard());
@@ -118,41 +93,9 @@ public class AddCardFragment extends Fragment {
         
     }
 
-    private void addTagToContainer(Tag selectedTag) {
-        View tagView = getLayoutInflater().inflate(R.layout.tag_layout, null);
-        TextView tagText = tagView.findViewById(R.id.tag_text);
-        ImageView closeButton = tagView.findViewById(R.id.tag_close_button);
-        
-        GradientDrawable background = (GradientDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.tag_bubble_background).mutate();
-        background.setColor(selectedTag.getColor());
-        
-        tagText.setBackground(background);
-        tagText.setText(selectedTag.getTagName());
-        tagText.setTextColor(Color.WHITE);
-        
-        closeButton.setOnClickListener(l -> {
-            tagContainer.removeView(tagView);
-            tagMap.put(selectedTag.getTagName(), selectedTag);
-            adapter.add(selectedTag.getTagName());
-            adapter.notifyDataSetChanged();
-            selectedTagsMap.remove(selectedTag.getId());
-        });
-        tagContainer.addView(tagView);
-    }
-
     private void createTag() {
         TagDialog tagDialog = new TagDialog();
         tagDialog.show(getActivity().getSupportFragmentManager(), "createTag");
-    }
-
-    public void clearTags() {
-        for (Tag tag: selectedTagsMap.values()) {
-            adapter.add(tag.getTagName());
-            tagMap.put(tag.getTagName(), tag);
-        }
-        adapter.notifyDataSetChanged();
-        selectedTagsMap.clear();
-        tagContainer.removeAllViews();
     }
 
     private void addCard() {
@@ -179,7 +122,7 @@ public class AddCardFragment extends Fragment {
                     crossRefs.add(crossRef);
                 }
                 tagViewModel.insertCrossRefs(crossRefs).thenRun(() -> {
-                    clearTags();
+                    tagHandler.clearTags();
                     Toast.makeText(getActivity(), "Card added!", Toast.LENGTH_SHORT).show();
                     cardsAdded++;
                     saveNumOfCardsAdded(cardsAdded);

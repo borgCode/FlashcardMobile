@@ -31,14 +31,9 @@ public class SettingsActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("AppSettings", MODE_PRIVATE);
         String theme = sharedPreferences.getString("Theme", "Light");
-        if (theme != null) {
-            Log.d("Theme check", "Fetched theme: " + theme);
-        }
         if (theme.equals("Dark")) {
-            Log.d("Theme check", "Theme is Dark");
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
-            Log.d("Theme check", "Theme is Light");
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
         setContentView(R.layout.activity_settings);

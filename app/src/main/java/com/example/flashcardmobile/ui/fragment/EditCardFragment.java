@@ -1,7 +1,5 @@
 package com.example.flashcardmobile.ui.fragment;
 
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,12 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.flashcardmobile.R;
 import com.example.flashcardmobile.entity.*;
 import com.example.flashcardmobile.ui.dialog.TagDialog;
+import com.example.flashcardmobile.util.TagHandler;
 import com.example.flashcardmobile.viewmodel.CardViewModel;
 import com.example.flashcardmobile.viewmodel.DeckViewModel;
 import com.example.flashcardmobile.viewmodel.SharedDeckAndCardViewModel;
@@ -29,7 +27,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class EditCardFragment extends Fragment {
 
@@ -41,11 +38,9 @@ public class EditCardFragment extends Fragment {
     private EditText backSide;
     private AutoCompleteTextView deckNameSelection;
     private Card card;
-    private AutoCompleteTextView tagInput;
-    private FlexboxLayout tagContainer;
+    private TagHandler tagHandler;
     private Map<Long, Tag> selectedTagsMap = new HashMap<>();
     private Map<String, Tag> tagMap = new HashMap<>();
-    private ArrayAdapter<String> adapter;
 
     @Nullable
 
@@ -93,50 +88,26 @@ public class EditCardFragment extends Fragment {
                 });
             });
         });
+
+        AutoCompleteTextView tagInput = view.findViewById(R.id.tagInputBox);
+        FlexboxLayout tagContainer = view.findViewById(R.id.tag_container);
+        tagHandler = new TagHandler(getContext(), tagInput, tagMap, selectedTagsMap, tagContainer);
         
-        tagInput = view.findViewById(R.id.tagInputBox);
-        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, new ArrayList<>());
-        tagInput.setAdapter(adapter);
         
         tagViewModel.getAllTags().observe(getViewLifecycleOwner(), newTags -> {
-            tagMap.clear();
-            tagMap = newTags.stream().collect(Collectors.toMap(Tag::getTagName, tag -> tag, (existing, replacement) -> existing, HashMap::new));
-            adapter.clear();
-            adapter.addAll(new ArrayList<>(tagMap.keySet()));
-            adapter.notifyDataSetChanged();
-        });
-        tagInput.setOnItemClickListener(((parent, view1, position, id) -> {
-            String selectedTagName = (String) parent.getItemAtPosition(position);
-            Tag selectedTag = tagMap.get(selectedTagName);
-            
-            tagMap.remove(selectedTagName);
-            adapter.remove(selectedTagName);
-            adapter.notifyDataSetChanged();
-            
-            selectedTagsMap.put(selectedTag.getId(), selectedTag);
-            addTagToContainer(selectedTag);
-            
-            tagInput.setText("");
-        }));
-
-        tagContainer = view.findViewById(R.id.tag_container);
-        tagViewModel.getCardWithTags(card.getId()).observe(getViewLifecycleOwner(), cardWithTags -> {
-            cardWithTags.tags.forEach(tag -> {
-                selectedTagsMap.put(tag.getId(), tag);
-                addTagToContainer(tag);
-                tagMap.remove(tag.getTagName());
-            });
+            tagHandler.addAll(newTags);
         });
         
-        adapter.clear();
-        adapter.addAll(new ArrayList<>(tagMap.keySet()));
-        adapter.notifyDataSetChanged();
+        tagViewModel.getCardWithTags(card.getId()).observe(getViewLifecycleOwner(), cardWithTags -> {
+            cardWithTags.tags.forEach(tag -> tagHandler.addTagToContainer(tag));
+        });
+        
 
         ImageButton addTagButton = view.findViewById(R.id.create_tag_button);
         addTagButton.setOnClickListener(v -> createTag());
 
         Button clearButton = view.findViewById(R.id.clear_tags_button);
-        clearButton.setOnClickListener(v -> clearTags());
+        clearButton.setOnClickListener(v -> tagHandler.clearTags());
 
         Button saveButton = view.findViewById(R.id.addCardButton);
         saveButton.setText(R.string.save);
@@ -146,32 +117,6 @@ public class EditCardFragment extends Fragment {
         return view;
         
     }
-    
-
-    private void addTagToContainer(Tag selectedTag) {
-        View tagView = getLayoutInflater().inflate(R.layout.tag_layout, null);
-        TextView tagText = tagView.findViewById(R.id.tag_text);
-        ImageView closeButton = tagView.findViewById(R.id.tag_close_button);
-
-        GradientDrawable background = (GradientDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.tag_bubble_background).mutate();
-        background.setColor(selectedTag.getColor());
-
-        tagText.setBackground(background);
-        tagText.setText(selectedTag.getTagName());
-        tagText.setTextColor(Color.WHITE);
-
-        closeButton.setOnClickListener(l -> {
-            tagContainer.removeView(tagView);
-            tagMap.put(selectedTag.getTagName(), selectedTag);
-            adapter.add(selectedTag.getTagName());
-            adapter.notifyDataSetChanged();
-            selectedTagsMap.remove(selectedTag.getId());
-        });
-
-
-        tagContainer.addView(tagView);
-    }
-
     private void createTag() {
         TagDialog tagDialog = new TagDialog();
         tagDialog.show(getActivity().getSupportFragmentManager(), "createTag");
@@ -196,18 +141,9 @@ public class EditCardFragment extends Fragment {
                 crossRefs.add(crossRef);
             }
             tagViewModel.updateCrossRefs(card.getId(), crossRefs);
-            clearTags();
+            tagHandler.clearTags();
             Toast.makeText(getActivity(), "Card updated", Toast.LENGTH_SHORT).show();
         }
         
-    }
-    public void clearTags() {
-        for (Tag tag: selectedTagsMap.values()) {
-            adapter.add(tag.getTagName());
-            tagMap.put(tag.getTagName(), tag);
-        }
-        adapter.notifyDataSetChanged();
-        selectedTagsMap.clear();
-        tagContainer.removeAllViews();
     }
 }
