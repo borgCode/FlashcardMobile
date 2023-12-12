@@ -19,14 +19,17 @@ import java.util.List;
 
 public class DeckListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    
 
-    public interface OnDeckOperationListener {
+    public interface OnButtonOperationListener {
         void onEditDeckName(long deckId, String deckName);
 
         void onViewAllCards(long deckId);
 
         void onViewDueCards(long deckId);
+
+        void onResetDueDate(long id);
+
+        void onCardDelete(long id);
     }
 
     private static final int VIEW_TYPE_DECKS = 0;
@@ -35,11 +38,11 @@ public class DeckListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private List<DeckWithInfo> decks;
     private List<Card> cards;
-    private OnDeckOperationListener listener;
+    private OnButtonOperationListener listener;
     private boolean showingDecks = true;
     private boolean showingAllCards = false;
 
-    public DeckListViewAdapter(OnDeckOperationListener listener) {
+    public DeckListViewAdapter(OnButtonOperationListener listener) {
         decks = new ArrayList<>();
         this.listener = listener;
 
@@ -150,17 +153,25 @@ public class DeckListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             cardHolder.frontSideCol.setText(card.getFrontSide());
             cardHolder.backSideCol.setText(card.getBackSide());
 
-            if (showingAllCards) {
-                cardHolder.cardOptions.setOnClickListener(v -> {
-                    //TODO menu options
-                });
-            } else {
-                cardHolder.cardOptions.setOnClickListener(v -> {
-                    //TODO menu options
-                });
-            }
-        }
+            cardHolder.cardOptions.setOnClickListener(v -> {
+                PopupMenu popupMenu = new PopupMenu(holder.itemView.getContext(), cardHolder.cardOptions);
+                popupMenu.getMenuInflater().inflate(R.menu.card_deck_list_popup_menu, popupMenu.getMenu());
 
+                popupMenu.setOnMenuItemClickListener(item -> {
+                    int id = item.getItemId();
+                    if (id == R.id.resetDueDateItem) {
+                        listener.onResetDueDate(card.getId());
+                    } else if (id == R.id.deleteCardItem) {
+                        listener.onCardDelete(card.getId());
+                    } else {
+                        return false;
+                    }
+                    return true;
+                });
+                Log.d("PopupMenu", "Showing menu");
+                popupMenu.show();
+            });
+        }
     }
 
     @Override
@@ -171,14 +182,12 @@ public class DeckListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             return cards.size();
         }
     }
-    
-    
-    
 
     public void setDecks(ArrayList<DeckWithInfo> decks) {
         this.decks = decks;
         showingDecks = true;
     }
+
     public void setCards(ArrayList<Card> cards) {
         this.cards = cards;
         showingDecks = false;

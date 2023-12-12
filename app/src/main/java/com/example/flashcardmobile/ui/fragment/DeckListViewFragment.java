@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,14 +20,17 @@ import com.example.flashcardmobile.ui.dialog.EditDeckNameDialog;
 import com.example.flashcardmobile.ui.view.DeckListViewAdapter;
 import com.example.flashcardmobile.viewmodel.CardViewModel;
 import com.example.flashcardmobile.viewmodel.DeckViewModel;
+import com.example.flashcardmobile.viewmodel.SharedDeckAndCardViewModel;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class DeckListViewFragment extends Fragment implements DeckListViewAdapter.OnDeckOperationListener {
+public class DeckListViewFragment extends Fragment implements DeckListViewAdapter.OnButtonOperationListener {
 
     private DeckViewModel deckViewModel;
     private CardViewModel cardViewModel;
+    private SharedDeckAndCardViewModel sharedDeckAndCardViewModel;
     private RecyclerView recyclerView;
     private DeckListViewAdapter deckListViewAdapter;
     private TextView firstColumn;
@@ -42,6 +46,7 @@ public class DeckListViewFragment extends Fragment implements DeckListViewAdapte
         
         deckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
         cardViewModel = new ViewModelProvider(requireActivity()).get(CardViewModel.class);
+        sharedDeckAndCardViewModel = new ViewModelProvider(requireActivity()).get(SharedDeckAndCardViewModel.class);
         
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -104,6 +109,21 @@ public class DeckListViewFragment extends Fragment implements DeckListViewAdapte
             deckListViewAdapter.notifyDataSetChanged();
         });
 
+    }
+
+    @Override
+    public void onResetDueDate(long id) {
+        cardViewModel.getCardById(id).observe(getViewLifecycleOwner(), card -> {
+            if (card != null) {
+                card.setDueDate(LocalDateTime.now());
+                cardViewModel.update(card);
+            }
+        });
+    }
+
+    @Override
+    public void onCardDelete(long id) {
+        cardViewModel.deleteCardById(id);
     }
 
     private void setColumnWeights(Float weight) {
