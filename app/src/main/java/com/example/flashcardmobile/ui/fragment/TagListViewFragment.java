@@ -66,7 +66,7 @@ public class TagListViewFragment extends Fragment implements TagListViewAdapter.
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         tagListViewAdapter = new TagListViewAdapter(this);
         recyclerView.setAdapter(tagListViewAdapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), recyclerView.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), RecyclerView.VERTICAL));
         
 
         tagViewModel.getAllTags().observe(getViewLifecycleOwner(), newTags -> {

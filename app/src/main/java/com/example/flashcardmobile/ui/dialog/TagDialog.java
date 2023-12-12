@@ -25,9 +25,7 @@ public class TagDialog extends DialogFragment {
     private TagViewModel tagViewModel;
     private int defaultColor;
     private EditText textInput;
-    private Button colorPickerBtn;
     private TextView tagPreview;
-    private Button createBtn;
     private static final String ARG_TAG_ID = "tag_id";
     private static final String ARG_TAG_NAME = "tag_name";
     private static final String ARG_TAG_COLOR = "tag_color";
@@ -66,15 +64,15 @@ public class TagDialog extends DialogFragment {
             public void afterTextChanged(Editable s) {
             }
         });
-        
 
-        colorPickerBtn = view.findViewById(R.id.dialog_open_color_picker);
+
+        Button colorPickerBtn = view.findViewById(R.id.dialog_open_color_picker);
         colorPickerBtn.setOnClickListener(l -> openColorPicker());
 
         tagPreview = view.findViewById(R.id.tagPreview);
         tagPreview.setBackgroundColor(defaultColor);
 
-        createBtn = view.findViewById(R.id.dialog_create_tag_button);
+        Button createBtn = view.findViewById(R.id.dialog_create_tag_button);
 
         if (getArguments() != null && getArguments().containsKey(ARG_TAG_NAME)) {
             isEditMode = true;

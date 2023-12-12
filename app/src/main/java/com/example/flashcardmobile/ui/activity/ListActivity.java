@@ -11,17 +11,15 @@ import com.google.android.material.tabs.TabLayout;
 
 public class ListActivity extends AppCompatActivity {
 
-    private ActivityListBinding binding;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityListBinding.inflate(getLayoutInflater());
+        com.example.flashcardmobile.databinding.ActivityListBinding binding = ActivityListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         ImageView backButton = findViewById(R.id.back_button);
         
-        backButton.setOnClickListener(view -> onBackPressed());
+        backButton.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
 
         ListTabsAdapter sectionsPagerAdapter = new ListTabsAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = binding.viewPager;

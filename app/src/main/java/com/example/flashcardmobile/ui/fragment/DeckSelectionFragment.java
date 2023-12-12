@@ -31,9 +31,7 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
 
     private DeckViewModel deckViewModel;
     private SharedDeckAndCardViewModel sharedDeckAndCardViewModel;
-    private RecyclerView recyclerView;
     private DeckAdapter deckAdapter;
-    private List<Deck> decks;
     private long deckToDelete;
     
     
@@ -41,7 +39,7 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_deck_selection, viewGroup, false);
 
-        decks = new ArrayList<>();
+        List<Deck> decks = new ArrayList<>();
 
         sharedDeckAndCardViewModel = new ViewModelProvider(requireActivity()).get(SharedDeckAndCardViewModel.class);
         deckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
@@ -53,7 +51,7 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
             }
         });
 
-        recyclerView = view.findViewById(R.id.deckSelectionView);
+        RecyclerView recyclerView = view.findViewById(R.id.deckSelectionView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         deckAdapter = new DeckAdapter(this, decks);
         recyclerView.setAdapter(deckAdapter);

@@ -1,7 +1,6 @@
 package com.example.flashcardmobile.entity;
 
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 
 @Entity(tableName = "card_tag_cross_ref",
         primaryKeys = {"cardId", "tagId"})

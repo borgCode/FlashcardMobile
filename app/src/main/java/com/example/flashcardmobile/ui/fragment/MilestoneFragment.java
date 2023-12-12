@@ -25,8 +25,6 @@ import java.util.List;
 
 public class MilestoneFragment extends Fragment {
 
-    private BadgeViewModel badgeViewModel;
-
 
     @Nullable
     @Override
@@ -62,10 +60,9 @@ public class MilestoneFragment extends Fragment {
                 view.findViewById(R.id.unique_days_2_text),
                 view.findViewById(R.id.unique_days_3_text)
         );
-        
-        
 
-        badgeViewModel = new ViewModelProvider(requireActivity()).get(BadgeViewModel.class);
+
+        BadgeViewModel badgeViewModel = new ViewModelProvider(requireActivity()).get(BadgeViewModel.class);
 
         badgeViewModel.getAllBadges(getViewLifecycleOwner()).observe(getViewLifecycleOwner(), badges -> {
             Log.d("Badge fetch", "Fetching badges, size of badges is: " + badges.size());

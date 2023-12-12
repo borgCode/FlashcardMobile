@@ -32,7 +32,6 @@ public class CardListViewFragment extends Fragment implements CardListViewAdapte
     private DeckCardViewModel deckCardViewModel;
     private CardViewModel cardViewModel;
     private SharedDeckAndCardViewModel sharedDeckAndCardViewModel;
-    private RecyclerView recyclerView;
     private CardListViewAdapter cardListViewAdapter;
     private String selectedOption;
 
@@ -45,7 +44,7 @@ public class CardListViewFragment extends Fragment implements CardListViewAdapte
         cardViewModel = new ViewModelProvider(requireActivity()).get(CardViewModel.class);
         sharedDeckAndCardViewModel = new ViewModelProvider(requireActivity()).get(SharedDeckAndCardViewModel.class);
 
-        recyclerView = view.findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         cardListViewAdapter = new CardListViewAdapter(this);
         recyclerView.setAdapter(cardListViewAdapter);

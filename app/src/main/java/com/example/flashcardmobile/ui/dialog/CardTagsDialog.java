@@ -1,6 +1,5 @@
 package com.example.flashcardmobile.ui.dialog;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -35,16 +34,11 @@ public class CardTagsDialog extends DialogFragment {
 
     private OnButtonSelectedListener listener;
 
-    private TagViewModel tagViewModel;
     private AutoCompleteTextView tagInput;
-    private Button clearButton;
-    private Button cancelButton;
-    private Button saveButton;
     private FlexboxLayout tagContainer;
     private Map<Long, Tag> selectedTagsMap = new HashMap<>();
     private Map<String, Tag> tagMap = new HashMap<>();
     private ArrayAdapter<String> adapter;
-    private DisplayMetrics metrics;
     private int screenWidth;
     private int screenHeight;
     private static final String ARG_TAG_ID = "card_id";
@@ -67,11 +61,11 @@ public class CardTagsDialog extends DialogFragment {
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_edit_card_tag, container, false);
 
-        metrics = getResources().getDisplayMetrics();
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
         screenWidth = metrics.widthPixels;
         screenHeight = metrics.heightPixels;
 
-        tagViewModel = new ViewModelProvider(requireActivity()).get(TagViewModel.class);
+        TagViewModel tagViewModel = new ViewModelProvider(requireActivity()).get(TagViewModel.class);
 
         tagContainer = view.findViewById(R.id.tag_container);
 
@@ -98,13 +92,13 @@ public class CardTagsDialog extends DialogFragment {
             }
         });
 
-        clearButton = view.findViewById(R.id.clear_tags_button);
+        Button clearButton = view.findViewById(R.id.clear_tags_button);
         clearButton.setOnClickListener(v -> clearTags());
 
-        cancelButton = view.findViewById(R.id.cancel_button);
+        Button cancelButton = view.findViewById(R.id.cancel_button);
         cancelButton.setOnClickListener(v -> getDialog().cancel());
 
-        saveButton = view.findViewById(R.id.save_button);
+        Button saveButton = view.findViewById(R.id.save_button);
         saveButton.setOnClickListener(v -> {
             listener.onTagsChanged(getArguments().getLong("card_id"), new ArrayList<>(selectedTagsMap.values()));
             getDialog().cancel();

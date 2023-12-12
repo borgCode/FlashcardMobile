@@ -6,7 +6,6 @@ import com.example.flashcardmobile.entity.StudySession;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 @Dao
 public interface StudySessionDao {

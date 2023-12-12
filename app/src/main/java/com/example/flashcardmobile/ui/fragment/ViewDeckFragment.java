@@ -31,7 +31,6 @@ public class ViewDeckFragment extends Fragment implements DeckViewAdapter.onCard
     private SharedDeckAndCardViewModel sharedDeckAndCardViewModel;
     private CardViewModel cardViewModel;
     private DeckViewModel deckViewModel;
-    private RecyclerView recyclerView;
     private DeckViewAdapter deckViewAdapter;
     private List<Card> cards;
     
@@ -45,8 +44,8 @@ public class ViewDeckFragment extends Fragment implements DeckViewAdapter.onCard
         cardViewModel = new ViewModelProvider(requireActivity()).get(CardViewModel.class);
         sharedDeckAndCardViewModel = new ViewModelProvider(requireActivity()).get(SharedDeckAndCardViewModel.class);
         deckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
-        
-        recyclerView = view.findViewById(R.id.recyclerView);
+
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         deckViewAdapter = new DeckViewAdapter(cards, this);
         recyclerView.setAdapter(deckViewAdapter);

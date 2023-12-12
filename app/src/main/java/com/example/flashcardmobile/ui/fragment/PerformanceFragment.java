@@ -19,7 +19,6 @@ import com.example.flashcardmobile.entity.Deck;
 import com.example.flashcardmobile.ui.dialog.CustomizeStreaksDialog;
 import com.example.flashcardmobile.viewmodel.DeckViewModel;
 import com.example.flashcardmobile.viewmodel.SharedAnalyticsViewModel;
-import com.example.flashcardmobile.viewmodel.StudySessionViewModel;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
@@ -38,7 +37,6 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class PerformanceFragment extends Fragment implements CustomizeStreaksDialog.OnButtonSelectedListener {
 
-    private DeckViewModel deckViewModel;
     private SharedAnalyticsViewModel sharedAnalyticsViewModel;
     private AutoCompleteTextView deckSelection;
     private ArrayAdapter<String> adapter;
@@ -57,7 +55,7 @@ public class PerformanceFragment extends Fragment implements CustomizeStreaksDia
         sharedPreferences = getActivity().getSharedPreferences("AppSettings", MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
-        deckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
+        DeckViewModel deckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
         sharedAnalyticsViewModel = new ViewModelProvider(requireActivity()).get(SharedAnalyticsViewModel.class);
 
         deckSelection = view.findViewById(R.id.performance_deck_selection);

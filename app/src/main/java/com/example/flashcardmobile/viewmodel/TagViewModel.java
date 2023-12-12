@@ -1,7 +1,6 @@
 package com.example.flashcardmobile.viewmodel;
 
 import android.app.Application;
-import android.util.Log;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import com.example.flashcardmobile.entity.CardTagCrossRef;

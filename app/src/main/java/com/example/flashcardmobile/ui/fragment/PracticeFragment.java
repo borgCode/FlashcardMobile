@@ -24,7 +24,6 @@ import org.jetbrains.annotations.NotNull;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,6 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
     private SharedAnalyticsViewModel sharedAnalyticsViewModel;
     private List<Card> cards;
     private CardAdapter cardAdapter;
-    private ViewPager2 viewPager2;
     private int currentCardPosition = -1;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -62,7 +60,7 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
         studySessionViewModel = new ViewModelProvider(requireActivity()).get(StudySessionViewModel.class);
         sharedAnalyticsViewModel = new ViewModelProvider(requireActivity()).get(SharedAnalyticsViewModel.class);
 
-        viewPager2 = view.findViewById(R.id.practiceView);
+        ViewPager2 viewPager2 = view.findViewById(R.id.practiceView);
         viewPager2.setUserInputEnabled(false);
         cards = new ArrayList<>();
         cardAdapter = new CardAdapter(cards, this);

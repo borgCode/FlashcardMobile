@@ -1,7 +1,6 @@
 package com.example.flashcardmobile.ui.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import org.jetbrains.annotations.NotNull;
 public class AddDeckFragment extends Fragment {
     private DeckViewModel deckViewModel;
     private EditText deckName;
-    private Button addButton;
 
     @Nullable
     @Override
@@ -30,7 +28,7 @@ public class AddDeckFragment extends Fragment {
         deckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
 
         deckName = view.findViewById(R.id.add_deck_name);
-        addButton = view.findViewById(R.id.add_button);
+        Button addButton = view.findViewById(R.id.add_button);
 
         addButton.setOnClickListener(v -> addDeck());
 

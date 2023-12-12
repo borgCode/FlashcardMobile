@@ -5,7 +5,6 @@ import android.util.Log;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import com.example.flashcardmobile.entity.Card;
-import com.example.flashcardmobile.entity.Deck;
 import com.example.flashcardmobile.repository.CardRepository;
 import org.jetbrains.annotations.NotNull;
 

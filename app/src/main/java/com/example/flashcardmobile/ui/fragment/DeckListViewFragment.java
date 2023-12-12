@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,10 +27,7 @@ import java.util.ArrayList;
 
 public class DeckListViewFragment extends Fragment implements DeckListViewAdapter.OnButtonOperationListener {
 
-    private DeckViewModel deckViewModel;
     private CardViewModel cardViewModel;
-    private SharedDeckAndCardViewModel sharedDeckAndCardViewModel;
-    private RecyclerView recyclerView;
     private DeckListViewAdapter deckListViewAdapter;
     private TextView firstColumn;
     private TextView secondColumn;
@@ -43,12 +39,12 @@ public class DeckListViewFragment extends Fragment implements DeckListViewAdapte
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable  ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_deck_list_view, container, false);
-        
-        deckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
+
+        DeckViewModel deckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
         cardViewModel = new ViewModelProvider(requireActivity()).get(CardViewModel.class);
-        sharedDeckAndCardViewModel = new ViewModelProvider(requireActivity()).get(SharedDeckAndCardViewModel.class);
-        
-        recyclerView = view.findViewById(R.id.recyclerView);
+        SharedDeckAndCardViewModel sharedDeckAndCardViewModel = new ViewModelProvider(requireActivity()).get(SharedDeckAndCardViewModel.class);
+
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         deckListViewAdapter = new DeckListViewAdapter(this);
         recyclerView.setAdapter(deckListViewAdapter);

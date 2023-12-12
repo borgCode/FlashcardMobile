@@ -2,7 +2,6 @@ package com.example.flashcardmobile.database.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.*;
-import com.example.flashcardmobile.entity.Deck;
 import com.example.flashcardmobile.entity.DeckPerformance;
 import com.example.flashcardmobile.entity.LearningAnalytics;
 

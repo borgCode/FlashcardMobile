@@ -44,15 +44,11 @@ public class AddCardFragment extends Fragment {
     private TagViewModel tagViewModel;
     private EditText frontSide;
     private EditText backSide;
-    private Button addButton;
     private AutoCompleteTextView tagInput;
-    private ImageButton addTagButton;
-    private Button clearButton;
     private FlexboxLayout tagContainer;
     private Map<Long, Tag> selectedTagsMap = new HashMap<>();
     private Map<String, Tag> tagMap = new HashMap<>();
     private ArrayAdapter<String> adapter;
-    private SharedPreferences sharedPreferences;
     private  SharedPreferences.Editor editor;
     private int cardsAdded = 0;
 
@@ -68,7 +64,7 @@ public class AddCardFragment extends Fragment {
 
         view.findViewById(R.id.deckSelectionBox).setVisibility(View.GONE);
 
-        sharedPreferences = getActivity().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
         cardViewModel = new ViewModelProvider(requireActivity()).get(CardViewModel.class);
@@ -104,18 +100,18 @@ public class AddCardFragment extends Fragment {
             tagInput.setText("");
             
         }));
-        
-        addTagButton = view.findViewById(R.id.create_tag_button);
+
+        ImageButton addTagButton = view.findViewById(R.id.create_tag_button);
         addTagButton.setOnClickListener(v -> createTag());
         
         tagContainer = view.findViewById(R.id.tag_container);
-        
-        clearButton = view.findViewById(R.id.clear_tags_button);
+
+        Button clearButton = view.findViewById(R.id.clear_tags_button);
         clearButton.setOnClickListener(v -> {
             clearTags();
         });
-        
-        addButton = view.findViewById(R.id.addCardButton);
+
+        Button addButton = view.findViewById(R.id.addCardButton);
         addButton.setOnClickListener(v -> addCard());
         
         return view;

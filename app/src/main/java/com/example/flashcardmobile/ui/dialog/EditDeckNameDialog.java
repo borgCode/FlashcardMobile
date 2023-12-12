@@ -18,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
 public class EditDeckNameDialog extends DialogFragment {
     private DeckViewModel deckViewModel;
     private EditText editText;
-    private Button saveButton;
 
     private static final String ARG_DECK_ID = "deck_id";
     private static final String ARG_DECK_NAME = "deck_name";
@@ -42,8 +41,8 @@ public class EditDeckNameDialog extends DialogFragment {
 
         editText = view.findViewById(R.id.edit_text);
         editText.setText(getArguments().getString(ARG_DECK_NAME));
-        
-        saveButton = view.findViewById(R.id.save_button);
+
+        Button saveButton = view.findViewById(R.id.save_button);
 
         saveButton.setOnClickListener(v -> saveChange());
 

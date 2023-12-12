@@ -40,11 +40,8 @@ public class EditCardFragment extends Fragment {
     private EditText frontSide;
     private EditText backSide;
     private AutoCompleteTextView deckNameSelection;
-    private Button saveButton;
-    private Button clearButton;
     private Card card;
     private AutoCompleteTextView tagInput;
-    private ImageButton addTagButton;
     private FlexboxLayout tagContainer;
     private Map<Long, Tag> selectedTagsMap = new HashMap<>();
     private Map<String, Tag> tagMap = new HashMap<>();
@@ -135,13 +132,13 @@ public class EditCardFragment extends Fragment {
         adapter.addAll(new ArrayList<>(tagMap.keySet()));
         adapter.notifyDataSetChanged();
 
-        addTagButton = view.findViewById(R.id.create_tag_button);
+        ImageButton addTagButton = view.findViewById(R.id.create_tag_button);
         addTagButton.setOnClickListener(v -> createTag());
 
-        clearButton = view.findViewById(R.id.clear_tags_button);
+        Button clearButton = view.findViewById(R.id.clear_tags_button);
         clearButton.setOnClickListener(v -> clearTags());
-        
-        saveButton = view.findViewById(R.id.addCardButton);
+
+        Button saveButton = view.findViewById(R.id.addCardButton);
         saveButton.setText(R.string.save);
 
         saveButton.setOnClickListener(v -> saveCard());
