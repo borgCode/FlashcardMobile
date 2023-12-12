@@ -28,8 +28,8 @@ public class CardTagsDialog extends DialogFragment{
 
     private OnButtonSelectedListener listener;
 
-    private Map<Long, Tag> selectedTagsMap = new HashMap<>();
-    private Map<String, Tag> tagMap = new HashMap<>();
+    private final Map<Long, Tag> selectedTagsMap = new HashMap<>();
+    private final Map<String, Tag> tagMap = new HashMap<>();
     private TagHandler tagHandler;
     private int screenWidth;
     private int screenHeight;

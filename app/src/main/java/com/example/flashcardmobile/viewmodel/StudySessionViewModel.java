@@ -15,8 +15,8 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 public class StudySessionViewModel extends AndroidViewModel {
-    private StudySessionRepository studySessionRepository;
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private final StudySessionRepository studySessionRepository;
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     
 
 

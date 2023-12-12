@@ -65,7 +65,7 @@ public class MilestoneFragment extends Fragment {
         BadgeViewModel badgeViewModel = new ViewModelProvider(requireActivity()).get(BadgeViewModel.class);
 
         badgeViewModel.getAllBadges(getViewLifecycleOwner()).observe(getViewLifecycleOwner(), badges -> {
-            Log.d("Badge fetch", "Fetching badges, size of badges is: " + badges.size());
+            
             if (badges.size() >= badgeImages.size() && badges.size() >= badgeNames.size()) {
                 for (int i = 0; i < badgeImages.size(); i++) {
                     badgeNames.get(i).setText(badges.get(i).getName());

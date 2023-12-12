@@ -24,12 +24,12 @@ import java.util.stream.Collectors;
 public class TagHandler {
     
     
-    private Context context;
-    private AutoCompleteTextView tagInput;
-    private ArrayAdapter<String> adapter;
-    private Map<String, Tag> tagMap;
-    private Map<Long, Tag> selectedTagsMap;
-    private FlexboxLayout tagContainer;
+    private final Context context;
+    private final AutoCompleteTextView tagInput;
+    private final ArrayAdapter<String> adapter;
+    private final Map<String, Tag> tagMap;
+    private final Map<Long, Tag> selectedTagsMap;
+    private final FlexboxLayout tagContainer;
 
     public TagHandler(Context context, AutoCompleteTextView tagInput, Map<String, Tag> tagMap, Map<Long, Tag> selectedTagsMap, FlexboxLayout tagContainer) {
         this.context = context.getApplicationContext();

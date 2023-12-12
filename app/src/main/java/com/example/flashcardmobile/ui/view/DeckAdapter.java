@@ -24,8 +24,8 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
         void onViewDeck(long deckId);
     }
     
-    private List<Deck> decks;
-    private OnDeckOperationListener listener;
+    private final List<Deck> decks;
+    private final OnDeckOperationListener listener;
 
     public DeckAdapter(OnDeckOperationListener listener, List<Deck> decks) {
 
@@ -41,7 +41,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
 
     public static class DeckViewHolder extends RecyclerView.ViewHolder {
         public Button deckBtn;
-        private ImageButton deckOptions;
+        private final ImageButton deckOptions;
 
         public DeckViewHolder(View itemView) {
             super(itemView);

@@ -17,9 +17,9 @@ import java.util.concurrent.CompletableFuture;
 public class BadgeManager {
 
     private static BadgeManager instance = null;
-    private BadgeRepository badgeRepository;
-    private AnalyticsRepository analyticsRepository;
-    private StudySessionRepository studySessionRepository;
+    private final BadgeRepository badgeRepository;
+    private final AnalyticsRepository analyticsRepository;
+    private final StudySessionRepository studySessionRepository;
     private int cardsStudied;
     private int cardsAdded;
     private int cardsMastered;
@@ -70,16 +70,16 @@ public class BadgeManager {
     }
 
     public void updateBadgeProgress(LifecycleOwner lifecycleOwner) {
-        Log.d("Update badge progress", "Getting user data for update");
+        
 
         badgeRepository.getAllBadges().observe(lifecycleOwner, badges -> {
             System.out.println("I am being observec");
             for (Badge badge : badges) {
-                Log.d("isAchieved", "isAchieved: " + badge.isAchieved());
+                
                 if (!badge.isAchieved() && checkIfCriteriaMet(badge)) {
-                    Log.d("Check if achieved", "checking if " + badge.getName() + " is achieved");
+                    
                     badge.setAchieved(true);
-                    Log.d("Check if achieved", "updating: " + badge.getName());
+                    
                     badgeRepository.update(badge);
                 }
             }
@@ -94,14 +94,14 @@ public class BadgeManager {
         return CompletableFuture.allOf(sessionCountFuture, analyticsFuture)
                 .thenRun(() -> {
                     this.uniqueDays = sessionCountFuture.join();
-                    Log.d("Update badge progress", "Unique days: " + this.uniqueDays);
+                    
                     List<LearningAnalytics> analytics = analyticsFuture.join();
                     for (LearningAnalytics analytic : analytics) {
                         this.cardsAdded += analytic.getCardsAdded();
                         this.cardsStudied += analytic.getCardsStudied();
                         this.cardsMastered += analytic.getCardsMastered();
 
-                        Log.d("Update badge progress", "Other values: " + this.cardsAdded + ", " + this.cardsStudied + ", " + this.cardsMastered);
+                        
                     }
                 });
     }

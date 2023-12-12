@@ -25,7 +25,7 @@ public class CardListViewAdapter extends RecyclerView.Adapter<CardListViewAdapte
 
     private List<DeckCard> cards;
     private List<DeckCard> cardsFull;
-    private onCardOperationListener listener;
+    private final onCardOperationListener listener;
     private String currentSearchColumn;
 
     public CardListViewAdapter(onCardOperationListener listener) {
@@ -111,7 +111,7 @@ public class CardListViewAdapter extends RecyclerView.Adapter<CardListViewAdapte
     public Filter getFilter() {
         return filter;
     }
-    private Filter filter = new Filter() {
+    private final Filter filter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             List<DeckCard> filteredList = new ArrayList<>();

@@ -15,8 +15,8 @@ public class DeleteConfirmationDialog extends DialogFragment {
     }
     
     private DeleteDialogListener deleteDialogListener;
-    private String dialogMessage;
-    private String confirmationType;
+    private final String dialogMessage;
+    private final String confirmationType;
 
     public DeleteConfirmationDialog(String dialogMessage, String confirmationType) {
         this.dialogMessage = dialogMessage;

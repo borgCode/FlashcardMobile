@@ -15,8 +15,8 @@ import java.util.concurrent.CompletableFuture;
 public class SharedAnalyticsViewModel extends AndroidViewModel {
 
 
-    private LocalDate date;
-    private AnalyticsRepository repository;
+    private final LocalDate date;
+    private final AnalyticsRepository repository;
 
     public SharedAnalyticsViewModel(@NotNull Application application) {
         super(application);

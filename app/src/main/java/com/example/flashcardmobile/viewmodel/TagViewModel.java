@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class TagViewModel extends AndroidViewModel {
-    private TagRepository tagRepository;
+    private final TagRepository tagRepository;
     private LiveData<List<Tag>> tags;
     
     public TagViewModel(@NotNull Application application) {

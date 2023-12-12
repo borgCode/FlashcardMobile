@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class DeckViewModel extends AndroidViewModel {
-    private DeckRepository deckRepository;
-    private LiveData<List<Deck>> allDecks;
+    private final DeckRepository deckRepository;
+    private final LiveData<List<Deck>> allDecks;
     public DeckViewModel(@NotNull Application application) {
         super(application);
         deckRepository = new DeckRepository(application);
@@ -22,7 +22,7 @@ public class DeckViewModel extends AndroidViewModel {
     }
     
     public void insert(Deck deck) {
-        Log.d("View Model", "Inserting new Deck");
+        
         deckRepository.insert(deck);
     }
     public void update(Deck deck) {

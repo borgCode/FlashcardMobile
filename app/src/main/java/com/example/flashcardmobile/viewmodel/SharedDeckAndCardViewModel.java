@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel;
 import com.example.flashcardmobile.entity.Card;
 
 public class SharedDeckAndCardViewModel extends ViewModel {
-    private MutableLiveData<Long> deckId = new MutableLiveData<>();
-    private MutableLiveData<Card> selectedCard = new MutableLiveData<>();
+    private final MutableLiveData<Long> deckId = new MutableLiveData<>();
+    private final MutableLiveData<Card> selectedCard = new MutableLiveData<>();
 
     public void setDeckId(Long id) {
         deckId.setValue(id);

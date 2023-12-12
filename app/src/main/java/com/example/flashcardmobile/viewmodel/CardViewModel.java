@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class CardViewModel extends AndroidViewModel {
-    private CardRepository cardRepository;
+    private final CardRepository cardRepository;
     private LiveData<List<Card>> cards;
 
 
@@ -23,7 +23,7 @@ public class CardViewModel extends AndroidViewModel {
     }
 
     public CompletableFuture<Long> insert(Card card) {
-        Log.d("AddCard ViewModel", "insert into DB");
+        
         return cardRepository.insert(card);
     }
     public void update(Card card) {

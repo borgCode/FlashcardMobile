@@ -43,8 +43,8 @@ public class AddCardFragment extends Fragment {
     private EditText backSide;
     private AutoCompleteTextView tagInput;
     private TagHandler tagHandler;
-    private Map<Long, Tag> selectedTagsMap = new HashMap<>();
-    private Map<String, Tag> tagMap = new HashMap<>();
+    private final Map<Long, Tag> selectedTagsMap = new HashMap<>();
+    private final Map<String, Tag> tagMap = new HashMap<>();
     private  SharedPreferences.Editor editor;
     private int cardsAdded = 0;
 

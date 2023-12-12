@@ -40,7 +40,7 @@ public class TagListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private List<Tag> tags = new ArrayList<>();
     private List<Card> cards = new ArrayList<>();
-    private onTagOperationListener listener;
+    private final onTagOperationListener listener;
     private boolean showingTags = true;
 
     public TagListViewAdapter(onTagOperationListener listener) {

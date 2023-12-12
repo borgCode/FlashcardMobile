@@ -43,11 +43,11 @@ public class SettingsActivity extends AppCompatActivity {
         
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            Log.d("Settings Action Bar", "Action bar is not null");
+            
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.back);
         } else {
-            Log.d("Settings Action Bar", "Action bar is null");
+            
         }
 
         RadioButton lightModeButton = findViewById(R.id.lightMode);
@@ -61,14 +61,14 @@ public class SettingsActivity extends AppCompatActivity {
         
         lightModeButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                Log.d("Radiobutton theme", "Light is checked, saving preference");
+                
                 saveThemePreference("Light");
                 recreateActivity();            }
         });
         
         darkModeButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                Log.d("Radiobutton theme", "Dark is checked, saving preference");
+                
                 saveThemePreference("Dark");
                 recreateActivity();
             }
@@ -79,13 +79,13 @@ public class SettingsActivity extends AppCompatActivity {
     private void saveThemePreference(String theme) {
         SharedPreferences sharedPreferences = getSharedPreferences("AppSettings", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        Log.d("Save Preference", "Putting theme in AppSettings");
+        
         editor.putString("Theme", theme);
         editor.apply();
     }
 
     private void recreateActivity() {
-        Log.d("Settings Recreate", "Recreating settings activity");
+        
         Intent intent = getIntent();
         finish();
         startActivity(intent);

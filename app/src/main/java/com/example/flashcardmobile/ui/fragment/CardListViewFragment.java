@@ -80,7 +80,7 @@ public class CardListViewFragment extends Fragment implements CardListViewAdapte
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             selectedOption = parent.getItemAtPosition(position).toString().toLowerCase().trim();
-                            Log.d("Item Selection", "Item selected: " + selectedOption);
+                            
                                 cardListViewAdapter.setCurrentSearchColumn(selectedOption);
 
                         }
@@ -102,7 +102,7 @@ public class CardListViewFragment extends Fragment implements CardListViewAdapte
                         @Override
                         public boolean onQueryTextChange(String newText) {
                             if (selectedOption.equals("tag")) {
-                                Log.d("Search view", "options is equal to tag, calling method with param: " + newText);
+                                
                                 observeCardsFilteredByTag(newText);
                             } else {
                                 cardListViewAdapter.getFilter().filter(newText);

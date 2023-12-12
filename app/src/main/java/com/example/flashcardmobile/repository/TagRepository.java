@@ -16,8 +16,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class TagRepository {
-    private TagDao tagDao;
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private final TagDao tagDao;
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     
     public TagRepository(Application application) {
         AppDatabase database = AppDatabase.getInstance(application);
@@ -25,7 +25,7 @@ public class TagRepository {
     }
 
     public void insert(Tag tag) {
-        Log.d("Tag R", "Inserting into db");
+        
         CompletableFuture.runAsync(() -> tagDao.insert(tag), executorService);
     }
 

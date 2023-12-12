@@ -65,16 +65,16 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
         requireActivity().addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull @NotNull Menu menu, @NonNull @NotNull MenuInflater menuInflater) {
-                Log.d("Practice Toolbar", "creating toolbar");
+                
                 menuInflater.inflate(R.menu.menu_deck_selection_dropdown, menu);
-                Log.d("Practice Toolbar", "toolbar created");
+                
             }
 
             @Override
             public boolean onMenuItemSelected(@NonNull @NotNull MenuItem menuItem) {
                 int id = menuItem.getItemId();
                 if (id == R.id.AddDeckItem) {
-                    Log.d("Add Deck Fragment", "opening add deck fragment");
+                    
 
                     AddDeckFragment addDeckFragment = new AddDeckFragment();
                     FragmentManager fragmentManager = getParentFragmentManager();

@@ -39,8 +39,8 @@ public class EditCardFragment extends Fragment {
     private AutoCompleteTextView deckNameSelection;
     private Card card;
     private TagHandler tagHandler;
-    private Map<Long, Tag> selectedTagsMap = new HashMap<>();
-    private Map<String, Tag> tagMap = new HashMap<>();
+    private final Map<Long, Tag> selectedTagsMap = new HashMap<>();
+    private final Map<String, Tag> tagMap = new HashMap<>();
 
     @Nullable
 
@@ -65,7 +65,7 @@ public class EditCardFragment extends Fragment {
             frontSide.setText(card.getFrontSide());
             backSide.setText(card.getBackSide());
         } else {
-            Log.d("Editor", "card is null");
+            
         }
         
         deckNameSelection = view.findViewById(R.id.deckSelectionAutoComplete);

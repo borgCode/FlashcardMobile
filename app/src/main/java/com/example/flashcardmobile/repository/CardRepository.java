@@ -13,8 +13,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class CardRepository {
-    private CardDao cardDao;
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private final CardDao cardDao;
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public CardRepository(Application application) {
         AppDatabase database = AppDatabase.getInstance(application);

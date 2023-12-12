@@ -15,8 +15,8 @@ import java.util.concurrent.Executors;
 
 public class AnalyticsRepository {
 
-    private AnalyticsDao analyticsDao;
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private final AnalyticsDao analyticsDao;
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public AnalyticsRepository(Application application) {
         AppDatabase database = AppDatabase.getInstance(application);

@@ -38,7 +38,7 @@ public class DeckListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private List<DeckWithInfo> decks;
     private List<Card> cards;
-    private OnButtonOperationListener listener;
+    private final OnButtonOperationListener listener;
     private boolean showingDecks = true;
     private boolean showingAllCards = false;
 
@@ -51,13 +51,13 @@ public class DeckListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public int getItemViewType(int position) {
         if (showingDecks) {
-            Log.d("ItemViewType", "showingDecks is true, returning" + VIEW_TYPE_DECKS);
+            
             return VIEW_TYPE_DECKS;
         } else if (showingAllCards) {
-            Log.d("ItemViewType", "showingCards is true, returning" + VIEW_TYPE_ALL_CARDS);
+            
             return VIEW_TYPE_ALL_CARDS;
         } else {
-            Log.d("ItemViewType", "showing decks and showing cards are false, returning" + VIEW_TYPE_DUE_CARDS);
+            
             return VIEW_TYPE_DUE_CARDS;
         }
     }
@@ -101,12 +101,12 @@ public class DeckListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         View view;
 
         if (viewType == VIEW_TYPE_DECKS) {
-            Log.d("view holder", "Type is " + VIEW_TYPE_DECKS);
+            
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_deck_table_list_cell_view, parent, false);
             return new DeckViewHolder(view);
         } else {
-            Log.d("view holder", "Type is " + VIEW_TYPE_ALL_CARDS);
+            
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_tag_table_card_cell_view, parent, false);
             return new CardViewHolder(view);
@@ -119,8 +119,6 @@ public class DeckListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if (holder instanceof DeckViewHolder) {
             DeckViewHolder deckHolder = (DeckViewHolder) holder;
             DeckWithInfo deck = decks.get(position);
-            Log.d("Binding Deck", "Deck fields: name: " + deck.getDeck().getDeckName() +
-                    "\nDeck size: " + deck.getDeckSize());
 
             deckHolder.deckNameCol.setText(deck.getDeck().getDeckName());
             deckHolder.deckSizeCol.setText(String.valueOf(deck.getDeckSize()));
@@ -149,7 +147,7 @@ public class DeckListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         } else if (holder instanceof CardViewHolder) {
             CardViewHolder cardHolder = (CardViewHolder) holder;
             Card card = cards.get(position);
-            Log.d("Binding card", "front: " + card.getFrontSide());
+            
             cardHolder.frontSideCol.setText(card.getFrontSide());
             cardHolder.backSideCol.setText(card.getBackSide());
 
@@ -168,7 +166,7 @@ public class DeckListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
                     return true;
                 });
-                Log.d("PopupMenu", "Showing menu");
+                
                 popupMenu.show();
             });
         }

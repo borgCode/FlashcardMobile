@@ -10,8 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class DeckCardViewModel extends AndroidViewModel {
-    private DeckCardRepository repository;
-    private LiveData<List<DeckCard>> cards;
+    private final DeckCardRepository repository;
+    private final LiveData<List<DeckCard>> cards;
 
 
     public DeckCardViewModel(@NotNull Application application) {

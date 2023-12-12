@@ -9,7 +9,7 @@ import com.example.flashcardmobile.entity.DeckCard;
 import java.util.List;
 
 public class DeckCardRepository {
-    private DeckCardDao deckCardDao;
+    private final DeckCardDao deckCardDao;
     
     public DeckCardRepository(Application application) {
         AppDatabase database = AppDatabase.getInstance(application);

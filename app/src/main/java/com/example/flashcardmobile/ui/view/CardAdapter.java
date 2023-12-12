@@ -19,8 +19,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         void onDifficultySelected(Card card, int difficulty);
     }
 
-    private List<Card> cards;
-    private AdapterCallback callback;
+    private final List<Card> cards;
+    private final AdapterCallback callback;
 
     public CardAdapter(List<Card> cards, AdapterCallback callback) {
         this.callback = callback;
@@ -85,7 +85,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     }
 
     private class DifficultyButtonClickListener implements View.OnClickListener {
-        private Card card;
+        private final Card card;
 
         public DifficultyButtonClickListener(Card card) {
             this.card = card;

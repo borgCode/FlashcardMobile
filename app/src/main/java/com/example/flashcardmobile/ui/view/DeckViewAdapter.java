@@ -25,8 +25,8 @@ public class DeckViewAdapter extends RecyclerView.Adapter<DeckViewAdapter.ViewHo
 
     }
     
-    private List<Card> cards;
-    private onCardOperationListener listener;
+    private final List<Card> cards;
+    private final onCardOperationListener listener;
 
     public DeckViewAdapter(List<Card> cards, onCardOperationListener listener) {
         this.listener = listener;
@@ -72,7 +72,7 @@ public class DeckViewAdapter extends RecyclerView.Adapter<DeckViewAdapter.ViewHo
             popupMenu.getMenuInflater().inflate(R.menu.card_list_popup_menu, popupMenu.getMenu());
 
             popupMenu.setOnMenuItemClickListener(item -> {
-                Log.d("PopupMenu", "item Clicked");
+                
                 int id = item.getItemId();
                 if (id == R.id.editCardItem) {
                     listener.onCardEdit(card.getDeckId(), card.getId());
@@ -85,7 +85,7 @@ public class DeckViewAdapter extends RecyclerView.Adapter<DeckViewAdapter.ViewHo
                 }
                 return true;
             });
-            Log.d("PopupMenu", "Showing menu");
+            
             popupMenu.show();
 
         });

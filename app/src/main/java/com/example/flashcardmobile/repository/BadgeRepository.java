@@ -11,8 +11,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class BadgeRepository {
-    private BadgeDao badgeDao;
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private final BadgeDao badgeDao;
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     
     public BadgeRepository(Application application) {
         AppDatabase database = AppDatabase.getInstance(application);

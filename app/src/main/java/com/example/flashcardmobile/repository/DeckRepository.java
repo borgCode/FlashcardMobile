@@ -15,9 +15,9 @@ import java.util.concurrent.Executors;
 
 public class DeckRepository {
 
-    private DeckDao deckDao;
-    private LiveData<List<Deck>> allDecks;
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private final DeckDao deckDao;
+    private final LiveData<List<Deck>> allDecks;
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public DeckRepository(Application application) {
         AppDatabase database = AppDatabase.getInstance(application);
@@ -26,7 +26,7 @@ public class DeckRepository {
     }
 
     public void insert(Deck deck) {
-        Log.d("DeckRepo", "Inserting new Deck");
+        
         CompletableFuture.runAsync(() -> deckDao.insert(deck), executorService);
     }
 

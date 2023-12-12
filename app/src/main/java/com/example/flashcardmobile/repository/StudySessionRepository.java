@@ -14,8 +14,8 @@ import java.util.concurrent.Executors;
 
 public class StudySessionRepository {
 
-    private StudySessionDao studySessionDao;
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private final StudySessionDao studySessionDao;
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public StudySessionRepository(Application application) {
         AppDatabase database = AppDatabase.getInstance(application);
