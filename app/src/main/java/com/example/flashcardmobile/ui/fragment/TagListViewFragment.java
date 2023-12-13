@@ -69,7 +69,7 @@ public class TagListViewFragment extends Fragment implements TagListViewAdapter.
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), RecyclerView.VERTICAL));
         
 
-        tagViewModel.getAllTags().observe(getViewLifecycleOwner(), newTags -> {
+        tagViewModel.getTagsWithCardCount().observe(getViewLifecycleOwner(), newTags -> {
             tagListViewAdapter.setTags(newTags);
             tagListViewAdapter.notifyDataSetChanged();
         });

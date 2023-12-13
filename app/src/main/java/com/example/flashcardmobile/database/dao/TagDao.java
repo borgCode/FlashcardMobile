@@ -2,10 +2,7 @@ package com.example.flashcardmobile.database.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.*;
-import com.example.flashcardmobile.entity.CardTagCrossRef;
-import com.example.flashcardmobile.entity.CardWithTags;
-import com.example.flashcardmobile.entity.Tag;
-import com.example.flashcardmobile.entity.TagWithCards;
+import com.example.flashcardmobile.entity.*;
 
 import java.util.List;
 
@@ -19,6 +16,11 @@ public interface TagDao {
     void delete(Tag tag);
     @Query("SELECT * FROM tags")
     LiveData<List<Tag>> getAllTags();
+    @Query("SELECT tags.id, tags.tag_name, tags.color, COUNT(card_tag_cross_ref.cardId) as cardCount " +
+            "FROM tags " +
+            "LEFT JOIN card_tag_cross_ref ON tags.id = card_tag_cross_ref.tagId " +
+            "GROUP BY tags.id")
+    LiveData<List<TagWithCardCount>> getTagsWithCardCounts();
     @Query("SELECT * FROM tags WHERE id = :id")
     LiveData<Tag> getTagById(long id);
     

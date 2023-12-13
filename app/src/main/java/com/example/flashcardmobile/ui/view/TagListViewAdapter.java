@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.flashcardmobile.R;
 import com.example.flashcardmobile.entity.Card;
 import com.example.flashcardmobile.entity.Tag;
+import com.example.flashcardmobile.entity.TagWithCardCount;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class TagListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private static final int VIEW_TYPE_TAG = 0;
     private static final int VIEW_TYPE_CARD = 1;
 
-    private List<Tag> tags = new ArrayList<>();
+    private List<TagWithCardCount> tags = new ArrayList<>();
     private List<Card> cards = new ArrayList<>();
     private final onTagOperationListener listener;
     private boolean showingTags = true;
@@ -106,15 +107,15 @@ public class TagListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(@NonNull @NotNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof TagViewHolder) {
             TagViewHolder tagHolder = (TagViewHolder) holder;
-            Tag tag = tags.get(position);
-            tagHolder.tagName.setText(tag.getTagName());
+            TagWithCardCount tag = tags.get(position);
+            tagHolder.tagName.setText(tag.getTag().getTagName());
 
             Drawable background = tagHolder.tagColor.getBackground();
-            int rgbColor = tag.getColor();
+            int rgbColor = tag.getTag().getColor();
             int argbColor = Color.argb(255, Color.red(rgbColor), Color.green(rgbColor), Color.blue(rgbColor));
             ((GradientDrawable) background).setColor(argbColor);
 
-            tagHolder.tagSize.setText("0");
+            tagHolder.tagSize.setText(String.valueOf(tag.getCardCount()));
 
             tagHolder.tagOptions.setOnClickListener(v -> {
                 PopupMenu popupMenu = new PopupMenu(tagHolder.itemView.getContext(), tagHolder.tagOptions);
@@ -123,11 +124,11 @@ public class TagListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 popupMenu.setOnMenuItemClickListener(item -> {
                     int id = item.getItemId();
                     if (id == R.id.view_cards_item) {
-                        listener.onViewCards(tag.getId());
+                        listener.onViewCards(tag.getTag().getId());
                     } else if (id == R.id.edit_tag_item) {
-                        listener.onEditTag(tag);
+                        listener.onEditTag(tag.getTag());
                     } else if (id == R.id.delete_tag_item) {
-                        listener.onDeleteTag(tag);
+                        listener.onDeleteTag(tag.getTag());
                     } else {
                         return false;
                     }
@@ -170,7 +171,7 @@ public class TagListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return showingTags ? tags.size() : cards.size();
     }
 
-    public void setTags(List<Tag> tags) {
+    public void setTags(List<TagWithCardCount> tags) {
         this.tags = tags;
         showingTags = true;
     }
