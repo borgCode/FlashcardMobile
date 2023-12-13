@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.*;
+import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -73,12 +74,31 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
                 currentCardPosition = position;
             }
         });
+        
+        Button finishedStudyingBtn = view.findViewById(R.id.finished_studying_button);
+        finishedStudyingBtn.setOnClickListener(v -> {
+            AddCardFragment addCardFragment = new AddCardFragment();
+            FragmentManager fragmentManager = getParentFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, addCardFragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
 
         sharedDeckAndCardViewModel.getDeckId().observe(getViewLifecycleOwner(), deckId -> {
             cardViewModel.getDueCards(deckId).observe(getViewLifecycleOwner(), newCards -> {
                 cards.clear();
                 cards.addAll(newCards);
                 cardAdapter.notifyDataSetChanged();
+                if (newCards.isEmpty()) {
+                    viewPager2.setVisibility(View.GONE);
+                    view.findViewById(R.id.finished_studying_text).setVisibility(View.VISIBLE);
+                    finishedStudyingBtn.setVisibility(View.VISIBLE);
+                } else {
+                    viewPager2.setVisibility(View.VISIBLE);
+                    view.findViewById(R.id.finished_studying_text).setVisibility(View.GONE);
+                    finishedStudyingBtn.setVisibility(View.GONE);
+                }
             });
             deckViewModel.getDeckById(deckId).observe(getViewLifecycleOwner(), deck -> {
                 if (actionBar != null) {

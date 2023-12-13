@@ -3,6 +3,7 @@ package com.example.flashcardmobile.ui.fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.*;
+import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import com.example.flashcardmobile.ui.dialog.DeleteConfirmationDialog;
 import com.example.flashcardmobile.ui.view.DeckAdapter;
 import com.example.flashcardmobile.viewmodel.DeckViewModel;
 import com.example.flashcardmobile.viewmodel.SharedDeckAndCardViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -43,15 +45,30 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
 
         sharedDeckAndCardViewModel = new ViewModelProvider(requireActivity()).get(SharedDeckAndCardViewModel.class);
         deckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
+        RecyclerView recyclerView = view.findViewById(R.id.deckSelectionView);
+       
+        Button noDecksButton = view.findViewById(R.id.no_decks_button);
+        noDecksButton.setOnClickListener(v -> openAddDeckFragment());
+       
+        FloatingActionButton fab = view.findViewById(R.id.fab);
+        fab.setOnClickListener(v -> openAddDeckFragment());
         
-        deckViewModel.getAllDecks().observe(getViewLifecycleOwner(), new Observer<List<Deck>>() {
-            @Override
-            public void onChanged(List<Deck> newDecks) {
-                deckAdapter.setDecks(newDecks);
+        deckViewModel.getAllDecks().observe(getViewLifecycleOwner(), newDecks -> {
+            deckAdapter.setDecks(newDecks);
+            if (newDecks.isEmpty()) {
+                recyclerView.setVisibility(View.GONE);
+                fab.setVisibility(View.GONE);
+                view.findViewById(R.id.no_decks_text).setVisibility(View.VISIBLE);
+                noDecksButton.setVisibility(View.VISIBLE);
+            } else {
+                recyclerView.setVisibility(View.VISIBLE);
+                fab.setVisibility(View.VISIBLE);
+                view.findViewById(R.id.no_decks_text).setVisibility(View.GONE);
+                noDecksButton.setVisibility(View.GONE);
             }
         });
 
-        RecyclerView recyclerView = view.findViewById(R.id.deckSelectionView);
+        
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         deckAdapter = new DeckAdapter(this, decks);
         recyclerView.setAdapter(deckAdapter);
@@ -74,15 +91,7 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
             public boolean onMenuItemSelected(@NonNull @NotNull MenuItem menuItem) {
                 int id = menuItem.getItemId();
                 if (id == R.id.AddDeckItem) {
-                    
-
-                    AddDeckFragment addDeckFragment = new AddDeckFragment();
-                    FragmentManager fragmentManager = getParentFragmentManager();
-
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, addDeckFragment)
-                            .addToBackStack(null)
-                            .commit();
+                    openAddDeckFragment();
                     return true;
                 } else if (id == R.id.deleteAllDecksItem) {
                     showDeleteDialog("Do you really want to delete all decks?", "all_decks");
@@ -93,6 +102,16 @@ public class DeckSelectionFragment extends Fragment implements DeckAdapter.OnDec
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
         
         return view;
+    }
+
+    private void openAddDeckFragment() {
+        AddDeckFragment addDeckFragment = new AddDeckFragment();
+        FragmentManager fragmentManager = getParentFragmentManager();
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, addDeckFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
