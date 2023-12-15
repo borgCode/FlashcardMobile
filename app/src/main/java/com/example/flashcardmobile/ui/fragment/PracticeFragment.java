@@ -18,6 +18,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.flashcardmobile.R;
 import com.example.flashcardmobile.entity.Card;
 import com.example.flashcardmobile.entity.StudySession;
+import com.example.flashcardmobile.ui.dialog.DeleteConfirmationDialog;
 import com.example.flashcardmobile.ui.view.CardAdapter;
 import com.example.flashcardmobile.viewmodel.*;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +30,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PracticeFragment extends Fragment implements CardAdapter.AdapterCallback {
+public class PracticeFragment extends Fragment implements CardAdapter.AdapterCallback, DeleteConfirmationDialog.DeleteDialogListener{
     private CardViewModel cardViewModel;
     private SharedDeckAndCardViewModel sharedDeckAndCardViewModel;
     private DeckViewModel deckViewModel;
@@ -94,6 +95,7 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
                     viewPager2.setVisibility(View.GONE);
                     view.findViewById(R.id.finished_studying_text).setVisibility(View.VISIBLE);
                     finishedStudyingBtn.setVisibility(View.VISIBLE);
+                    
                 } else {
                     viewPager2.setVisibility(View.VISIBLE);
                     view.findViewById(R.id.finished_studying_text).setVisibility(View.GONE);
@@ -130,11 +132,24 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
                                 .commit();
                     }
                     return true;
+                } else if (id == R.id.deleteCardItem) {
+                    showDeleteDialog("Do you really want to delete this card?", "single_card");
                 }
                 return false;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
         return view;
+    }
+
+    private void showDeleteDialog(String dialogMessage, String type) {
+        DeleteConfirmationDialog dialog = new DeleteConfirmationDialog(dialogMessage, type);
+        dialog.setDeleteDialogListener(this);
+        dialog.show(getParentFragmentManager(), "deleteDialog");
+    }
+
+    @Override
+    public void onConfirmDelete(String confirmationType) {
+        cardViewModel.delete(cards.get(currentCardPosition));
     }
 
     @Override
@@ -273,5 +288,6 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
         editor.putInt(key, type);
         editor.apply();
     }
+    
 }
 
