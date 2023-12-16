@@ -46,6 +46,7 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
     private int easyCounter;
     private int mediumCounter;
     private int hardCounter;
+    private boolean showMenu = true;
 
     @Nullable
     @Override
@@ -95,6 +96,8 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
                     viewPager2.setVisibility(View.GONE);
                     view.findViewById(R.id.finished_studying_text).setVisibility(View.VISIBLE);
                     finishedStudyingBtn.setVisibility(View.VISIBLE);
+                    showMenu = false;
+                    requireActivity().invalidateOptionsMenu();
                     
                 } else {
                     viewPager2.setVisibility(View.VISIBLE);
@@ -136,6 +139,12 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
                     showDeleteDialog("Do you really want to delete this card?", "single_card");
                 }
                 return false;
+            }
+            @Override
+            public void onPrepareMenu(@NonNull @NotNull Menu menu) {
+                if (!showMenu) {
+                    menu.clear();
+                }
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
         return view;

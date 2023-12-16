@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,6 +47,8 @@ public class PerformanceFragment extends Fragment implements CustomizeStreaksDia
     private TextView streakDisplay;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
+
+    private TextView deckTitle;
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
@@ -57,9 +60,8 @@ public class PerformanceFragment extends Fragment implements CustomizeStreaksDia
 
         DeckViewModel deckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
         sharedAnalyticsViewModel = new ViewModelProvider(requireActivity()).get(SharedAnalyticsViewModel.class);
-
+        
         deckSelection = view.findViewById(R.id.performance_deck_selection);
-
         adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, new ArrayList<>());
         deckSelection.setAdapter(adapter);
 
@@ -68,6 +70,7 @@ public class PerformanceFragment extends Fragment implements CustomizeStreaksDia
             adapter.clear();
             adapter.addAll(new ArrayList<>(deckMap.keySet()));
         });
+        
 
         deckSelection.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -80,13 +83,13 @@ public class PerformanceFragment extends Fragment implements CustomizeStreaksDia
         });
         
         streakTitle = view.findViewById(R.id.performance_streak_title);
+        deckTitle = view.findViewById(R.id.selected_deck);
         
-        deckSelection.setOnItemClickListener((((parent, view1, position, id) -> {
+        deckSelection.setOnItemClickListener((parent, view1, position, id) -> {
             String selectedDeckName = (String) parent.getItemAtPosition(position);
             long deckId = deckMap.get(selectedDeckName);
-            loadPieChartData(deckId);
-            streakTitle.setText("Study streak for " + selectedDeckName);
-        })));
+            loadSelectedDeck(deckId, selectedDeckName);
+        });
         
         pieChart = view.findViewById(R.id.performance_piechart);
         pieChart.setUsePercentValues(true);
@@ -116,13 +119,26 @@ public class PerformanceFragment extends Fragment implements CustomizeStreaksDia
             getCurrentUserStreak();
         }
 
-
-
-        
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                String firstItem = adapter.getItem(0);
+                long deckId = deckMap.get(firstItem);
+                loadSelectedDeck(deckId, firstItem);
+            }
+        }, 100);
 
         return view;
     }
-    
+
+    private void loadSelectedDeck(long deckId, String selectedDeckName) {
+        loadPieChartData(deckId);
+        streakTitle.setText("Study streak for " + selectedDeckName);
+        deckTitle.setText(selectedDeckName);
+        deckSelection.setText("");
+        deckSelection.setHint("Select Deck");
+    }
+
 
     private void loadPieChartData(long deckId) {
         List<PieEntry> pieEntries = new ArrayList<>();
