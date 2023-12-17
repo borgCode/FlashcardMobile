@@ -21,6 +21,11 @@
                 android:text="Add more cards"
                 android:layout_gravity="center"
                 android:id="@+id/finished_studying_button"/>
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Back to main menu"
+                android:layout_gravity="center"
+                android:id="@+id/back_to_menu_button"
+        android:layout_marginTop="15dp"/>
 
     </LinearLayout>
 

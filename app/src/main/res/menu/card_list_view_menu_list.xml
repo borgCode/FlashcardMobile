@@ -3,9 +3,12 @@
     <item 
         android:id="@+id/search_view_with_spinner"
         android:title="Search"
-        android:icon="@drawable/ic_search"
-        app:showAsAction="ifRoom|collapseActionView"
+        app:showAsAction="never|collapseActionView"
         app:actionLayout="@layout/search_view_with_spinner"/>
+    
+    <item android:id="@+id/select_cards"
+          android:title="Select"
+          app:showAsAction="never"/>
     
 
 </menu>

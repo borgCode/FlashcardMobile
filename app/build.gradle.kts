@@ -46,6 +46,8 @@ dependencies {
     implementation("androidx.navigation:navigation-ui:2.7.5")
     implementation("androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version")
     implementation("androidx.lifecycle:lifecycle-livedata:$lifecycle_version")
+    implementation ("androidx.recyclerview:recyclerview:1.3.2")
+    implementation ("androidx.recyclerview:recyclerview-selection:1.1.0")
     implementation("androidx.room:room-runtime:$room_version")
     implementation ("com.github.javafaker:javafaker:1.0.2")
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")

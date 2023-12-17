@@ -86,6 +86,11 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
                     .addToBackStack(null)
                     .commit();
         });
+        
+        Button backToMenuButton = view.findViewById(R.id.back_to_menu_button);
+        backToMenuButton.setOnClickListener(v -> {
+            getActivity().finish();
+        });
 
         sharedDeckAndCardViewModel.getDeckId().observe(getViewLifecycleOwner(), deckId -> {
             cardViewModel.getDueCards(deckId).observe(getViewLifecycleOwner(), newCards -> {
@@ -147,6 +152,7 @@ public class PracticeFragment extends Fragment implements CardAdapter.AdapterCal
                 }
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+        
         return view;
     }
 

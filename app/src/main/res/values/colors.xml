@@ -17,4 +17,7 @@
     <color name="secondaryColorDark">#A98274</color>
     <color name="backgroundColorDark">#053B50</color>
     <color name="textColorDark">#EEEEEE</color>
+
+
+    <color name="selectedColor">#DDEEFF</color>
 </resources>
